@@ -1,0 +1,9 @@
+api_proxy_pbs.get:
+  path: '/api/fortnight'
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::index'
+  methods:  [GET]
+  requirements:
+    _access: 'TRUE'
+  options:
+    no_cache: TRUE

@@ -145,4 +145,29 @@ class ScheduleController
             return null;
         }
     }
+
+    /**
+     * Handle Exceptions
+     * @param  Exception $e the exception
+     * @return CacheableJsonResponse
+     */
+    protected function handleException(Exception $e)
+    {
+        if ($e instanceof Rest404Exception) {
+            return new CacheableJsonResponse(
+                ['error' => $e->getMessage()],
+                404
+            );
+        } elseif ($e instanceof Rest403Exception) {
+            return new CacheableJsonResponse(
+                ['error' => $e->getMessage()],
+                403
+            );
+        }
+
+        return new CacheableJsonResponse(
+            ['error' => 'Internal server error.'],
+            500
+        );
+    }
 }

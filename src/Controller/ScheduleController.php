@@ -76,7 +76,8 @@ class ScheduleController extends ControllerBase
                 // global $insomnia_lookup, $programs;
 
                 // Week 0 or 1:
-                $week = ((int) $og_program) <= 7;
+                $week = ((int) $og_program['day']) > 7;
+
                 // For each insomnia program:
                 switch ($og_program['slug']) {
                     case 'insomnia_monday':

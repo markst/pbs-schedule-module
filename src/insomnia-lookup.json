@@ -1,0 +1,62 @@
+{
+  "insomnia_sunday": [
+    {
+      "slug": "subterranean-chill",
+      "profileImage": "https://amrap-pages-image.s3.amazonaws.com/profile/7014.jpg"
+    },
+    {
+      "slug": "yellowbrickroad",
+      "profileImage": "https://amrap-pages-image.s3.amazonaws.com/profile/10223.jpg"
+    }
+  ],
+  "insomnia_monday": [
+    {
+      "slug": "transfigurations",
+      "profileImage": "https://amrap-pages-image.s3.amazonaws.com/profile/10541.jpg"
+    },
+    {
+      "slug": "got-the-blues",
+      "profileImage": "https://amrap-pages-image.s3.amazonaws.com/profile/6908.jpg"
+    }
+  ],
+  "insomnia_tuesday": [
+    {
+      "slug": "shaggin-the-night-away",
+      "profileImage": "https://amrap-pages-image.s3.amazonaws.com/profile/6934.jpg"
+    },
+    {
+      "slug": "the-modernist",
+      "profileImage": "https://amrap-pages-image.s3.amazonaws.com/profile/7858.jpg"
+    }
+  ],
+  "insomnia_wednesday": [
+    {
+      "slug": "lca",
+      "profileImage": "https://amrap-pages-image.s3.amazonaws.com/profile/10054.jpg"
+    },
+    {
+      "slug": "tnt",
+      "profileImage": "https://amrap-pages-image.s3.amazonaws.com/profile/10544.jpg"
+    }
+  ],
+  "insomnia_thursday": [
+    {
+      "slug": "tyrannocoreus",
+      "profileImage": "https://amrap-pages-image.s3.amazonaws.com/profile/10055.jpg"
+    },
+    {
+      "slug": "audiovitamins",
+      "profileImage": "https://amrap-pages-image.s3.amazonaws.com/profile/10222.jpg"
+    }
+  ],
+  "insomnia_friday": [
+    {
+      "slug": "new-noise",
+      "profileImage": "https://amrap-pages-image.s3.amazonaws.com/profile/6926.jpg"
+    },
+    {
+      "slug": "irvine-jump",
+      "profileImage": "https://amrap-pages-image.s3.amazonaws.com/profile/6914.jpg"
+    }
+  ]
+}

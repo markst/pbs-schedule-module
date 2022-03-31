@@ -2,16 +2,42 @@
 
 namespace Drupal\api_proxy_pbs\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Cache\CacheableJsonResponse;
+use Drupal\Core\Cache\CacheableMetadata;
 
-class ScheduleController
+class ScheduleController extends ControllerBase
 {
     /**
-     * @return JsonResponse
+     * @return CacheableJsonResponse
      */
     public function index()
     {
-        return new JsonResponse($this->getFortnightSchedule());
+        try {
+            $data = $this->getFortnightSchedule();
+
+            /*
+            // Add Cache settings for Max-age and URL context.
+            $data['#cache'] = [
+                'max-age' => 600,
+                'contexts' => ['url'],
+            ];
+            */
+
+            $response = new CacheableJsonResponse($data);
+            $response->addCacheableDependency(
+                CacheableMetadata::createFromRenderArray($data)
+                /*
+                CacheableMetadata::createFromRenderArray([
+                    '#cache' => $cacheMetadata,
+                ])
+                */
+            );
+
+            return $response;
+        } catch (Exception $e) {
+            return $this->handleException($e);
+        }
     }
 
     /**

@@ -5,5 +5,3 @@ api_proxy_pbs.get:
   methods:  [GET]
   requirements:
     _access: 'TRUE'
-  options:
-    no_cache: TRUE

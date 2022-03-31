@@ -52,48 +52,8 @@ final class AirnetProxy extends HttpApiPluginBase
      */
     public function postprocessOutgoing(Response $response): Response
     {
-        // If we're fetching schedule
+        // TODO: Check if we're fetching schedule `rest/stations/3pbs/guides/fm`
         // $response->$request->getBasePath()
-        // 'rest/stations/3pbs/guides/fm'
-
-        // $schedule = json_decode($response->getContent(), TRUE);
-
-        // Create a http_build_query for programs
-
-        // Execute curl request for programs
-
-        // Json decode response if request was successful
-
-        // Create a $weektwo
-
-        // Loop through the original $schedule
-
-        // For each insomnia program:
-
-        /***
-        switch (program.slug) {
-        case "insomnia_monday":
-        case "insomnia_tuesday":
-        case "insomnia_wednesday":
-        case "insomnia_thursday":
-        case "insomnia_friday":
-        case "insomnia_sunday":
-
-        // do lookup on insomnialookup for correct slug
-        // array_search('zero', array_column(json_decode($json, true), 'name')); 
-
-        // Add found program to $weektwo
-
-        default:
-        // Add existing program to $weektwo
-        break;
-
-        ***/
-
-        // $data[] = $schedule + $weektwo;
-
-        // Update response with new schedule:
-        // $response->setContent(json_encode($data));
         return $response;
     }
 }

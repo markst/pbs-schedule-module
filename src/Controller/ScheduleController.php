@@ -151,23 +151,24 @@ class ScheduleController extends ControllerBase
     }
 
     /**
-     * @return Perform curl request with url
+     * @return Perform request with url
      */
     function getJSON(string $url)
     {
-        // Execute curl request for `url`:
-        $handle = curl_init($url);
-        curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($handle, CURLOPT_FOLLOWLOCATION, true);
-        $session = curl_exec($handle);
-        curl_close($handle);
+        $method = 'GET';
+        $options = [];
 
-        if ($session !== false) {
-            // json decode response if request was successful:
-            return json_decode($session, true);
-        } else {
-            return null;
+        $client = \Drupal::httpClient();
+
+        $response = $client->request($method, $url, $options);
+        $code = $response->getStatusCode();
+
+        if ($code == 200) {
+            $body = $response->getBody()->getContents();
+            return json_decode($body, true);
         }
+
+        return null;
     }
 
     /**

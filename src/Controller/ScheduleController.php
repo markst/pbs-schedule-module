@@ -137,7 +137,7 @@ class ScheduleController extends ControllerBase
     public function getSchedule()
     {
         return $this->getJSON(
-            'http://airnet.org.au/rest/stations/3pbs/guides/fm'
+            'https://airnet.org.au/rest/stations/3pbs/guides/fm'
         );
     }
     /**
@@ -146,7 +146,7 @@ class ScheduleController extends ControllerBase
     public function getPrograms()
     {
         return $this->getJSON(
-            'http://airnet.org.au/rest/stations/3pbs/programs'
+            'https://airnet.org.au/rest/stations/3pbs/programs'
         );
     }
 

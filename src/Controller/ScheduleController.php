@@ -16,24 +16,20 @@ class ScheduleController extends ControllerBase
         try {
             $data = $this->getFortnightSchedule();
 
-            /*
             // Add Cache settings for Max-age and URL context.
-            $data['#cache'] = [
-                'max-age' => 600,
+            $cache_metadata = [
+                'max-age' => 86401,
                 'contexts' => ['url'],
             ];
-            */
 
             $response = new CacheableJsonResponse($data);
             $response->headers->set('Cache-Control', 'public, max-age=86400');
-            $response->headers->set('Content-Type', "application/json; charset=utf-8");
+            $response->headers->set(
+                'Content-Type',
+                'application/json; charset=utf-8'
+            );
             $response->addCacheableDependency(
-                CacheableMetadata::createFromRenderArray($data)
-                /*
-                CacheableMetadata::createFromRenderArray([
-                    '#cache' => $cacheMetadata,
-                ])
-                */
+                CacheableMetadata::createFromRenderArray($cache_metadata)
             );
 
             return $response;

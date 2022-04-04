@@ -1,0 +1,5 @@
+administer api proxies:
+  title: 'Administer the API proxies'
+
+permission_callbacks:
+  - Drupal\api_proxy\ApiProxyPermissions::permissions

@@ -1,0 +1,8 @@
+api_proxy.form_tab:
+  route_name: api_proxy.form
+  title: 'API Proxy'
+  base_route: api_proxy.form
+api_proxy.settings_tab:
+  route_name: api_proxy.settings
+  title: 'Settings'
+  base_route: api_proxy.form

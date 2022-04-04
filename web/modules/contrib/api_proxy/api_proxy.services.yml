@@ -1,0 +1,18 @@
+parameters:
+  api_proxy.uri_param_name: _api_proxy_uri
+services:
+  Drupal\api_proxy\Plugin\HttpApiPluginManager:
+    autowire: true
+    parent: default_plugin_manager
+  Drupal\api_proxy\ParamConverter\HttpApiProxyConverter:
+    autowire: true
+    tags:
+      - { name: paramconverter }
+  Drupal\api_proxy\EventSubscriber\OptionsRequestSubscriber:
+    decorates: options_request_listener
+    arguments:
+      - '@router.route_provider'
+      - '@Drupal\api_proxy\EventSubscriber\OptionsRequestSubscriber.inner'
+      - '%api_proxy.uri_param_name%'
+    tags:
+      - { name: event_subscriber }

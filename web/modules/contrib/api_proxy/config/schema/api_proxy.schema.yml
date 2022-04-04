@@ -1,0 +1,9 @@
+api_proxy.settings:
+  type: config_object
+  label: 'API Proxy Settings'
+  mapping:
+    api_proxies:
+      type: sequence
+      label: 'API Proxies'
+      sequence:
+        type: api_proxy.settings.api_proxy_plugin.[%key]

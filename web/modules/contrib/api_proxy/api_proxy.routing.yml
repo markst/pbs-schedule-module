@@ -1,0 +1,30 @@
+api_proxy.form:
+  path: '/admin/config/services/api-proxy'
+  defaults:
+    _form: '\Drupal\api_proxy\Form\ApiProxyForm'
+    _title: 'API Proxy'
+  requirements:
+    _permission: 'administer site configuration'
+
+api_proxy.settings:
+  path: '/admin/config/services/api-proxy/settings'
+  defaults:
+    _form: '\Drupal\api_proxy\Form\SettingsForm'
+    _title: 'Configure HTTP API proxies'
+  requirements:
+    _permission: 'administer site configuration'
+
+api_proxy.forwarder:
+  path: '/api-proxy/{api_proxy}'
+  options:
+    parameters:
+      api_proxy:
+        type: 'api_proxy'
+  methods: [GET, PUT, POST, PATCH, DELETE, OPTIONS]
+  defaults:
+    _controller: Drupal\api_proxy\Controller\Forwarder::forward
+    _title: 'API Proxy request forwarder'
+  requirements:
+    # Dynamic permissions are enforced in the controller.
+    # TODO: Move permission checks to the routing system.
+    _access: 'TRUE'

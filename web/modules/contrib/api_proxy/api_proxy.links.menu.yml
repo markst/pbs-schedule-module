@@ -1,0 +1,5 @@
+api_proxy.form:
+  title: 'API Proxy'
+  description: 'Configure the behavior of the API proxies.'
+  route_name: api_proxy.form
+  parent: system.admin_config_services

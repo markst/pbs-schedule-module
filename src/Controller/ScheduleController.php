@@ -25,6 +25,7 @@ class ScheduleController extends ControllerBase
             */
 
             $response = new CacheableJsonResponse($data);
+            $response->headers->set('Cache-Control', 'public, max-age=86400');
             $response->addCacheableDependency(
                 CacheableMetadata::createFromRenderArray($data)
                 /*

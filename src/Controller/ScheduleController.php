@@ -9,6 +9,7 @@ use Drupal\Core\Cache\CacheableMetadata;
 class ScheduleController extends ControllerBase
 {
     /**
+     * Main index.
      * @return CacheableJsonResponse
      */
     public function index()
@@ -23,11 +24,14 @@ class ScheduleController extends ControllerBase
             ];
 
             $response = new CacheableJsonResponse($data);
-            $response->headers->set('Cache-Control', 'public, max-age=86400');
+            // Configurable`admin/config/development/performance`:
+            $response->headers->set('Cache-Control', 'public, max-age=86402');
             $response->headers->set(
                 'Content-Type',
                 'application/json; charset=utf-8'
             );
+
+            $response->headers->addCacheControlDirective('public');
             $response->addCacheableDependency(
                 CacheableMetadata::createFromRenderArray($cache_metadata)
             );
@@ -39,7 +43,8 @@ class ScheduleController extends ControllerBase
     }
 
     /**
-     * @return insomnia shows
+     * Concatenated schedule with `insomnia_` modifications based on `insomnia-lookup.json`
+     * @return json array of scheduled programs
      */
     public function getFortnightSchedule()
     {
@@ -130,7 +135,8 @@ class ScheduleController extends ControllerBase
     }
 
     /**
-     * @return Airnet schedule
+     * Airnet schedule
+     * @return json array of scheduled programs
      */
     public function getSchedule()
     {
@@ -139,7 +145,8 @@ class ScheduleController extends ControllerBase
         );
     }
     /**
-     * @return Airnet programs
+     * Airnet programs
+     * @return json array of programs
      */
     public function getPrograms()
     {
@@ -149,7 +156,8 @@ class ScheduleController extends ControllerBase
     }
 
     /**
-     * @return Perform request with url
+     * Perform request with url
+     * @return json object
      */
     function getJSON(string $url)
     {

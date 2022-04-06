@@ -46,7 +46,7 @@ class ScheduleController extends ControllerBase implements
             // Add Cache settings for Max-age and URL context.
             $cache_metadata = [
                 'max-age' => 86401,
-                'contexts' => ['url'],
+                'contexts' => ['url', 'url.query_args:x'],
             ];
 
             $response = new CacheableJsonResponse($data);
@@ -75,9 +75,9 @@ class ScheduleController extends ControllerBase implements
     public function getFortnightSchedule()
     {
         // Fetch schedule:
-        $schedule = $this->getSchedule();
+        $schedule = $this->subrequest('/rest/stations/3pbs/guides/fm');
         // Fetch programs:
-        $programs = $this->getPrograms();
+        $programs = $this->subrequest('/rest/stations/3pbs/programs');
         // Get the contents of the JSON file:
         $insomnia_lookup = json_decode(
             file_get_contents(__DIR__ . '/../insomnia-lookup.json'),
@@ -184,11 +184,15 @@ class ScheduleController extends ControllerBase implements
      */
     protected function subrequest(string $uri)
     {
+        $current_request = \Drupal::request();
+
         $path = Url::fromRoute(
             'api_proxy.forwarder',
             ['api_proxy' => 'airnet', '_api_proxy_uri' => $uri],
             []
-        )->toString();
+        )
+            ->toString(true)
+            ->getGeneratedUrl();
 
         $sub_request = Request::create($path, 'GET', [
             'Host' => 'airnet.org.au',
@@ -204,14 +208,26 @@ class ScheduleController extends ControllerBase implements
 
         $code = $sub_response->getStatusCode();
 
+        // This hack is necessary, otherwise subsequent code will have the wrong route match!
+        if (
+            \Drupal::request()->getPathInfo() !==
+            $current_request->getPathInfo()
+        ) {
+            \Drupal::requestStack()->pop();
+        }
+
         if ($code == 200) {
             $content = $sub_response->getContent();
             return json_decode($content, true);
         }
+
+        /*
         return [
             'data' => json_decode($sub_response->getContent(), true),
             'status' => $code,
         ];
+        */
+
         return null;
     }
 

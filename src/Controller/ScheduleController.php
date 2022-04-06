@@ -166,7 +166,9 @@ class ScheduleController extends ControllerBase implements
      */
     public function getSchedule()
     {
-        return $this->subrequest('/rest/stations/3pbs/guides/fm');
+        return new JsonResponse(
+            $this->subrequest('/rest/stations/3pbs/guides/fm')
+        );
     }
 
     /**
@@ -175,11 +177,24 @@ class ScheduleController extends ControllerBase implements
      */
     public function getPrograms()
     {
-        return $this->subrequest('/rest/stations/3pbs/programs');
+        return new JsonResponse(
+            $this->subrequest('/rest/stations/3pbs/programs')
+        );
     }
 
     /**
-     * Airnet episodes.
+     * Airnet program.
+     * @return json array of programs
+     */
+    public function getProgram($program)
+    {
+        return new JsonResponse(
+            $this->subrequest("/rest/stations/3pbs/programs/{$program}")
+        );
+    }
+
+    /**
+     * Airnet episodes for a program.
      * @return json
      */
     public function getEpisodes($program)
@@ -187,6 +202,31 @@ class ScheduleController extends ControllerBase implements
         return new JsonResponse(
             $this->subrequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes"
+            )
+        );
+    }
+
+    /**
+     * Airnet episode for a program.
+     * @return json
+     */
+    public function getEpisode($program, $date)
+    {
+        return new JsonResponse(
+            $this->subrequest(
+                "/rest/stations/3pbs/programs/{$program}/episodes/{$date}"
+            )
+        );
+    }
+    /**
+     * Airnet playlists for a program.
+     * @return json
+     */
+    public function getPlaylists($program, $date)
+    {
+        return new JsonResponse(
+            $this->subrequest(
+                "/rest/stations/3pbs/programs/{$program}/episodes/{$date}/playlists"
             )
         );
     }

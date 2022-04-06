@@ -1,17 +1,66 @@
 api_proxy_pbs.fortnight_schedule:
   path: '/api/fortnight'
+  methods:  [GET]
   defaults:
     _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::index'
-  methods:  [GET]
   requirements:
     _access: 'TRUE'
+
+api_proxy_pbs.programs:
+  path: '/api/programs'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getPrograms'
+  requirements:
+    _access: 'TRUE'
+
+api_proxy_pbs.program:
+  path: '/api/programs/{program}'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getProgram'
+  requirements:
+    _access: 'TRUE'
+  options:
+    parameters:
+      program:
+        type: entity:program
+
 api_proxy_pbs.episodes:
   path: '/api/programs/{program}/episodes'
   defaults:
     _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getEpisodes'
   requirements:
-    _permission: 'access content'
+    _access: 'TRUE'
   options:
     parameters:
-      station:
-        type: entity:node
+      program:
+        type: entity:program
+
+api_proxy_pbs.episode:
+  path: '/api/programs/{program}/episodes/{date}'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getEpisode'
+  requirements:
+    _access: 'TRUE'
+  options:
+    parameters:
+      program:
+        type: entity:program
+      date:
+        type: entity:date
+
+api_proxy_pbs.playlists:
+  path: '/api/programs/{program}/episodes/{date}/playlists'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getPlaylists'
+  requirements:
+    _access: 'TRUE'
+  options:
+    parameters:
+      program:
+        type: entity:program                
+      date:
+        type: entity:date

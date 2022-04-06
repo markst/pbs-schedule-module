@@ -179,6 +179,19 @@ class ScheduleController extends ControllerBase implements
     }
 
     /**
+     * Airnet episodes.
+     * @return json
+     */
+    public function getEpisodes($program)
+    {
+        return new JsonResponse(
+            $this->subrequest(
+                "/rest/stations/3pbs/programs/{$program}/episodes"
+            )
+        );
+    }
+
+    /**
      * Perform subrequest request with uri
      * @return json object
      */

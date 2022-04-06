@@ -1,7 +1,17 @@
-api_proxy_pbs.get:
+api_proxy_pbs.fortnight_schedule:
   path: '/api/fortnight'
   defaults:
     _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::index'
   methods:  [GET]
   requirements:
     _access: 'TRUE'
+api_proxy_pbs.episodes:
+  path: '/api/programs/{program}/episodes'
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getEpisodes'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      station:
+        type: entity:node

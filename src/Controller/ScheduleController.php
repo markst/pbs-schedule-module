@@ -184,8 +184,6 @@ class ScheduleController extends ControllerBase implements
      */
     protected function subrequest(string $uri)
     {
-        $current_request = \Drupal::request();
-
         $path = Url::fromRoute(
             'api_proxy.forwarder',
             ['api_proxy' => 'airnet', '_api_proxy_uri' => $uri],
@@ -207,14 +205,6 @@ class ScheduleController extends ControllerBase implements
         );
 
         $code = $sub_response->getStatusCode();
-
-        // This hack is necessary, otherwise subsequent code will have the wrong route match!
-        if (
-            \Drupal::request()->getPathInfo() !==
-            $current_request->getPathInfo()
-        ) {
-            \Drupal::requestStack()->pop();
-        }
 
         if ($code == 200) {
             $content = $sub_response->getContent();

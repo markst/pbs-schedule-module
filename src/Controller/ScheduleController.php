@@ -2,12 +2,38 @@
 
 namespace Drupal\api_proxy_pbs\Controller;
 
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Url;
 
-class ScheduleController extends ControllerBase
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+
+class ScheduleController extends ControllerBase implements
+    ContainerInjectionInterface
 {
+    /**
+     * Symfony\Component\HttpKernel\HttpKernelInterface definition.
+     *
+     * @var Symfony\Component\HttpKernel\HttpKernelInterface
+     */
+    protected $httpKernel;
+
+    public function __construct(HttpKernelInterface $http_kernel)
+    {
+        $this->httpKernel = $http_kernel;
+    }
+
+    public static function create(ContainerInterface $container)
+    {
+        return new static($container->get('http_kernel.basic'));
+    }
+
     /**
      * Main index.
      * @return CacheableJsonResponse
@@ -140,26 +166,60 @@ class ScheduleController extends ControllerBase
      */
     public function getSchedule()
     {
-        return $this->getJSON(
-            'https://airnet.org.au/rest/stations/3pbs/guides/fm'
-        );
+        return $this->subrequest('/rest/stations/3pbs/guides/fm');
     }
+
     /**
      * Airnet programs
      * @return json array of programs
      */
     public function getPrograms()
     {
-        return $this->getJSON(
-            'https://airnet.org.au/rest/stations/3pbs/programs'
+        return $this->subrequest('/rest/stations/3pbs/programs');
+    }
+
+    /**
+     * Perform subrequest request with uri
+     * @return json object
+     */
+    protected function subrequest(string $uri)
+    {
+        $path = Url::fromRoute(
+            'api_proxy.forwarder',
+            ['api_proxy' => 'airnet', '_api_proxy_uri' => $uri],
+            []
+        )->toString();
+
+        $sub_request = Request::create($path, 'GET', [
+            'Host' => 'airnet.org.au',
+        ]);
+
+        // \Drupal::service('http_kernel')->handle($sub_request, HttpKernelInterface::SUB_REQUEST);
+        // \Drupal::service('http_kernel.basic');
+
+        $sub_response = $this->httpKernel->handle(
+            $sub_request,
+            HttpKernelInterface::SUB_REQUEST
         );
+
+        $code = $sub_response->getStatusCode();
+
+        if ($code == 200) {
+            $content = $sub_response->getContent();
+            return json_decode($content, true);
+        }
+        return [
+            'data' => json_decode($sub_response->getContent(), true),
+            'status' => $code,
+        ];
+        return null;
     }
 
     /**
      * Perform request with url
      * @return json object
      */
-    function getJSON(string $url)
+    protected function getJSON(string $url)
     {
         $method = 'GET';
         $options = [];

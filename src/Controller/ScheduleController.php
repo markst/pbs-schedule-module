@@ -245,9 +245,8 @@ class ScheduleController extends ControllerBase implements
             ->toString(true)
             ->getGeneratedUrl();
 
-        $sub_request = Request::create($path, 'GET', [
-            'Host' => 'airnet.org.au',
-        ]);
+        $sub_request = Request::create($path, 'GET', []);
+        $sub_request->headers->set('Host', 'airnet.org.au');
 
         // \Drupal::service('http_kernel')->handle($sub_request, HttpKernelInterface::SUB_REQUEST);
         // \Drupal::service('http_kernel.basic');

@@ -262,16 +262,13 @@ class ScheduleController extends ControllerBase implements
         if ($code == 200) {
             $content = $sub_response->getContent();
             return json_decode($content, true);
+        } else {
+            throw new \Exception($sub_response->getContent());
+            return [
+                'data' => json_decode($sub_response->getContent(), true),
+                'status' => $code,
+            ];
         }
-
-        /*
-        return [
-            'data' => json_decode($sub_response->getContent(), true),
-            'status' => $code,
-        ];
-        */
-
-        return null;
     }
 
     /**

@@ -245,9 +245,8 @@ class ScheduleController extends ControllerBase implements
             ->toString(true)
             ->getGeneratedUrl();
 
-        $sub_request = Request::create($path, 'GET', [
-            'Host' => 'airnet.org.au',
-        ]);
+        $sub_request = Request::create($path, 'GET', []);
+        $sub_request->headers->set('Host', 'airnet.org.au');
 
         // \Drupal::service('http_kernel')->handle($sub_request, HttpKernelInterface::SUB_REQUEST);
         // \Drupal::service('http_kernel.basic');
@@ -262,16 +261,13 @@ class ScheduleController extends ControllerBase implements
         if ($code == 200) {
             $content = $sub_response->getContent();
             return json_decode($content, true);
+        } else {
+            throw new \Exception($sub_response->getContent());
+            return [
+                'data' => json_decode($sub_response->getContent(), true),
+                'status' => $code,
+            ];
         }
-
-        /*
-        return [
-            'data' => json_decode($sub_response->getContent(), true),
-            'status' => $code,
-        ];
-        */
-
-        return null;
     }
 
     /**

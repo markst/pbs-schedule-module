@@ -2,36 +2,31 @@
 
 namespace Drupal\api_proxy_pbs\Controller;
 
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\api_proxy_pbs\Controller\SubRequestController;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Url;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
-class ScheduleController extends ControllerBase implements
-    ContainerInjectionInterface
+class ScheduleController extends ControllerBase
 {
-    /**
-     * Symfony\Component\HttpKernel\HttpKernelInterface definition.
-     *
-     * @var Symfony\Component\HttpKernel\HttpKernelInterface
-     */
-    protected $httpKernel;
+    protected $subRequestController;
 
-    public function __construct(HttpKernelInterface $http_kernel)
+    public function __construct(SubRequestController $sub_request_controller)
     {
-        $this->httpKernel = $http_kernel;
+        $this->subRequestController = $sub_request_controller;
     }
 
     public static function create(ContainerInterface $container)
     {
-        return new static($container->get('http_kernel.basic'));
+        // SubRequestController::create($container);
+        $controller = new SubRequestController(
+            \Drupal::service('http_kernel.basic'),
+            \Drupal::requestStack()
+        );
+        return new static($controller);
     }
 
     /**
@@ -43,12 +38,6 @@ class ScheduleController extends ControllerBase implements
         try {
             $data = $this->getFortnightSchedule();
 
-            // Add Cache settings for Max-age and URL context.
-            $cache_metadata = [
-                'max-age' => 86401,
-                'contexts' => ['url', 'url.query_args:x'],
-            ];
-
             $response = new CacheableJsonResponse($data);
             // Configurable`admin/config/development/performance`:
             $response->headers->set('Cache-Control', 'public, max-age=86402');
@@ -59,7 +48,13 @@ class ScheduleController extends ControllerBase implements
 
             $response->headers->addCacheControlDirective('public');
             $response->addCacheableDependency(
-                CacheableMetadata::createFromRenderArray($cache_metadata)
+                CacheableMetadata::createFromRenderArray([
+                    // Add Cache settings for Max-age and URL context.
+                    '#cache' => [
+                        'max-age' => 86401,
+                        'contexts' => ['url'],
+                    ],
+                ])
             );
 
             return $response;
@@ -75,9 +70,13 @@ class ScheduleController extends ControllerBase implements
     public function getFortnightSchedule()
     {
         // Fetch schedule:
-        $schedule = $this->subrequest('/rest/stations/3pbs/guides/fm');
+        $schedule = $this->subRequestController->getJSONSubrequest(
+            '/rest/stations/3pbs/guides/fm'
+        );
         // Fetch programs:
-        $programs = $this->subrequest('/rest/stations/3pbs/programs');
+        $programs = $this->subRequestController->getJSONSubrequest(
+            '/rest/stations/3pbs/programs'
+        );
         // Get the contents of the JSON file:
         $insomnia_lookup = json_decode(
             file_get_contents(__DIR__ . '/../insomnia-lookup.json'),
@@ -158,138 +157,6 @@ class ScheduleController extends ControllerBase implements
             }
         },
         $two_week);
-    }
-
-    /**
-     * Airnet schedule
-     * @return json array of scheduled programs
-     */
-    public function getSchedule()
-    {
-        return new JsonResponse(
-            $this->subrequest('/rest/stations/3pbs/guides/fm')
-        );
-    }
-
-    /**
-     * Airnet programs
-     * @return json array of programs
-     */
-    public function getPrograms()
-    {
-        return new JsonResponse(
-            $this->subrequest('/rest/stations/3pbs/programs')
-        );
-    }
-
-    /**
-     * Airnet program.
-     * @return json array of programs
-     */
-    public function getProgram($program)
-    {
-        return new JsonResponse(
-            $this->subrequest("/rest/stations/3pbs/programs/{$program}")
-        );
-    }
-
-    /**
-     * Airnet episodes for a program.
-     * @return json
-     */
-    public function getEpisodes($program)
-    {
-        return new JsonResponse(
-            $this->subrequest(
-                "/rest/stations/3pbs/programs/{$program}/episodes"
-            )
-        );
-    }
-
-    /**
-     * Airnet episode for a program.
-     * @return json
-     */
-    public function getEpisode($program, $date)
-    {
-        return new JsonResponse(
-            $this->subrequest(
-                "/rest/stations/3pbs/programs/{$program}/episodes/{$date}"
-            )
-        );
-    }
-    /**
-     * Airnet playlists for a program.
-     * @return json
-     */
-    public function getPlaylists($program, $date)
-    {
-        return new JsonResponse(
-            $this->subrequest(
-                "/rest/stations/3pbs/programs/{$program}/episodes/{$date}/playlists"
-            )
-        );
-    }
-
-    /**
-     * Perform subrequest request with uri
-     * @return json object
-     */
-    protected function subrequest(string $uri)
-    {
-        $path = Url::fromRoute(
-            'api_proxy.forwarder',
-            ['api_proxy' => 'airnet', '_api_proxy_uri' => $uri],
-            []
-        )
-            ->toString(true)
-            ->getGeneratedUrl();
-
-        $sub_request = Request::create($path, 'GET', []);
-        $sub_request->headers->set('Host', 'airnet.org.au');
-
-        // \Drupal::service('http_kernel')->handle($sub_request, HttpKernelInterface::SUB_REQUEST);
-        // \Drupal::service('http_kernel.basic');
-
-        $sub_response = $this->httpKernel->handle(
-            $sub_request,
-            HttpKernelInterface::SUB_REQUEST
-        );
-
-        $code = $sub_response->getStatusCode();
-
-        if ($code == 200) {
-            $content = $sub_response->getContent();
-            return json_decode($content, true);
-        } else {
-            throw new \Exception($sub_response->getContent());
-            return [
-                'data' => json_decode($sub_response->getContent(), true),
-                'status' => $code,
-            ];
-        }
-    }
-
-    /**
-     * Perform request with url
-     * @return json object
-     */
-    protected function getJSON(string $url)
-    {
-        $method = 'GET';
-        $options = [];
-
-        $client = \Drupal::httpClient();
-
-        $response = $client->request($method, $url, $options);
-        $code = $response->getStatusCode();
-
-        if ($code == 200) {
-            $body = $response->getBody()->getContents();
-            return json_decode($body, true);
-        }
-
-        return null;
     }
 
     /**

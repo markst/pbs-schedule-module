@@ -10,7 +10,7 @@ api_proxy_pbs.programs:
   path: '/api/programs'
   methods:  [GET]
   defaults:
-    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getPrograms'
+    _controller: 'Drupal\api_proxy_pbs\Controller\ApiController::getPrograms'
   requirements:
     _access: 'TRUE'
 
@@ -18,7 +18,7 @@ api_proxy_pbs.program:
   path: '/api/programs/{program}'
   methods:  [GET]
   defaults:
-    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getProgram'
+    _controller: 'Drupal\api_proxy_pbs\Controller\ApiController::getProgram'
   requirements:
     _access: 'TRUE'
   options:
@@ -29,7 +29,7 @@ api_proxy_pbs.program:
 api_proxy_pbs.episodes:
   path: '/api/programs/{program}/episodes'
   defaults:
-    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getEpisodes'
+    _controller: 'Drupal\api_proxy_pbs\Controller\ApiController::getEpisodes'
   requirements:
     _access: 'TRUE'
   options:
@@ -41,7 +41,7 @@ api_proxy_pbs.episode:
   path: '/api/programs/{program}/episodes/{date}'
   methods:  [GET]
   defaults:
-    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getEpisode'
+    _controller: 'Drupal\api_proxy_pbs\Controller\ApiController::getEpisode'
   requirements:
     _access: 'TRUE'
   options:
@@ -55,7 +55,7 @@ api_proxy_pbs.playlists:
   path: '/api/programs/{program}/episodes/{date}/playlists'
   methods:  [GET]
   defaults:
-    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getPlaylists'
+    _controller: 'Drupal\api_proxy_pbs\Controller\ApiController::getPlaylists'
   requirements:
     _access: 'TRUE'
   options:

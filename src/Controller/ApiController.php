@@ -88,6 +88,7 @@ class ApiController extends ControllerBase
             $this->subRequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes" .
                     '?' .
+                    // URL encode params for `api_proxy`
                     UrlHelper::buildQuery($params),
                 $params
             ),

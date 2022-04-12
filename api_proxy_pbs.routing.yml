@@ -14,6 +14,14 @@ api_proxy_pbs.fortnight_schedule:
   requirements:
     _access: 'TRUE'
 
+api_proxy_pbs.insomnia:
+  path: '/api/insomnia-lookup'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getInsomniaMap'
+  requirements:
+    _access: 'TRUE'
+
 api_proxy_pbs.programs:
   path: '/api/programs'
   methods:  [GET]

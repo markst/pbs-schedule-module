@@ -9,6 +9,7 @@ use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ScheduleController extends ControllerBase
 {
@@ -77,11 +78,8 @@ class ScheduleController extends ControllerBase
         $programs = $this->subRequestController->getJSONSubrequest(
             '/rest/stations/3pbs/programs'
         );
-        // Get the contents of the JSON file:
-        $insomnia_lookup = json_decode(
-            file_get_contents(__DIR__ . '/../insomnia-lookup.json'),
-            true
-        );
+        // Get the insomnia lookup:
+        $insomnia_lookup = $this->insomniaMap();
 
         // Merge two weeks together:
         $two_week = array_merge(
@@ -157,6 +155,26 @@ class ScheduleController extends ControllerBase
             }
         },
         $two_week);
+    }
+
+    /**
+     * Insomnia lookup
+     * @return json lookup table
+     */
+    public function getInsomniaMap()
+    {
+        return new JsonResponse($this->insomniaMap());
+    }
+
+    protected function insomniaMap()
+    {
+        $config = \Drupal::config('api_proxy_pbs.settings');
+        $body = $config->get('insomnia_lookup');
+
+        return json_decode(
+            $body ?: file_get_contents(__DIR__ . '/../insomnia-lookup.json'),
+            true
+        );
     }
 
     /**

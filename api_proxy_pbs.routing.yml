@@ -1,3 +1,11 @@
+api_proxy_pbs.settings:
+  path: '/admin/config/services/api-proxy-pbs/settings'
+  defaults:
+    _form: '\Drupal\api_proxy_pbs\Form\ScheduleSettingsForm'
+    _title: 'Configure Insomnia JSON'
+  requirements:
+    _permission: 'administer site configuration'
+
 api_proxy_pbs.fortnight_schedule:
   path: '/api/fortnight'
   methods:  [GET]

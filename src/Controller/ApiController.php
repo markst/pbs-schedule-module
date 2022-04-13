@@ -44,13 +44,50 @@ class ApiController extends ControllerBase
     }
 
     /**
+     * Return `CacheableJsonResponse` with time to live value headers.
+     * @param  Object $data json object
+     * @param  Int $ttl time to live in seconds.
+     * @param  Array $cache_contexts array cache contexts.
+     * @return CacheableJsonResponse
+     */
+    protected function cachedReponse(
+        $data,
+        $ttl = 3600,
+        $cache_contexts = ['url']
+    ) {
+        $response = new CacheableJsonResponse($data);
+        $response
+            ->setPublic()
+            ->setMaxAge($ttl)
+            ->setExpires(new \DateTime('@' . (REQUEST_TIME + $ttl)));
+
+        $response->headers->set(
+            'Content-Type',
+            'application/json; charset=utf-8'
+        );
+
+        $response->addCacheableDependency(
+            CacheableMetadata::createFromRenderArray([
+                // Add Cache settings for Max-age and URL context.
+                '#cache' => [
+                    'max-age' => $ttl,
+                    'contexts' => $cache_contexts,
+                ],
+            ])
+        );
+
+        return $response;
+    }
+
+    /**
      * Airnet vanilla one week schedule
      * @return json array of scheduled programs
      */
     public function getSchedule()
     {
-        return new JsonResponse(
-            $this->subRequest('/rest/stations/3pbs/guides/fm')
+        return $this->cachedReponse(
+            $this->subRequest('/rest/stations/3pbs/guides/fm'),
+            86400
         );
     }
 
@@ -60,8 +97,9 @@ class ApiController extends ControllerBase
      */
     public function getPrograms()
     {
-        return new JsonResponse(
-            $this->subRequest('/rest/stations/3pbs/programs')
+        return $this->cachedReponse(
+            $this->subRequest('/rest/stations/3pbs/programs'),
+            86400
         );
     }
 
@@ -71,8 +109,9 @@ class ApiController extends ControllerBase
      */
     public function getProgram($program)
     {
-        return new JsonResponse(
-            $this->subRequest("/rest/stations/3pbs/programs/{$program}")
+        return $this->cachedReponse(
+            $this->subRequest("/rest/stations/3pbs/programs/{$program}"),
+            86400
         );
     }
 
@@ -83,8 +122,7 @@ class ApiController extends ControllerBase
     public function getEpisodes($program)
     {
         $params = \Drupal::request()->query->all();
-
-        return (new CacheableJsonResponse(
+        return $this->cachedReponse(
             $this->subRequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes" .
                     '?' .
@@ -92,18 +130,13 @@ class ApiController extends ControllerBase
                     UrlHelper::buildQuery($params),
                 $params
             ),
-            200
-        ))->addCacheableDependency(
-            CacheableMetadata::createFromRenderArray([
-                '#cache' => [
-                    'contexts' => [
-                        'url.path',
-                        'url.query_args',
-                        'url.query_args:date',
-                        'url.query_args:numBefore',
-                    ],
-                ],
-            ])
+            3600,
+            [
+                'url.path',
+                'url.query_args',
+                'url.query_args:date',
+                'url.query_args:numBefore',
+            ]
         );
     }
 
@@ -113,10 +146,11 @@ class ApiController extends ControllerBase
      */
     public function getEpisode($program, $date)
     {
-        return new JsonResponse(
+        return $this->cachedReponse(
             $this->subRequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes/{$date}"
-            )
+            ),
+            3600
         );
     }
 
@@ -126,18 +160,11 @@ class ApiController extends ControllerBase
      */
     public function getPlaylists($program, $date)
     {
-        return (new CacheableJsonResponse(
+        return $this->cachedReponse(
             $this->subRequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes/{$date}/playlists"
             ),
-            200
-        ))->addCacheableDependency(
-            CacheableMetadata::createFromRenderArray([
-                '#cache' => [
-                    'max-age' => 60,
-                    'contexts' => ['url'],
-                ],
-            ])
+            10
         );
     }
 }

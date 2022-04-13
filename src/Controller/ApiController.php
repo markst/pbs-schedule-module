@@ -80,6 +80,17 @@ class ApiController extends ControllerBase
     }
 
     /**
+     * Airnet station info
+     * @return json array of scheduled programs
+     */
+    public function getChannel()
+    {
+        return $this->cachedReponse(
+            $this->subRequest('/rest/stations/3pbs/channels/fm')
+        );
+    }
+
+    /**
      * Airnet vanilla one week schedule
      * @return json array of scheduled programs
      */

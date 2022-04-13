@@ -22,6 +22,14 @@ api_proxy_pbs.insomnia:
   requirements:
     _access: 'TRUE'
 
+api_proxy_pbs.channel:
+  path: '/api/channels/fm'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\ApiController::getChannel'
+  requirements:
+    _access: 'TRUE'
+
 api_proxy_pbs.programs:
   path: '/api/programs'
   methods:  [GET]

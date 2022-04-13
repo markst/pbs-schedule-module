@@ -52,6 +52,7 @@ api_proxy_pbs.program:
 
 api_proxy_pbs.episodes:
   path: '/api/programs/{program}/episodes'
+  methods:  [GET]
   defaults:
     _controller: 'Drupal\api_proxy_pbs\Controller\ApiController::getEpisodes'
   requirements:

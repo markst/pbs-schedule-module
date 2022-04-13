@@ -37,22 +37,23 @@ class ScheduleController extends ControllerBase
     public function index()
     {
         try {
+            $ttl = 43200;
             $data = $this->getFortnightSchedule();
 
             $response = new CacheableJsonResponse($data);
-            // Configurable`admin/config/development/performance`:
-            $response->headers->set('Cache-Control', 'public, max-age=86402');
+            $response->setPublic();
+            $response->setMaxAge($ttl); // Configurable `admin/config/development/performance`
+            $response->setExpires(new \DateTime('@' . (REQUEST_TIME + $ttl)));
             $response->headers->set(
                 'Content-Type',
                 'application/json; charset=utf-8'
             );
 
-            $response->headers->addCacheControlDirective('public');
             $response->addCacheableDependency(
                 CacheableMetadata::createFromRenderArray([
                     // Add Cache settings for Max-age and URL context.
                     '#cache' => [
-                        'max-age' => 86401,
+                        'max-age' => $ttl,
                         'contexts' => ['url'],
                     ],
                 ])

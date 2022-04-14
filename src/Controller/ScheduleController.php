@@ -135,9 +135,9 @@ class ScheduleController extends ControllerBase
                     $new_program['day'] = $og_program['day'];
                     $new_program['start'] = $og_program['start'];
                     $new_program['duration'] =
-                        $og_program['duration'] == null
+                        $og_program['duration'] != null
                             ? $og_program['duration']
-                            : 7200;
+                            : 14400;
                     $new_program['profileImage'] =
                         $new_slug_info['profileImage'];
 

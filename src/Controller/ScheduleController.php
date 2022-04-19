@@ -125,11 +125,11 @@ class ScheduleController extends ControllerBase
                         array_column($programs, 'slug')
                     );
 
-                    $new_program = $programs[$i];
-
-                    if ($new_program == null) {
+                    if ($i == false) {
                         return $og_program;
                     }
+
+                    $new_program = $programs[$i];
 
                     // Carry existing attributes:
                     $new_program['day'] = $og_program['day'];

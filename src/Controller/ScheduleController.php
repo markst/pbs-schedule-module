@@ -194,11 +194,10 @@ class ScheduleController extends ControllerBase
     protected function startDate($program)
     {
         $times = explode(':', $program['start']);
-        $dt = new DateTime('now', new DateTimeZone('Australia/Melbourne'));
-        return $dt
+        return (new DateTime('now', new DateTimeZone('Australia/Melbourne')))
             ->setISODate(
                 date('Y'),
-                date('W') - (date('W') % 2),
+                date('W') - (date('W') % 2 == 0 ? 1 : 0),
                 $program['day']
             )
             ->setTime($times[0], $times[1])

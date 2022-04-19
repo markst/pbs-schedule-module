@@ -11,6 +11,9 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use DateTime;
+use DateTimeZone;
+
 class ScheduleController extends ControllerBase
 {
     protected $subRequestController;
@@ -143,6 +146,9 @@ class ScheduleController extends ControllerBase
 
                     // Remove stale `onairnow`:
                     unset($new_program['onairnow']);
+                    // Set the ISO 8601 date;
+                    $new_program['startTime'] = $this->startDate($og_program);
+
                     return $new_program;
                     break;
                 default:
@@ -151,6 +157,9 @@ class ScheduleController extends ControllerBase
                     unset($og_program['bannerImageSmall']);
                     unset($og_program['profileImageSmall']);
                     unset($og_program['url']);
+                    // Set the ISO 8601 date;
+                    $og_program['startTime'] = $this->startDate($og_program);
+
                     return $og_program;
                     break;
             }
@@ -176,6 +185,24 @@ class ScheduleController extends ControllerBase
             $body ?: file_get_contents(__DIR__ . '/../insomnia-lookup.json'),
             true
         );
+    }
+
+    /**
+     * Format date from components
+     * @return string ISO 8601 date string.
+     */
+    protected function startDate($program)
+    {
+        $times = explode(':', $program['start']);
+        $dt = new DateTime('now', new DateTimeZone('Australia/Melbourne'));
+        return $dt
+            ->setISODate(
+                date('Y'),
+                date('W') - (date('W') % 2),
+                $program['day']
+            )
+            ->setTime($times[0], $times[1])
+            ->format('c');
     }
 
     /**

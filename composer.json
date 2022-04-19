@@ -1,7 +1,6 @@
 {
     "name": "drupal/api_proxy_pbs",
     "require": {
-        "behat/behat": "^3.8",
-        "phpunit/phpunit": "^9.5"
+        "drupal/api_proxy": "^2.0"
     }
 }

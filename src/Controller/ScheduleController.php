@@ -194,11 +194,22 @@ class ScheduleController extends ControllerBase
     protected function startDate($program)
     {
         $times = explode(':', $program['start']);
+        $even_week = date('W') % 2 == 0;
+        $append = $even_week && $program['day'] <= 7 ? 14 : 0;
+        /*
+        Odd week:
+        Week 1 = 1 -> 7
+        Week 2 = 8 -> 14
+
+        Even week: (Week 2)
+        Week 1 = 15 -> 21
+        Week 2 = 8 -> 14
+        */
         return (new DateTime('now', new DateTimeZone('Australia/Melbourne')))
             ->setISODate(
                 date('Y'),
-                date('W') - (date('W') % 2 == 0 ? 1 : 0),
-                $program['day']
+                date('W') - ($even_week ? 1 : 0),
+                $program['day'] + $append
             )
             ->setTime($times[0], $times[1])
             ->format('c');

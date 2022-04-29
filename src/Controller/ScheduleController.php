@@ -40,13 +40,19 @@ class ScheduleController extends ControllerBase
     public function index()
     {
         try {
-            $ttl = 43200;
+            $ttl = 12 * 60 * 60;
             $data = $this->getFortnightSchedule();
+
+            // Module info:
+            $info = \Drupal::service('extension.list.module')->getExtensionInfo(
+                'api_proxy_pbs'
+            );
 
             $response = new CacheableJsonResponse($data);
             $response->setPublic();
             $response->setMaxAge($ttl); // Configurable `admin/config/development/performance`
             $response->setExpires(new \DateTime('@' . (REQUEST_TIME + $ttl)));
+            $response->headers->set('Proxy-Version', $info['version']);
             $response->headers->set(
                 'Content-Type',
                 'application/json; charset=utf-8'

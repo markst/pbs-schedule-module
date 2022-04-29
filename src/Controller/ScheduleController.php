@@ -193,8 +193,14 @@ class ScheduleController extends ControllerBase
      */
     protected function startDate($program)
     {
+        // User timezone defined in Regional Settings: `date_default_timezone_get()`
+
         $times = explode(':', $program['start']);
-        $even_week = date('W') % 2 == 0;
+        $start_time = new DateTime(
+            'now',
+            new DateTimeZone('Australia/Melbourne')
+        );
+        $even_week = $start_time->format('W') % 2 == 0;
         $append = $even_week && $program['day'] <= 7 ? 14 : 0;
         /*
         Odd week:
@@ -205,10 +211,10 @@ class ScheduleController extends ControllerBase
         Week 1 = 15 -> 21
         Week 2 = 8 -> 14
         */
-        return (new DateTime('now', new DateTimeZone('Australia/Melbourne')))
+        return $start_time
             ->setISODate(
-                date('Y'),
-                date('W') - ($even_week ? 1 : 0),
+                $start_time->format('Y'),
+                $start_time->format('W') - ($even_week ? 1 : 0),
                 $program['day'] + $append
             )
             ->setTime($times[0], $times[1])

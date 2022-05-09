@@ -1,0 +1,9 @@
+name: Airnet API Proxy
+description: 'A proxy for Airnet.'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: "airnet"
+type: module
+version: "1.0.0-alpha"
+dependencies:
+  - api_proxy

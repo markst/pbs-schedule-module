@@ -1,0 +1,6 @@
+{
+    "name": "drupal/api_proxy_pbs",
+    "require": {
+        "drupal/api_proxy": "^2.0"
+    }
+}

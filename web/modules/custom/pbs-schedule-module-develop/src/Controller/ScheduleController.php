@@ -2,36 +2,72 @@
 
 namespace Drupal\api_proxy_pbs\Controller;
 
+use Drupal\api_proxy_pbs\Controller\SubRequestController;
+
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use DateTime;
+use DateTimeZone;
+
 class ScheduleController extends ControllerBase
 {
+    protected $subRequestController;
+
+    public function __construct(SubRequestController $sub_request_controller)
+    {
+        $this->subRequestController = $sub_request_controller;
+    }
+
+    public static function create(ContainerInterface $container)
+    {
+        // SubRequestController::create($container);
+        $controller = new SubRequestController(
+            \Drupal::service('http_kernel.basic'),
+            \Drupal::requestStack()
+        );
+        return new static($controller);
+    }
+
     /**
+     * Main index.
      * @return CacheableJsonResponse
      */
     public function index()
     {
         try {
+            $ttl = 12 * 60 * 60;
             $data = $this->getFortnightSchedule();
 
-            /*
-            // Add Cache settings for Max-age and URL context.
-            $data['#cache'] = [
-                'max-age' => 600,
-                'contexts' => ['url'],
-            ];
-            */
-
             $response = new CacheableJsonResponse($data);
+            $response->setPublic();
+            $response->setMaxAge($ttl); // Configurable `admin/config/development/performance`
+            $response->setExpires(new \DateTime('@' . (REQUEST_TIME + $ttl)));
+            $response->headers->set(
+                'Content-Type',
+                'application/json; charset=utf-8'
+            );
+
+            // Module info:
+            $response->headers->set(
+                'Proxy-Version',
+                \Drupal::service('extension.list.module')->getExtensionInfo(
+                    'api_proxy_pbs'
+                )['version']
+            );
+
             $response->addCacheableDependency(
-                CacheableMetadata::createFromRenderArray($data)
-                /*
                 CacheableMetadata::createFromRenderArray([
-                    '#cache' => $cacheMetadata,
+                    // Add Cache settings for Max-age and URL context.
+                    '#cache' => [
+                        'max-age' => $ttl,
+                        'contexts' => ['url'],
+                    ],
                 ])
-                */
             );
 
             return $response;
@@ -41,19 +77,21 @@ class ScheduleController extends ControllerBase
     }
 
     /**
-     * @return insomnia shows
+     * Concatenated schedule with `insomnia_` modifications based on `insomnia-lookup.json`
+     * @return json array of scheduled programs
      */
     public function getFortnightSchedule()
     {
         // Fetch schedule:
-        $schedule = $this->getSchedule();
-        // Fetch programs:
-        $programs = $this->getPrograms();
-        // Get the contents of the JSON file:
-        $insomnia_lookup = json_decode(
-            file_get_contents(__DIR__ . '/../insomnia-lookup.json'),
-            true
+        $schedule = $this->subRequestController->getJSONSubrequest(
+            '/rest/stations/3pbs/guides/fm'
         );
+        // Fetch programs:
+        $programs = $this->subRequestController->getJSONSubrequest(
+            '/rest/stations/3pbs/programs'
+        );
+        // Get the insomnia lookup:
+        $insomnia_lookup = $this->insomniaMap();
 
         // Merge two weeks together:
         $two_week = array_merge(
@@ -98,24 +136,27 @@ class ScheduleController extends ControllerBase
                         array_column($programs, 'slug')
                     );
 
-                    $new_program = $programs[$i];
-
-                    if ($new_program == null) {
+                    if ($i == false) {
                         return $og_program;
                     }
+
+                    $new_program = $programs[$i];
 
                     // Carry existing attributes:
                     $new_program['day'] = $og_program['day'];
                     $new_program['start'] = $og_program['start'];
                     $new_program['duration'] =
-                        $og_program['duration'] == null
+                        $og_program['duration'] != null
                             ? $og_program['duration']
-                            : 7200;
+                            : 14400;
                     $new_program['profileImage'] =
                         $new_slug_info['profileImage'];
 
                     // Remove stale `onairnow`:
                     unset($new_program['onairnow']);
+                    // Set the ISO 8601 date;
+                    $new_program['startTime'] = $this->startDate($og_program);
+
                     return $new_program;
                     break;
                 default:
@@ -124,6 +165,9 @@ class ScheduleController extends ControllerBase
                     unset($og_program['bannerImageSmall']);
                     unset($og_program['profileImageSmall']);
                     unset($og_program['url']);
+                    // Set the ISO 8601 date;
+                    $og_program['startTime'] = $this->startDate($og_program);
+
                     return $og_program;
                     break;
             }
@@ -132,43 +176,57 @@ class ScheduleController extends ControllerBase
     }
 
     /**
-     * @return Airnet schedule
+     * Insomnia lookup
+     * @return json lookup table
      */
-    public function getSchedule()
+    public function getInsomniaMap()
     {
-        return $this->getJSON(
-            'https://airnet.org.au/rest/stations/3pbs/guides/fm'
-        );
-    }
-    /**
-     * @return Airnet programs
-     */
-    public function getPrograms()
-    {
-        return $this->getJSON(
-            'https://airnet.org.au/rest/stations/3pbs/programs'
-        );
+        return new JsonResponse($this->insomniaMap());
     }
 
-    /**
-     * @return Perform request with url
-     */
-    function getJSON(string $url)
+    protected function insomniaMap()
     {
-        $method = 'GET';
-        $options = [];
+        $config = \Drupal::config('api_proxy_pbs.settings');
+        $body = $config->get('insomnia_lookup');
 
-        $client = \Drupal::httpClient();
+        return json_decode(
+            $body ?: file_get_contents(__DIR__ . '/../insomnia-lookup.json'),
+            true
+        );
+    }
 
-        $response = $client->request($method, $url, $options);
-        $code = $response->getStatusCode();
+    /**
+     * Format date from components
+     * @return string ISO 8601 date string.
+     */
+    protected function startDate($program)
+    {
+        // User timezone defined in Regional Settings: `date_default_timezone_get()`
 
-        if ($code == 200) {
-            $body = $response->getBody()->getContents();
-            return json_decode($body, true);
-        }
+        $times = explode(':', $program['start']);
+        $start_time = new DateTime(
+            'now',
+            new DateTimeZone('Australia/Melbourne')
+        );
+        $even_week = $start_time->format('W') % 2 == 0;
+        $append = $even_week && $program['day'] <= 7 ? 14 : 0;
+        /*
+        Odd week:
+        Week 1 = 1 -> 7
+        Week 2 = 8 -> 14
 
-        return null;
+        Even week: (Week 2)
+        Week 1 = 15 -> 21
+        Week 2 = 8 -> 14
+        */
+        return $start_time
+            ->setISODate(
+                $start_time->format('Y'),
+                $start_time->format('W') - ($even_week ? 1 : 0),
+                $program['day'] + $append
+            )
+            ->setTime($times[0], $times[1])
+            ->format('c');
     }
 
     /**

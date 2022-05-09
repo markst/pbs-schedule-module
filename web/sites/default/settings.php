@@ -249,7 +249,7 @@ $databases = [];
  *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
  * @endcode
  */
-$settings['hash_salt'] = 'qTuUVWR5te3pT7jASLBKgGLpddS4QRSRaGIjX6rT-tseqw8Zvs-mu9d27DkqFYW4LVQJlZFfwA';
+$settings['hash_salt'] = 'fFLVezLAc3itTSsARgYPIO7lbqaGFDCYtshGZHwIo5EQtfotrczeqrhQIp1VJ_0vFGcPDaXXVA';
 
 /**
  * Deployment identifier.
@@ -769,16 +769,15 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 # if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
 #   include $app_root . '/' . $site_path . '/settings.local.php';
 # }
-$databases['default']['default'] = array (
-  'database' => 'pbss_db',
-  'username' => 'pbss_user',
-  'password' => 'paoDyn.y5yrfw',
-  'prefix' => '',
-  'host' => 'localhost',
-  'port' => '3306',
-  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
-  'driver' => 'mysql',
-);
 
 // Location of the site configuration files.
 $settings['config_sync_directory'] = '../config/sync';
+
+
+/**
+ * If there is a local settings file, then include it
+ */
+$local_settings = __DIR__ . "/settings.local.php";
+if (file_exists($local_settings)) {
+  include $local_settings;
+}

@@ -40,7 +40,7 @@ class ScheduleController extends ControllerBase
     public function index()
     {
         try {
-            $ttl = 12 * 60 * 60;
+            $ttl = 1 * 60 * 60;
             $data = $this->getFortnightSchedule();
 
             $response = new CacheableJsonResponse($data);

@@ -103,8 +103,6 @@ class SubRequestController extends ControllerBase implements
      * Perform subrequest request with uri.
      * @return json object
      *   The response json.
-     *
-     * @throws \Exception
      */
     public function getJSONSubrequest($uri, $parameters = [])
     {
@@ -127,7 +125,6 @@ class SubRequestController extends ControllerBase implements
             $content = $sub_response->getContent();
             return json_decode($content, true);
         } else {
-            throw new \Exception($sub_response->getContent());
             return [
                 'data' => json_decode($sub_response->getContent(), true),
                 'status' => $code,

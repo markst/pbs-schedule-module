@@ -157,12 +157,14 @@ class ApiController extends ControllerBase
      */
     public function getEpisode($program, $date)
     {
-        return $this->cachedReponse(
-            $this->subRequest(
+        try {
+            $episode = $this->subRequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes/{$date}"
-            ),
-            3600
-        );
+            );
+            return $this->cachedReponse($episode, 3600);
+        } catch (Throwable $e) {
+            return new JsonResponse($e->getMessage());
+        }
     }
 
     /**
@@ -171,11 +173,13 @@ class ApiController extends ControllerBase
      */
     public function getPlaylists($program, $date)
     {
-        return $this->cachedReponse(
-            $this->subRequest(
+        try {
+            $playlist = $this->subRequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes/{$date}/playlists"
-            ),
-            10
-        );
+            );
+            return $this->cachedReponse($playlist, 10);
+        } catch (Throwable $e) {
+            return new JsonResponse($e->getMessage());
+        }
     }
 }

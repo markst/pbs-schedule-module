@@ -142,26 +142,4 @@ class SubRequestController extends ControllerBase implements
             throw new \Exception($e->getMessage());
         }
     }
-
-    /**
-     * Perform request with url
-     * @return json object
-     */
-    protected function getJSON(string $url)
-    {
-        $method = 'GET';
-        $options = [];
-
-        $client = \Drupal::httpClient();
-
-        $response = $client->request($method, $url, $options);
-        $code = $response->getStatusCode();
-
-        if ($code == 200) {
-            $body = $response->getBody()->getContents();
-            return json_decode($body, true);
-        }
-
-        return null;
-    }
 }

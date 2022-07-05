@@ -62,8 +62,8 @@ class SubRequestController extends ControllerBase implements
      * @param string|resource|null $content
      *   The raw body data.
      *
-     * @return string
-     *   The response String.
+     * @return Response
+     *   The response Response.
      *
      * @throws \Exception
      */
@@ -90,19 +90,26 @@ class SubRequestController extends ControllerBase implements
         // Confirm necessary `api_proxy`:
         $sub_request->headers->set('Host', 'airnet.org.au');
 
-        $sub_response = $this->httpKernel->handle(
-            $sub_request,
-            HttpKernelInterface::SUB_REQUEST,
-            false
-        );
-
-        return $sub_response; // ->getContent();
+        try {
+            $sub_response = $this->httpKernel->handle(
+                $sub_request,
+                HttpKernelInterface::SUB_REQUEST,
+                false
+            );
+            return $sub_response; // ->getContent();
+        } catch (Throwable $t) {
+            throw new \Exception($t->getMessage());
+        } catch (\Exception | \Error $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
     /**
      * Perform subrequest request with uri.
      * @return json object
      *   The response json.
+     *
+     * @throws \Exception
      */
     public function getJSONSubrequest($uri, $parameters = [])
     {
@@ -118,39 +125,21 @@ class SubRequestController extends ControllerBase implements
             ->toString(true)
             ->getGeneratedUrl();
 
-        $sub_response = $this->subRequest($path, 'GET', $parameters);
-        $code = $sub_response->getStatusCode();
-
-        if ($code == 200) {
+        try {
+            $sub_response = $this->subRequest($path, 'GET', $parameters);
+            $code = $sub_response->getStatusCode();
             $content = $sub_response->getContent();
-            return json_decode($content, true);
-        } else {
-            return [
-                'data' => json_decode($sub_response->getContent(), true),
-                'status' => $code,
-            ];
+
+            if ($code == 200) {
+                return json_decode($content, true);
+            } else {
+                // throw new \NotFoundHttpException($content);
+                throw new \Exception($content);
+            }
+        } catch (Throwable $t) {
+            throw new \Exception($t->getMessage());
+        } catch (\Exception | \Error $e) {
+            throw new \Exception($e->getMessage());
         }
-    }
-
-    /**
-     * Perform request with url
-     * @return json object
-     */
-    protected function getJSON(string $url)
-    {
-        $method = 'GET';
-        $options = [];
-
-        $client = \Drupal::httpClient();
-
-        $response = $client->request($method, $url, $options);
-        $code = $response->getStatusCode();
-
-        if ($code == 200) {
-            $body = $response->getBody()->getContents();
-            return json_decode($body, true);
-        }
-
-        return null;
     }
 }

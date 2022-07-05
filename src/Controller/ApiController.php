@@ -35,15 +35,6 @@ class ApiController extends ControllerBase
     }
 
     /**
-     * Perform subrequest request with uri
-     * @return json object
-     */
-    protected function subRequest(string $uri, $params = [])
-    {
-        return $this->subRequestController->getJSONSubrequest($uri, $params);
-    }
-
-    /**
      * Return `CacheableJsonResponse` with time to live value headers.
      * @param  Object $data json object
      * @param  Int $ttl time to live in seconds.
@@ -86,7 +77,9 @@ class ApiController extends ControllerBase
     public function getChannel()
     {
         return $this->cachedReponse(
-            $this->subRequest('/rest/stations/3pbs/channels/fm')
+            $this->subRequestController->getJSONSubrequest(
+                '/rest/stations/3pbs/channels/fm'
+            )
         );
     }
 
@@ -97,7 +90,9 @@ class ApiController extends ControllerBase
     public function getSchedule()
     {
         return $this->cachedReponse(
-            $this->subRequest('/rest/stations/3pbs/guides/fm'),
+            $this->subRequestController->getJSONSubrequest(
+                '/rest/stations/3pbs/guides/fm'
+            ),
             86400
         );
     }
@@ -109,7 +104,9 @@ class ApiController extends ControllerBase
     public function getPrograms()
     {
         return $this->cachedReponse(
-            $this->subRequest('/rest/stations/3pbs/programs'),
+            $this->subRequestController->getJSONSubrequest(
+                '/rest/stations/3pbs/programs'
+            ),
             86400
         );
     }
@@ -121,7 +118,9 @@ class ApiController extends ControllerBase
     public function getProgram($program)
     {
         return $this->cachedReponse(
-            $this->subRequest("/rest/stations/3pbs/programs/{$program}"),
+            $this->subRequestController->getJSONSubrequest(
+                "/rest/stations/3pbs/programs/{$program}"
+            ),
             86400
         );
     }
@@ -134,7 +133,7 @@ class ApiController extends ControllerBase
     {
         $params = \Drupal::request()->query->all();
         return $this->cachedReponse(
-            $this->subRequest(
+            $this->subRequestController->getJSONSubrequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes" .
                     '?' .
                     // URL encode params for `api_proxy`
@@ -158,12 +157,20 @@ class ApiController extends ControllerBase
     public function getEpisode($program, $date)
     {
         try {
-            $episode = $this->subRequest(
+            $episode = $this->subRequestController->getJSONSubrequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes/{$date}"
             );
             return $this->cachedReponse($episode, 3600);
-        } catch (Throwable $e) {
-            return new JsonResponse($e->getMessage());
+        } catch (Throwable $t) {
+            return (new JsonResponse([
+                'data' => json_decode($e->getMessage()),
+                'status' => 404,
+            ]))->setStatusCode(404);
+        } catch (\Exception | \Error $e) {
+            return (new JsonResponse([
+                'data' => json_decode($e->getMessage()),
+                'status' => 404,
+            ]))->setStatusCode(404);
         }
     }
 
@@ -174,12 +181,20 @@ class ApiController extends ControllerBase
     public function getPlaylists($program, $date)
     {
         try {
-            $playlist = $this->subRequest(
+            $playlist = $this->subRequestController->getJSONSubrequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes/{$date}/playlists"
             );
             return $this->cachedReponse($playlist, 10);
-        } catch (Throwable $e) {
-            return new JsonResponse($e->getMessage());
+        } catch (Throwable $t) {
+            return (new JsonResponse([
+                'data' => json_decode($e->getMessage()),
+                'status' => 404,
+            ]))->setStatusCode(404);
+        } catch (\Exception | \Error $e) {
+            return (new JsonResponse([
+                'data' => json_decode($e->getMessage()),
+                'status' => 404,
+            ]))->setStatusCode(404);
         }
     }
 }

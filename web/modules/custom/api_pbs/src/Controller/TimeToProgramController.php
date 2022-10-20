@@ -45,10 +45,13 @@ class TimeToProgramController extends ControllerBase
               );
 
               foreach ($episodes as $key => $episode) {
-                $startdate = str_replace(' ', '', $episode['start']); // Replaces all spaces with hyphens.
-                $startdate = preg_replace('/[^A-Za-z0-9]/', '', $startdate); // Removes special chars.
+                $startdate = str_replace(' ', '', $episode['start']);
+                $startdate = preg_replace('/[^A-Za-z0-9]/', '', $startdate);
+                $enddate = str_replace(' ', '', $episode['end']);
+                $enddate = preg_replace('/[^A-Za-z0-9]/', '', $enddate);
 
-                if ($date == $startdate) {
+
+                if ($date >= $startdate && $date < $enddate) {
                   $data = $program['name'];
                   break 2;
                 }

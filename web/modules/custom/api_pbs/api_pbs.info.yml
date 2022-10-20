@@ -1,0 +1,7 @@
+name: PBS API
+description: 'PBS API that connects to Airnet API.'
+core_version_requirement: ^9 || ^10
+version: 1.0
+package: "pbs"
+type: module
+configure: api_pbs.settings

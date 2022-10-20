@@ -1,0 +1,11 @@
+api_pbs.timetoprogram:
+  path: '/api/showname/{date}'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_pbs\Controller\TimeToProgramController::lookup'
+  requirements:
+    _access: 'TRUE'
+  options:
+    parameters:
+      date:
+        type: entity:date

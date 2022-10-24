@@ -1,8 +1,8 @@
-api_pbs.timetoprogram:
+pbs_airnet_api:
   path: '/api/showname/{date}'
   methods:  [GET]
   defaults:
-    _controller: 'Drupal\api_pbs\Controller\TimeToProgramController::lookup'
+    _controller: 'Drupal\pbs_airnet_api\Controller\PBSAirnetController::lookup'
   requirements:
     _access: 'TRUE'
   options:

@@ -1,8 +1,19 @@
-pbs_airnet_api:
+pbs_airnet_api_showname:
   path: '/api/showname/{date}'
   methods:  [GET]
   defaults:
-    _controller: 'Drupal\pbs_airnet_api\Controller\PBSAirnetController::lookup'
+    _controller: 'Drupal\pbs_airnet_api\Controller\PBSAirnetController::showname'
+  requirements:
+    _access: 'TRUE'
+  options:
+    parameters:
+      date:
+        type: entity:date
+pbs_airnet_api_schedule:
+  path: '/api/schedule/{date}'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\pbs_airnet_api\Controller\PBSAirnetController::schedule'
   requirements:
     _access: 'TRUE'
   options:

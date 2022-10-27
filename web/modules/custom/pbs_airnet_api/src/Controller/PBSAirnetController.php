@@ -7,6 +7,7 @@
 
 namespace Drupal\pbs_airnet_api\Controller;
 
+use DateInterval;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -14,6 +15,7 @@ use Drupal\Core\Controller\ControllerBase;
 use \GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\api_proxy_pbs\Controller\ScheduleController;
+
 
 /**
  * Cache demo main page.
@@ -46,7 +48,7 @@ class PBSAirnetController extends ControllerBase {
    *
    * @return CacheableJsonResponse
    */
-  public function lookup($date) {
+  public function showname($date) {
     try {
       // Clear cache
       if ($date == 'clear') {
@@ -72,6 +74,92 @@ class PBSAirnetController extends ControllerBase {
             $end_date = preg_replace('/[^A-Za-z0-9]/', '', $end_date);
 
             if ($date >= $start_date && $date < $end_date) {
+              $match = [
+                'program' => $program->name,
+                'start' => $start_date,
+              ];
+              $data[] = $match;
+            }
+          }
+        }
+        $data_sorted = $this->array_orderby($data, 'start', SORT_DESC);
+
+        if (count($data_sorted) >= 1) {
+          $data = $data_sorted[0]['program'];
+        }
+      }
+
+      $ttl = 1 * 60 * 60;
+      $response = new CacheableJsonResponse($data);
+      $response->setPublic();
+      $response->setMaxAge($ttl); // Configurable `admin/config/development/performance`
+      $response->setExpires(new \DateTime('@' . (REQUEST_TIME + $ttl)));
+      $response->headers->set(
+        'Content-Type',
+        'application/json; charset=utf-8'
+      );
+
+      // Module info:
+      $response->headers->set(
+        'Proxy-Version',
+        \Drupal::service('extension.list.module')->getExtensionInfo(
+          'pbs_airnet_api'
+        )['version']
+      );
+
+      $response->addCacheableDependency(
+        CacheableMetadata::createFromRenderArray([
+          // Add Cache settings for Max-age and URL context.
+          '#cache' => [
+            'max-age' => $ttl,
+            'contexts' => ['url'],
+          ],
+        ])
+      );
+
+      return $response;
+    }
+    catch
+    (Exception $e) {
+      return $this->handleException($e);
+    }
+  }
+
+  /**
+   * API Function timestamp lookup returns Program Name based on the ongoing schedule.
+   *
+   * @return CacheableJsonResponse
+   */
+  public function schedule($date) {
+    try {
+      // Clear cache
+      if ($date == 'clear') {
+        $this->clearJson('pbsapi_programs');
+        $data = "Cache Cleared.";
+      }
+
+      // Lookup Program Name
+      else {
+        $time_offset = 12 * 60 * 60;
+        $programs = $this->loadJson('https://schedule.pbsfm.org.au/api/fortnight', 'pbsapi_programs', $time_offset);
+        $data = [];
+
+        $base_date = date_create("20100104 000000");
+        $search_date = date_create($date);
+        $time = substr($date, 8);
+
+        foreach ($programs['data'] as $key => $program) {
+          $diff_date = $base_date->diff($search_date);
+          $day = ($diff_date->days % 14) + 1;
+
+          if ($program->day == $day) {
+
+            $start_date = date_create($program->startTime);
+            $start_time = $start_date->format('His');
+            $end_date = $start_date->add(new DateInterval('PT' . $program->duration . 'S'));
+            $end_time = $end_date->format('His');
+
+            if ($time >= $start_time && $time <= $end_time) {
               $match = [
                 'program' => $program->name,
                 'start' => $start_date,

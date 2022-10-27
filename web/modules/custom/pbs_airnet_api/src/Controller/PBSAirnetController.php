@@ -62,12 +62,12 @@ class PBSAirnetController extends ControllerBase {
         $programs = $this->loadJson('https://schedule.pbsfm.org.au/api/fortnight', 'pbsapi_programs', $time_offset);
         $data = [];
 
-        foreach ($programs['data'] as $key => $program) {
+        foreach ($programs['data'] as $program) {
           $slug = $program->slug;
 
           $episodes = $this->loadJson('https://airnet.org.au/rest/stations/3pbs/programs/' . $slug . '/episodes', 'pbsapi_' . $slug, $time_offset);
 
-          foreach ($episodes['data'] as $key => $episode) {
+          foreach ($episodes['data'] as $episode) {
             $start_date = str_replace(' ', '', $episode->start);
             $start_date = preg_replace('/[^A-Za-z0-9]/', '', $start_date);
             $end_date = str_replace(' ', '', $episode->end);
@@ -126,7 +126,7 @@ class PBSAirnetController extends ControllerBase {
   }
 
   /**
-   * API Function timestamp lookup returns Program Name based on the ongoing schedule.
+   * API Function timestamp lookup returns Program Name based on an ongoing fortnightly schedule.
    *
    * @return CacheableJsonResponse
    */
@@ -140,38 +140,37 @@ class PBSAirnetController extends ControllerBase {
 
       // Lookup Program Name
       else {
+        // Cache time.
         $time_offset = 12 * 60 * 60;
-        $programs = $this->loadJson('https://schedule.pbsfm.org.au/api/fortnight', 'pbsapi_programs', $time_offset);
-        $data = [];
 
-        $base_date = date_create("20100104 000000");
+        // Specify a Monday date in the past.
+        $base_date = date_create("20100104000000");
+
+        // Convert Search query to date and time objects.
         $search_date = date_create($date);
         $time = substr($date, 8);
 
-        foreach ($programs['data'] as $key => $program) {
+        // Load the fortnightly program data.
+        $programs = $this->loadJson('https://schedule.pbsfm.org.au/api/fortnight', 'pbsapi_programs', $time_offset);
+
+        foreach ($programs['data'] as $program) {
+          // Find the Program's corresponding day of a fortnightly schedule.
           $diff_date = $base_date->diff($search_date);
           $day = ($diff_date->days % 14) + 1;
 
+          // Match a Program day to the search day.
           if ($program->day == $day) {
-
             $start_date = date_create($program->startTime);
             $start_time = $start_date->format('His');
             $end_date = $start_date->add(new DateInterval('PT' . $program->duration . 'S'));
             $end_time = $end_date->format('His');
 
+            // Match the Program by the search time.
             if ($time >= $start_time && $time <= $end_time) {
-              $match = [
-                'program' => $program->name,
-                'start' => $start_date,
-              ];
-              $data[] = $match;
+              $data = $program->name;
+              break;
             }
           }
-        }
-        $data_sorted = $this->array_orderby($data, 'start', SORT_DESC);
-
-        if (count($data_sorted) >= 1) {
-          $data = $data_sorted[0]['program'];
         }
       }
 

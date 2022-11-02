@@ -148,7 +148,6 @@ class PBSAirnetController extends ControllerBase {
 
         // Convert Search query to date and time objects.
         $search_date = date_create($date);
-        $search_day = substr($date, 0,8);
 
         // Load the fortnightly program data.
         $programs = $this->loadJson('https://schedule.pbsfm.org.au/api/fortnight', 'pbsapi_programs', $time_offset);
@@ -160,9 +159,9 @@ class PBSAirnetController extends ControllerBase {
 
           // Match a Program day to the search day.
           if ($program->day == $day) {
-            $search = $search_day . substr($program->startTime, 10);
-            $start_date = date_create($search);
-            $end_date = date_create($search);
+            $search_day = substr($date, 0,8) . substr($program->startTime, 10, 9);
+            $start_date = date_create($search_day);
+            $end_date = date_create($search_day);
             $end_date = $end_date->add(new DateInterval('PT' . $program->duration . 'S'));
 
             // Match the Program by the search time.

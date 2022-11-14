@@ -151,6 +151,7 @@ class PBSAirnetController extends ControllerBase {
 
         // Load the fortnightly program data.
         $programs = $this->loadJson('https://schedule.pbsfm.org.au/api/fortnight', 'pbsapi_programs', $time_offset);
+        $dst_change = FALSE;
 
         foreach ($programs['data'] as $program) {
           // Find the Program's corresponding day of a fortnightly schedule.
@@ -159,10 +160,34 @@ class PBSAirnetController extends ControllerBase {
 
           // Match a Program day to the search day.
           if ($program->day == $day) {
+            $program_count++;
             $search_day = substr($date, 0,8) . substr($program->startTime, 10, 9);
             $start_date = date_create($search_day);
             $end_date = date_create($search_day);
-            $end_date = $end_date->add(new DateInterval('PT' . $program->duration . 'S'));
+            $duration = $program->duration - 1;
+            $end_date->add(new DateInterval('PT' . $duration . 'S'));
+
+            $start_dst = $start_date->format('I');
+            $end_dst = $end_date->format('I');
+
+            // Fix when Daylight Saving starts within a program.
+            if ($start_dst == 0 && $end_dst == 1) {
+              $end_date = dstEndDate($search_day, $program->duration, 1);
+            }
+
+            // Fix when Daylight Saving starts between programs.
+            if ($start_dst == 1 && $end_dst == 1 & $dst_change != TRUE & $program_count >=2) {
+              $dst_change = TRUE;
+              $end_date = dstEndDate($search_day, $program->duration, 1);
+            }
+
+            // Fix when Daylight Saving ends within a program.
+            if ($start_dst == 1 && $end_dst == 0) {
+              $end_date = dstEndDate($search_day, $program->duration, -1);
+            }
+
+            // Fix when Daylight Saving ends between programs.
+            // Not required as the end time remains the same.
 
             // Match the Program by the search time.
             if ($search_date >= $start_date  && $search_date < $end_date) {
@@ -270,4 +295,11 @@ class PBSAirnetController extends ControllerBase {
   }
 }
 
-
+/**
+ * Function to update end date for DST.
+ */
+function dstEndDate($date, $duration, $offset) {
+  $end_date = date_create($date);
+    $duration = $duration - ($offset * 60 * 60) - 1;
+  return $end_date->add(new DateInterval('PT' . $duration . 'S'));
+}

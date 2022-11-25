@@ -1,0 +1,9 @@
+{
+  "enableAudioServer": true,
+  "enableOnDemandRecording": true,
+  "liveStreamUrl": "https://playerservices.streamtheworld.com/api/livestream-redirect/3PBS_FMAAC.m3u8",
+  "liveStreamUrlHQ": "https://playerservices.streamtheworld.com/api/livestream-redirect/3PBS_FMAAC128.m3u8",
+  "browserLiveStreamUrl": "https://playerservices.streamtheworld.com/api/livestream-redirect/3PBS_FMAAC.m3u8",
+  "browserReplayUrlTemplate": "https://airnet.org.au/omnystudio/3pbs/???PROGRAM???/???EPISODE???/aac_mid.m4a",
+  "replaySourceUrl": ""
+}

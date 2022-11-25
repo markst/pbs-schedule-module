@@ -72,14 +72,23 @@ class ApiController extends ControllerBase
 
     /**
      * Airnet station info
-     * @return json array of scheduled programs
+     * @return json object of the config
      */
     public function getChannel()
     {
         return $this->cachedReponse(
-            $this->subRequestController->getJSONSubrequest(
-                '/rest/stations/3pbs/channels/fm'
-            )
+            $this->config()
+        );
+    }
+
+    protected function config()
+    {
+        $config = \Drupal::config('api_proxy_pbs.settings');
+        $body = $config->get('config');
+
+        return json_decode(
+            $body ?: file_get_contents(__DIR__ . '/../config.json'),
+            true
         );
     }
 

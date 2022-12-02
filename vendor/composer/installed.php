@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-develop',
         'version' => 'dev-develop',
-        'reference' => 'b6320fe2bda2e0ed61e497eda78cc9e8a2304818',
+        'reference' => '150583d1a0cd0852711969ca057df88ec0675dd5',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -280,7 +280,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-develop',
             'version' => 'dev-develop',
-            'reference' => 'b6320fe2bda2e0ed61e497eda78cc9e8a2304818',
+            'reference' => '150583d1a0cd0852711969ca057df88ec0675dd5',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

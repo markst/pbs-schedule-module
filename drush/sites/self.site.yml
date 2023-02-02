@@ -1,0 +1,5 @@
+# File: self.site.yml
+pbss:
+  root: /Users/lukehodge/Sites/pbss/www
+  uri: http://local.schedule.pbsfm.org.au
+

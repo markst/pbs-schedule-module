@@ -81,7 +81,7 @@ class ApiController extends ControllerBase
         );
     }
 
-    protected function config()
+    protected function config($name)
     {
         $config = \Drupal::config('api_proxy_pbs.settings');
         $body = $config->get('config');

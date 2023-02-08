@@ -77,11 +77,11 @@ class ApiController extends ControllerBase
     public function getChannel()
     {
         return $this->cachedReponse(
-            $this->config()
+            $this->configuration()
         );
     }
 
-    protected function config()
+    protected function configuration()
     {
         $config = \Drupal::config('api_proxy_pbs.settings');
         $body = $config->get('config');

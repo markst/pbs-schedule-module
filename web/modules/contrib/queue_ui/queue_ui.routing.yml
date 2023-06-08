@@ -14,7 +14,7 @@ queue_ui.confirm_clear_form:
     _permission: 'admin queue_ui'
 
 queue_ui.inspect:
-  path: admin/config/system/queue-ui/inspect/{queue_name}
+  path: admin/config/system/queue-ui/inspect/{queueName}
   defaults:
     _form: '\Drupal\queue_ui\Form\InspectForm'
     _title: 'Inspect queue'
@@ -22,7 +22,7 @@ queue_ui.inspect:
     _permission: 'admin queue_ui'
 
 queue_ui.inspect.view:
-  path: admin/config/system/queue-ui/{queue_name}/view/{queue_item}
+  path: admin/config/system/queue-ui/{queueName}/view/{queueItem}
   defaults:
     _form: '\Drupal\queue_ui\Form\ItemDetailForm'
     _title: 'Queue item details'
@@ -30,15 +30,22 @@ queue_ui.inspect.view:
     _permission: 'admin queue_ui'
 
 queue_ui.inspect.release:
-  path: admin/config/system/queue-ui/{queue_name}/release/{queue_item}
+  path: admin/config/system/queue-ui/{queueName}/release/{queueItem}
   defaults:
     _form: '\Drupal\queue_ui\Form\ConfirmItemReleaseForm'
   requirements:
     _permission: 'admin queue_ui'
 
 queue_ui.inspect.delete:
-  path: admin/config/system/queue-ui/{queue_name}/delete/{queue_item}
+  path: admin/config/system/queue-ui/{queueName}/delete/{queueItem}
   defaults:
     _form: '\Drupal\queue_ui\Form\ConfirmItemDeleteForm'
   requirements:
     _permission: 'admin queue_ui'
+
+queue_ui.process:
+  path: admin/config/system/queue-ui/{queueName}/process
+  defaults:
+    _controller: '\Drupal\queue_ui\Controller\QueueProcessController::process'
+  requirements:
+    _custom_access: '\Drupal\queue_ui\Controller\QueueProcessController::access'

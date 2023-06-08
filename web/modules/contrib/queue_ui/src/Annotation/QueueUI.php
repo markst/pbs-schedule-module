@@ -6,7 +6,8 @@ use Drupal\Component\Annotation\Plugin;
 
 /**
  * Defines a QueueUI annotation object.
- * Plugin Namespace: Plugin\QueueUI
+ *
+ * Plugin Namespace: Plugin\QueueUI.
  *
  * @Annotation
  */
@@ -20,6 +21,8 @@ class QueueUI extends Plugin {
   public $id;
 
   /**
+   * The class name.
+   *
    * @var string
    */
   public $class_name;

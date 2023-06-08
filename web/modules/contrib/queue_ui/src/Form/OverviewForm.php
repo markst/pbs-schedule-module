@@ -3,23 +3,23 @@
 namespace Drupal\queue_ui\Form;
 
 use Drupal\Core\Database\Database;
-use Drupal\Core\Extension\ModuleHandler;
-use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Queue\QueueFactory;
-use Drupal\Core\Queue\QueueInterface;
-use Drupal\Core\Queue\QueueWorkerManager;
+use Drupal\Core\Queue\QueueWorkerManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Url;
-use Drupal\queue_ui\QueueUIInterface;
+use Drupal\queue_ui\QueueUIBatchInterface;
 use Drupal\queue_ui\QueueUIManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class QueueUIOverviewForm
+ * Class QueueUIOverviewForm declaration.
+ *
  * @package Drupal\queue_ui\Form
  */
 class OverviewForm extends FormBase {
@@ -55,7 +55,7 @@ class OverviewForm extends FormBase {
   /**
    * The Drupal module handler.
    *
-   * @var \Drupal\Core\Extension\ModuleHandler
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
@@ -67,28 +67,49 @@ class OverviewForm extends FormBase {
   protected $dbConnection;
 
   /**
-   * @var \Drupal\Core\Queue\QueueWorkerManager
+   * The queue plugin manager.
+   *
+   * @var \Drupal\Core\Queue\QueueWorkerManagerInterface
    */
   private $queueWorkerManager;
 
   /**
+   * The QueueUIManager.
+   *
    * @var \Drupal\queue_ui\QueueUIManager
    */
   private $queueUIManager;
 
   /**
+   * The QueueUIBatchInterface.
+   *
+   * @var \Drupal\queue_ui\QueueUIBatchInterface
+   */
+  protected $queueUiBatch;
+
+  /**
    * OverviewForm constructor.
    *
    * @param \Drupal\Core\Queue\QueueFactory $queue_factory
+   *   The queue service.
    * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
+   *   The tempstore factory.
    * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   Current user.
    * @param \Drupal\Core\State\StateInterface $state
-   * @param \Drupal\Core\Extension\ModuleHandler $module_handler
-   * @param \Drupal\Core\Queue\QueueWorkerManager $queueWorkerManager
+   *   The state service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
+   * @param \Drupal\Core\Queue\QueueWorkerManagerInterface $queueWorkerManager
+   *   The queue plugin manager.
    * @param \Drupal\queue_ui\QueueUIManager $queueUIManager
-   * @param \Drupal\Core\Messenger\Messenger $messenger
+   *   The QueueUIManager object.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
+   * @param \Drupal\queue_ui\QueueUIBatchInterface $queue_ui_batch
+   *   The batch service.
    */
-  public function __construct(QueueFactory $queue_factory, PrivateTempStoreFactory $temp_store_factory, AccountInterface $current_user, StateInterface $state, ModuleHandler $module_handler, QueueWorkerManager $queueWorkerManager, QueueUIManager $queueUIManager, Messenger $messenger) {
+  public function __construct(QueueFactory $queue_factory, PrivateTempStoreFactory $temp_store_factory, AccountInterface $current_user, StateInterface $state, ModuleHandlerInterface $module_handler, QueueWorkerManagerInterface $queueWorkerManager, QueueUIManager $queueUIManager, MessengerInterface $messenger, QueueUIBatchInterface $queue_ui_batch) {
     $this->queueFactory = $queue_factory;
     $this->tempStoreFactory = $temp_store_factory;
     $this->currentUser = $current_user;
@@ -99,10 +120,15 @@ class OverviewForm extends FormBase {
     $this->queueWorkerManager = $queueWorkerManager;
     $this->queueUIManager = $queueUIManager;
     $this->messenger = $messenger;
+    $this->queueUiBatch = $queue_ui_batch;
   }
 
   /**
+   * {@inheritdoc}
+   *
    * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   The current service container.
+   *
    * @return static
    */
   public static function create(ContainerInterface $container) {
@@ -114,7 +140,8 @@ class OverviewForm extends FormBase {
       $container->get('module_handler'),
       $container->get('plugin.manager.queue_worker'),
       $container->get('plugin.manager.queue_ui'),
-      $container->get('messenger')
+      $container->get('messenger'),
+      $container->get('queue_ui.batch')
     );
   }
 
@@ -158,6 +185,7 @@ class OverviewForm extends FormBase {
       '#tableselect' => TRUE,
       '#header' => [
         'title' => $this->t('Title'),
+        'name' => $this->t('Machine name'),
         'items' => $this->t('Number of items'),
         'class' => $this->t('Class'),
         'cron' => $this->t('Cron time limit (seconds)'),
@@ -179,28 +207,34 @@ class OverviewForm extends FormBase {
 
       // Add the weight to the table header.
       $form['queues']['#header']['weight'] = $this->t('Weight');
+      // Add this element so the weight values from the table rows get
+      // submitted to form_state.
       $form['weight'] = [
-        '#type' => 'value',
+        '#type' => 'table',
       ];
     }
-
-    // Get queues names.
+    /**
+     * @var array $queues
+    */
     $queues = $this->queueWorkerManager->getDefinitions();
     foreach ($queues as $name => $queue_definition) {
       $queue = $this->queueFactory->get($name);
 
       $operations = [];
       // If queue inspection is enabled for this implementation.
-      if ($queue_ui = $this->queueUIManager->fromQueueName($name)) {
+      if ($this->queueUIManager->fromQueueName($name)) {
         $operations['inspect'] = [
           'title' => $this->t('Inspect'),
-          'url' => Url::fromRoute('queue_ui.inspect', ['queue_name' => $name]),
+          'url' => Url::fromRoute('queue_ui.inspect', ['queueName' => $name]),
         ];
       }
 
       $row = [
         'title' => [
           '#markup' => (string) $queue_definition['title'],
+        ],
+        'name' => [
+          '#markup' => $name,
         ],
         'items' => [
           '#markup' => $queue->numberOfItems(),
@@ -213,19 +247,19 @@ class OverviewForm extends FormBase {
           '#title' => $this->t('Cron Time'),
           '#title_display' => 'hidden',
           '#placeholder' => $this->t('Cron disabled'),
-          '#value' => (isset($queue_definition['cron']['time']) ? $queue_definition['cron']['time'] : ''),
+          '#value' => ($queue_definition['cron']['time'] ?? ''),
           '#parents' => [],
           '#name' => 'cron[' . $name . ']',
         ],
         'operations' => [
-          '#type' => 'dropbutton',
+          '#type' => 'operations',
           '#links' => $operations,
         ],
       ];
 
       // Enable sort if queue_order is enabled.
       if ($queue_order_installed) {
-        $weight = isset($queue_definition['weight']) ? $queue_definition['weight'] : 10;
+        $weight = $queue_definition['weight'] ?? 10;
         $row['#attributes'] = ['class' => ['draggable']];
         $row['#weight'] = $weight;
         $row['weight'] = [
@@ -236,14 +270,17 @@ class OverviewForm extends FormBase {
           '#name' => 'weight[' . $name . ']',
           // Classify the weight element for #tabledrag.
           '#attributes' => ['class' => ['queue-order-weight']],
+          '#parents' => ['weight', $name],
         ];
       }
 
       $form['queues'][$name] = $row;
     }
 
+    // Add this element so the cron values from the table rows get submitted to
+    // form_state.
     $form['cron'] = [
-      '#type' => 'value',
+      '#type' => 'table',
     ];
 
     $form['botton'] = [
@@ -272,7 +309,9 @@ class OverviewForm extends FormBase {
    * We need this method, but each button has its own submit handler.
    *
    * @param array $form
+   *   The form where the settings form is being included in.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $form_state->cleanValues();
@@ -296,14 +335,18 @@ class OverviewForm extends FormBase {
   }
 
   /**
+   * Process bulk submission.
+   *
    * @param array $form
+   *   The form where the settings form is being included in.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
    */
   public function submitBulkForm(array &$form, FormStateInterface $form_state) {
     if (in_array($form_state->getValue('operation'), [
       'submitBatch',
       'submitRelease',
-      'submitClear'
+      'submitClear',
     ])) {
       $selected_queues = array_filter($form_state->getValue('queues'));
 
@@ -317,37 +360,31 @@ class OverviewForm extends FormBase {
    * Process queue(s) with batch.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   * @param $queues
+   *   The current state of the form.
+   * @param array $queues
+   *   An array of queue information.
    */
-  public function submitBatch(FormStateInterface $form_state, $queues) {
-    $batch = [
-      'title' => $this->t('Processing queues'),
-      'operations' => [],
-      'finished' => ['\Drupal\queue_ui\QueueUIBatch', 'finish'],
-    ];
-
-    foreach ($queues as $queue_name) {
-      $batch['operations'][] = ['\Drupal\queue_ui\QueueUIBatch::step', [$queue_name]];
-    }
-
-    batch_set($batch);
+  public function submitBatch(FormStateInterface $form_state, array $queues) {
+    $this->queueUiBatch->batch($queues);
   }
 
   /**
    * Option to remove lease timestamps.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   * @param $queues
+   *   The current state of the form.
+   * @param array $queues
+   *   An array of queue information.
    */
-  public function submitRelease(FormStateInterface $form_state, $queues) {
-    foreach ($queues as $queue_name) {
-      /** @var QueueUIInterface $queue_ui */
-      if ($queue_ui = $this->queueUIManager->fromQueueName($queue_name)) {
-        $num_updated = $queue_ui->releaseItems($queue_name);
+  public function submitRelease(FormStateInterface $form_state, array $queues) {
+    foreach ($queues as $queueName) {
+      /** @var \Drupal\queue_ui\QueueUIInterface $queue_ui */
+      if ($queue_ui = $this->queueUIManager->fromQueueName($queueName)) {
+        $num_updated = $queue_ui->releaseItems($queueName);
 
         $this->messenger->addMessage($this->t('@count lease reset in queue @name', [
           '@count' => $num_updated,
-          '@name' => $queue_name
+          '@name' => $queueName,
         ]));
       }
     }
@@ -357,12 +394,15 @@ class OverviewForm extends FormBase {
    * Option to delete queue.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   * @param $queues
+   *   The current state of the form.
+   * @param array $queues
+   *   An array of queue information.
    */
-  public function submitClear(FormStateInterface $form_state, $queues) {
+  public function submitClear(FormStateInterface $form_state, array $queues) {
     $this->tempStoreFactory->get('queue_ui_clear_queues')
       ->set($this->currentUser->id(), $queues);
 
     $form_state->setRedirect('queue_ui.confirm_clear_form');
   }
+
 }

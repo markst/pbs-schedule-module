@@ -10,22 +10,29 @@ use Drupal\queue_ui\QueueUIManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ConfirmItemDeleteForm
+ * Class ConfirmItemDeleteForm declaration.
+ *
  * @package Drupal\queue_ui\Form
  */
 class ConfirmItemDeleteForm extends ConfirmFormBase {
 
   /**
+   * The queue name.
+   *
    * @var string
    */
-  protected $queue_name;
+  protected $queueName;
 
   /**
+   * The queue item.
+   *
    * @var string
    */
-  protected $queue_item;
+  protected $queueItem;
 
   /**
+   * The QueueUIManager.
+   *
    * @var \Drupal\queue_ui\QueueUIManager
    */
   private $queueUIManager;
@@ -34,7 +41,9 @@ class ConfirmItemDeleteForm extends ConfirmFormBase {
    * ConfirmItemDeleteForm constructor.
    *
    * @param \Drupal\Core\Messenger\Messenger $messenger
+   *   The messenger service.
    * @param \Drupal\queue_ui\QueueUIManager $queueUIManager
+   *   The QueueUIManager object.
    */
   public function __construct(Messenger $messenger, QueueUIManager $queueUIManager) {
     $this->messenger = $messenger;
@@ -42,7 +51,11 @@ class ConfirmItemDeleteForm extends ConfirmFormBase {
   }
 
   /**
+   * {@inheritdoc}
+   *
    * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   The current service container.
+   *
    * @return static
    */
   public static function create(ContainerInterface $container) {
@@ -56,7 +69,7 @@ class ConfirmItemDeleteForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Are you sure you want to delete queue item %queue_item?', ['%queue_item' => $this->queue_item]);
+    return $this->t('Are you sure you want to delete queue item %queueItem?', ['%queueItem' => $this->queueItem]);
   }
 
   /**
@@ -70,7 +83,7 @@ class ConfirmItemDeleteForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return Url::fromRoute('queue_ui.inspect', ['queue_name' => $this->queue_name]);
+    return Url::fromRoute('queue_ui.inspect', ['queueName' => $this->queueName]);
   }
 
   /**
@@ -83,25 +96,36 @@ class ConfirmItemDeleteForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    *
-   * @param bool $queue_name
-   * @param bool $queue_item
+   * @param array $form
+   *   The form where the settings form is being included in.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   * @param bool $queueName
+   *   The name of the queue being inspected.
+   * @param bool $queueItem
+   *   The queue item.
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $queue_name = FALSE, $queue_item = FALSE) {
-    $this->queue_name = $queue_name;
-    $this->queue_item = $queue_item;
+  public function buildForm(array $form, FormStateInterface $form_state, $queueName = FALSE, $queueItem = FALSE) {
+    $this->queueName = $queueName;
+    $this->queueItem = $queueItem;
 
     return parent::buildForm($form, $form_state);
   }
 
   /**
+   * {@inheritdoc}
+   *
    * @param array $form
+   *   The form where the settings form is being included in.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $queue_ui = $this->queueUIManager->fromQueueName($this->queue_name);
-    $queue_ui->deleteItem($this->queue_item);
+    $queue_ui = $this->queueUIManager->fromQueueName($this->queueName);
+    $queue_ui->deleteItem($this->queueItem);
 
-    $this->messenger->addMessage("Deleted queue item " . $this->queue_item);
-    $form_state->setRedirectUrl(Url::fromRoute('queue_ui.inspect', ['queue_name' => $this->queue_name]));
+    $this->messenger->addMessage("Deleted queue item " . $this->queueItem);
+    $form_state->setRedirectUrl(Url::fromRoute('queue_ui.inspect', ['queueName' => $this->queueName]));
   }
+
 }

@@ -9,12 +9,15 @@ use Drupal\queue_ui\QueueUIManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class InspectForm
+ * Class InspectForm declaration.
+ *
  * @package Drupal\queue_ui\Form
  */
 class InspectForm extends FormBase {
 
   /**
+   * The QueueUIManager.
+   *
    * @var \Drupal\queue_ui\QueueUIManager
    */
   private $queueUIManager;
@@ -23,13 +26,18 @@ class InspectForm extends FormBase {
    * InspectForm constructor.
    *
    * @param \Drupal\queue_ui\QueueUIManager $queueUIManager
+   *   The QueueUIManager object.
    */
   public function __construct(QueueUIManager $queueUIManager) {
     $this->queueUIManager = $queueUIManager;
   }
 
   /**
+   * {@inheritdoc}
+   *
    * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   The current service container.
+   *
    * @return static
    */
   public static function create(ContainerInterface $container) {
@@ -48,16 +56,19 @@ class InspectForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $queue_name = FALSE) {
-    if ($queue_ui = $this->queueUIManager->fromQueueName($queue_name)) {
+  public function buildForm(array $form, FormStateInterface $form_state, $queueName = FALSE) {
+    if ($queue_ui = $this->queueUIManager->fromQueueName($queueName)) {
 
       $rows = [];
-      foreach ($queue_ui->getItems($queue_name) as $item) {
+      foreach ($queue_ui->getItems($queueName) as $item) {
         $operations = [];
         foreach ($queue_ui->getOperations() as $op => $title) {
           $operations[] = [
             'title' => $title,
-            'url' => Url::fromRoute('queue_ui.inspect.' . $op, ['queue_name' => $queue_name, 'queue_item' => $item->item_id]),
+            'url' => Url::fromRoute('queue_ui.inspect.' . $op, [
+              'queueName' => $queueName,
+              'queueItem' => $item->item_id,
+            ]),
           ];
         }
 
@@ -70,7 +81,7 @@ class InspectForm extends FormBase {
               '#type' => 'dropbutton',
               '#links' => $operations,
             ],
-          ]
+          ],
         ];
       }
 
@@ -83,18 +94,22 @@ class InspectForm extends FormBase {
             'created' => $this->t('Created'),
             'operations' => $this->t('Operations'),
           ],
-          '#rows' => $rows
+          '#rows' => $rows,
         ],
         'pager' => [
-          '#type' => 'pager'
+          '#type' => 'pager',
         ],
       ];
     }
   }
 
   /**
+   * {@inheritdoc}
+   *
    * @param array $form
+   *   The form where the settings form is being included in.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {}
 

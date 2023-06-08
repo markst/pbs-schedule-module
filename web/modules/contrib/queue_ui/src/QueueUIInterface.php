@@ -15,37 +15,40 @@ interface QueueUIInterface {
   /**
    * Inspect the queue items in a specified queue.
    *
-   * @param string $queue_name
-   *  The name of the queue being inspected.
+   * @param string $queueName
+   *   The name of the queue being inspected.
    */
-  public function getItems($queue_name);
+  public function getItems($queueName);
 
   /**
-   * @param $queue_name
+   * Force the releasing of a queue.
+   *
+   * @param string $queueName
+   *   The name of the queue being inspected.
    */
-  public function releaseItems($queue_name);
+  public function releaseItems($queueName);
 
   /**
    * View item data for a specified queue item.
    *
-   * @param integer $item_id
-   *  The item id to be viewed.
+   * @param int $item_id
+   *   The item id to be viewed.
    */
   public function loadItem($item_id);
 
   /**
    * Force the releasing of a specified queue item.
    *
-   * @param integer $item_id
-   *  The item id to be released.
+   * @param int $item_id
+   *   The item id to be released.
    */
   public function releaseItem($item_id);
 
   /**
    * Force the deletion of a specified queue item.
    *
-   * @param integer $item_id
-   *  The item id to be deleted.
+   * @param int $item_id
+   *   The item id to be deleted.
    */
   public function deleteItem($item_id);
 

@@ -6,7 +6,7 @@ use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
 
 /**
- * Class WeightChangeTest.
+ * Class WeightChangeTest declaration.
  *
  * @package Drupal\Tests\queue_ui\Functional
  * @group queue_ui
@@ -52,8 +52,7 @@ class WeightChangeTest extends BrowserTestBase {
     $session->fieldValueEquals('weight[queue_order_worker_D]', '0');
     $session->fieldValueEquals('weight[queue_order_worker_E]', '-10');
     $session->fieldValueEquals('weight[queue_order_worker_F]', '-20');
-    $this->drupalPostForm(
-      $form_url,
+    $this->submitForm(
       [
         'weight[queue_order_worker_A]' => '-10',
         'weight[queue_order_worker_B]' => '-8',

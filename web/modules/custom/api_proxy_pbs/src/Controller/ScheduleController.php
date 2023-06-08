@@ -143,7 +143,7 @@ class ScheduleController extends ControllerBase
                     $new_program = $programs[$i];
 
                     // Carry existing attributes:
-                    $new_program['day'] = $og_program['day'];
+                    $new_program['day'] = strval($og_program['day']);
                     $new_program['start'] = $og_program['start'];
                     $new_program['duration'] =
                         $og_program['duration'] != null
@@ -167,6 +167,8 @@ class ScheduleController extends ControllerBase
                     unset($og_program['url']);
                     // Set the ISO 8601 date;
                     $og_program['startTime'] = $this->startDate($og_program);
+                    // Replace the 'day' attribute with a string day:
+                    $og_program['day'] = strval($og_program['day']);
 
                     return $og_program;
                     break;

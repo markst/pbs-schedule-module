@@ -1,0 +1,13 @@
+name: Rebuild Cache Access
+description: Provide a Rebuild Cache admin toolbar button accessible to every role with the corresponding permission set.
+package: Utility
+
+type: module
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - drupal:toolbar
+
+# Information added by Drupal.org packaging script on 2022-07-24
+version: '8.x-1.8'
+project: 'rebuild_cache_access'
+datestamp: 1658665208

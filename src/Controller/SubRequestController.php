@@ -10,14 +10,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 
 /**
- * Class SubRequest.
+ * Class SubRequestController.
  *
  * @package Drupal\api_proxy_pbs\Controller
  */
-class SubRequestController extends ControllerBase implements
-    ContainerInjectionInterface
+class SubRequestController extends ControllerBase implements ContainerInjectionInterface
 {
     /**
      * Symfony\Component\HttpKernel\HttpKernelInterface definition.
@@ -32,6 +34,11 @@ class SubRequestController extends ControllerBase implements
     protected $requestStack;
 
     /**
+     * @var \Symfony\Component\HttpClient\HttpClient
+     */
+    protected $httpClient;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
@@ -40,11 +47,12 @@ class SubRequestController extends ControllerBase implements
     ) {
         $this->httpKernel = $http_kernel;
         $this->requestStack = $request_stack;
+        $this->httpClient = HttpClient::create();
     }
 
     public static function create(ContainerInterface $container)
     {
-        $httpKernel = \Drupal::service('http_kernel.basic'); // $container->get('http_kernel.basic'),
+        $httpKernel = \Drupal::service('http_kernel.basic');
         $requestStack = \Drupal::requestStack();
 
         return new static($httpKernel, $requestStack);
@@ -105,41 +113,40 @@ class SubRequestController extends ControllerBase implements
     }
 
     /**
-     * Perform subrequest request with uri.
-     * @return json object
-     *   The response json.
+     * Performs an HTTP GET request to the external API at airnet.org.au and returns the JSON-decoded response.
      *
-     * @throws \Exception
+     * @param string $uri        The URI path for the API endpoint, relative to the base URL.
+     * @param array  $parameters An associative array of query parameters to be included in the request.
+     *
+     * @return array The JSON-decoded response data if the request is successful.
+     *
+     * @throws \Exception In case of an error or non-200 response from the server.
      */
     public function getJSONSubrequest($uri, $parameters = [])
     {
-        // Generate path from `api_proxy` route:
-        $path = Url::fromRoute(
-            'api_proxy.forwarder',
-            [
-                'api_proxy' => 'airnet',
-                '_api_proxy_uri' => $uri,
-            ],
-            []
-        )
-            ->toString(true)
-            ->getGeneratedUrl();
+        // Base URL for airnet.org.au API.
+        $base_url = 'https://airnet.org.au';
 
         try {
-            $sub_response = $this->subRequest($path, 'GET', $parameters);
-            $code = $sub_response->getStatusCode();
-            $content = $sub_response->getContent();
+            // Perform the HTTP request using the HttpClient instance created in the constructor.
+            $response = $this->httpClient->request('GET', $base_url . $uri, [
+                'query' => $parameters,
+                'headers' => [
+                    'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                    'Pragma' => 'no-cache',
+                    'Expires' => '0'
+                ]
+            ]);
 
-            if ($code == 200) {
-                return json_decode($content, true);
+            // If the response code is 200, return the JSON-decoded content.
+            if ($response->getStatusCode() == 200) {
+                return json_decode($response->getContent(), true);
             } else {
-                // throw new \NotFoundHttpException($content);
-                throw new \Exception($content);
+                throw new \Exception("Error: " . $response->getReasonPhrase());
             }
-        } catch (Throwable $t) {
-            throw new \Exception($t->getMessage());
-        } catch (\Exception | \Error $e) {
-            throw new \Exception($e->getMessage());
+        } catch (TransportExceptionInterface | ClientExceptionInterface $e) {
+            // Handle exceptions.
+            throw new \Exception("Error: " . $e->getMessage());
         }
     }
 }

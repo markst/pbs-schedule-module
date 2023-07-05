@@ -56,7 +56,7 @@ final class ApiProxyForm extends FormBase {
       '#description' => $this->t('This page allows you to enqueue cache warming operations manually. This will put the cache warming operations in a queue. If you want to actually execute them right away you can force processing the queue. A good way to do that is by installing the <a href=":url">Queue UI</a> module or using Drush. This module will provide a UI to process an entire queue.', [':url' => 'https://www.drupal.org/project/queue_ui']),
     ];
     $html = array_reduce($this->apiProxyManager->getDefinitions(), function ($carry, array $definition) {
-      return $carry . '<dt>'. $definition['label'] .'</dt><dd>'. $definition['description'] .'</dd>';
+      return $carry . '<dt>' . $definition['label'] . '</dt><dd>' . $definition['description'] . '</dd>';
     }, '');
     $form['apis'] = [
       '#type' => 'details',

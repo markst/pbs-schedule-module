@@ -20,7 +20,7 @@ final class Forwarder extends ControllerBase {
   /**
    * The name of the query string parameter containing the URI.
    *
-   * @param string
+   * @var string
    */
   private $uriParamName;
 
@@ -53,7 +53,7 @@ final class Forwarder extends ControllerBase {
    *   The response object.
    */
   public function forward(HttpApiInterface $api_proxy, Request $request): Response {
-    // TODO: This belongs to the routing system.
+    // @todo This belongs to the routing system.
     $account = $this->currentUser();
     $cache_contexts = [
       'url.query_args:' . $this->uriParamName,

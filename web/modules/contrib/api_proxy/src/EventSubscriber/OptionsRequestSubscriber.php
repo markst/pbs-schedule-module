@@ -2,14 +2,13 @@
 
 namespace Drupal\api_proxy\EventSubscriber;
 
-use Drupal\api_proxy\Controller\Forwarder;
 use Drupal\api_proxy\Plugin\HttpApiPluginBase;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableResponse;
 use Drupal\Core\Config\ImmutableConfig;
-use Symfony\Cmf\Component\Routing\RouteProviderInterface;
+use Drupal\Core\Routing\RouteProviderInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -22,7 +21,7 @@ class OptionsRequestSubscriber implements EventSubscriberInterface {
   /**
    * The route provider.
    *
-   * @var \Symfony\Cmf\Component\Routing\RouteProviderInterface
+   * @var \Drupal\Core\Routing\RouteProviderInterface
    */
   protected $routeProvider;
 
@@ -36,16 +35,16 @@ class OptionsRequestSubscriber implements EventSubscriberInterface {
   /**
    * The name of the query string parameter containing the URI.
    *
-   * @param string
+   * @var string
    */
   private $uriParamName;
 
   /**
    * Creates a new OptionsRequestSubscriber instance.
    *
-   * @param \Symfony\Cmf\Component\Routing\RouteProviderInterface $route_provider
+   * @param \Drupal\Core\Routing\RouteProviderInterface $route_provider
    *   The route provider.
-   * @param \Symfony\Component\EventDispatcher\EventSubscriberInterface
+   * @param \Symfony\Component\EventDispatcher\EventSubscriberInterface $subject
    *   The decorated service.
    * @param string $uri_param_name
    *   The name of the query string parameter containing the URI.
@@ -59,10 +58,10 @@ class OptionsRequestSubscriber implements EventSubscriberInterface {
   /**
    * Tries to handle the options request.
    *
-   * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
    *   The request event.
    */
-  public function onRequest(GetResponseEvent $event) {
+  public function onRequest(RequestEvent $event) {
     $request = $event->getRequest();
     $routes = $this->routeProvider->getRouteCollectionForRequest($event->getRequest());
     if ($request->getMethod() !== 'OPTIONS') {
@@ -117,7 +116,7 @@ class OptionsRequestSubscriber implements EventSubscriberInterface {
    * @return \Drupal\Core\Config\ImmutableConfig
    *   The immutable configuration object.
    *
-   * @todo: use dependency injection to pass the configFactory.
+   * @todo use dependency injection to pass the configFactory.
    */
   private function config(string $config_id): ImmutableConfig {
     return \Drupal::config($config_id);

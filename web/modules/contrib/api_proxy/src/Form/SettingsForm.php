@@ -28,7 +28,7 @@ final class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function __construct(ConfigFactoryInterface $config_factory, HttpApiPluginManager $api_proxy_manager) {
-    $this->setConfigFactory($config_factory);
+    parent::__construct($config_factory);
     $this->apiProxyManager = $api_proxy_manager;
   }
 
@@ -109,7 +109,7 @@ final class SettingsForm extends ConfigFormBase {
     $message = $this->t('Settings saved for plugin(s): %names', [
       '%names' => implode(', ', array_map(function (HttpApiPluginBase $api_proxy) {
         return $api_proxy->getPluginDefinition()['label'];
-      }, $api_proxies))
+      }, $api_proxies)),
     ]);
     $this->messenger()->addStatus($message);
   }

@@ -85,8 +85,8 @@ abstract class HttpApiPluginBase extends PluginBase implements ContainerFactoryP
    */
   public function getConfiguration(): array {
     return [
-        'id' => $this->getPluginId(),
-      ] + $this->configuration + $this->defaultConfiguration();
+      'id' => $this->getPluginId(),
+    ] + $this->configuration + $this->defaultConfiguration();
   }
 
   /**
@@ -111,7 +111,7 @@ abstract class HttpApiPluginBase extends PluginBase implements ContainerFactoryP
         'methods' => ['GET', 'OPTIONS'],
         'max_age' => 1 * 60 * 60,
         'headers' => '',
-      ]
+      ],
     ];
   }
 
@@ -154,15 +154,7 @@ abstract class HttpApiPluginBase extends PluginBase implements ContainerFactoryP
    * {@inheritdoc}
    */
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
-    // TODO: Write the validation for the headers.
-//    $frequency = $form_state->getValue('frequency');
-//    $batch_size = $form_state->getValue('batchSize');
-//    if (!is_numeric($frequency) || $frequency < 0) {
-//      $form_state->setError($form[$this->getPluginId()]['frequency'], $this->t('Frequency should be a positive number.'));
-//    }
-//    if (!is_numeric($batch_size) || $batch_size < 1) {
-//      $form_state->setError($form[$this->getPluginId()]['batchSize'], $this->t('Batch size should be a number greater than 1.'));
-//    }
+    // @todo Write the validation for the headers.
   }
 
   /**
@@ -309,7 +301,7 @@ abstract class HttpApiPluginBase extends PluginBase implements ContainerFactoryP
   public function forward(Request $request, string $uri): Response {
     $parsed_uri = UrlHelper::parse($uri);
     $api_uri = rtrim($this->getBaseUrl(), '/') . '/' . ltrim($parsed_uri['path'], '/');
-    list($api_method, $api_uri, $headers, $query_params) = $this->preprocessIncoming(
+    [$api_method, $api_uri, $headers, $query_params] = $this->preprocessIncoming(
       $request->getMethod(),
       $api_uri,
       $request->headers,
@@ -355,6 +347,9 @@ abstract class HttpApiPluginBase extends PluginBase implements ContainerFactoryP
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function corsResponse(Request $request): CacheableResponse {
     $headers = $this->calculateCorsHeaders($request);
     return empty($headers)
@@ -366,6 +361,18 @@ abstract class HttpApiPluginBase extends PluginBase implements ContainerFactoryP
         ]);
   }
 
+  /**
+   * Calculate the CORS headers for the given request.
+   *
+   * Consults the configuration for this HTTP API plugin to come up with the
+   * necessary CORS headers to sent in the response.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   Incoming HTTP request.
+   *
+   * @return array
+   *   Array of CORS headers to sent in the response.
+   */
   private function calculateCorsHeaders(Request $request): array {
     $origin = $request->headers->get('Origin');
     if (empty($origin)) {
@@ -397,6 +404,19 @@ abstract class HttpApiPluginBase extends PluginBase implements ContainerFactoryP
     return $headers;
   }
 
+  /**
+   * Decide if the response should be cacheable.
+   *
+   * If the response should be cacheable, wrap the response in a cacheable
+   * response object.
+   *
+   * @param \Symfony\Component\HttpFoundation\Response $response
+   *   Incoming HTTP request.
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
+   *   Potentially altered response. When the response should be cached, this
+   *   will be a \Drupal\Core\Cache\CacheableResponse object.
+   */
   private function maybeMakeResponseCacheable(Response $response): Response {
     $configured_ttl = $this->isCacheForced() ? $this->getForcedCacheTtl() : 0;
     $response_ttl = (int) $response->getMaxAge();
@@ -413,11 +433,20 @@ abstract class HttpApiPluginBase extends PluginBase implements ContainerFactoryP
     $cacheable_response->setCache([
       'max_age' => $ttl,
       'public' => TRUE,
-      'etag' => $this->buildEtag($cacheable_response)
+      'etag' => $this->buildEtag($cacheable_response),
     ]);
     return $cacheable_response;
   }
 
+  /**
+   * Build an appropriate ETag for the given response.
+   *
+   * @param \Drupal\Core\Cache\CacheableResponse $cacheable_response
+   *   Outgoing response.
+   *
+   * @return string
+   *   Suitable hash of the given response that can be used as an Etag header.
+   */
   private function buildEtag(CacheableResponse $cacheable_response) {
     $digest = array_reduce(
       $cacheable_response->headers->all(),
@@ -429,6 +458,17 @@ abstract class HttpApiPluginBase extends PluginBase implements ContainerFactoryP
     return Crypt::hashBase64($digest);
   }
 
+  /**
+   * Calculate the non-CORS related headers to include in the response.
+   *
+   * @param array $headers
+   *   Headers from the request, which may or may not get included in the
+   *   response.
+   *
+   * @return array
+   *   Array of headers to include in the response. Includes the request headers
+   *   if configured. Also includes any configured additional headers.
+   */
   protected function calculateHeaders(array $headers): array {
     $new_headers = array_filter(array_diff_key($headers, ['host' => NULL]));
     $new_headers['x-forwarded-host'] = $headers['host'] ?? '';
@@ -438,22 +478,55 @@ abstract class HttpApiPluginBase extends PluginBase implements ContainerFactoryP
     );
   }
 
+  /**
+   * Helper function to parse the additional headers configuration form value.
+   *
+   * @param string $input
+   *   List of headers from the form.
+   *
+   * @return array
+   *   Array of headers with the key being the header name and the value being
+   *   the header value.
+   */
   private function parseHeaders(string $input) {
     return array_filter(array_reduce(
       array_filter(explode("\n", $input)),
       function ($carry, $header) {
-        list($name, $val) = array_map('trim', explode(':', $header, 2));
+        [$name, $val] = array_map('trim', explode(':', $header, 2));
         return array_merge($carry, [$name => $val]);
       },
       []
     ));
   }
 
+  /**
+   * Helper function to parse a list of values, origins in our case.
+   *
+   * @param string $input
+   *   List of values, one per line, separated by new lines.
+   *
+   * @return array
+   *   Array of values trimmed.
+   */
   private function parseMultiline(string $input) {
     return array_filter(array_map('trim', explode("\n", $input)));
   }
 
-  private function matchedOrigin($origin, $candidates): ?string {
+  /**
+   * Match an origin in a list of candidate origins.
+   *
+   * If one of the candidates listed is '*', then '*' is the matched origin.
+   * Otherwise, we look for a direct match in the list of candidates.
+   *
+   * @param string $origin
+   *   Origin domain.
+   * @param array $candidates
+   *   List of candidate origins to match against.
+   *
+   * @return string|null
+   *   The matched origin if found in the list of candidates, otherwise NULL.
+   */
+  private function matchedOrigin(string $origin, array $candidates): ?string {
     // Check if there is a '*' in the candidates.
     $has_star = array_reduce($candidates, function (bool $carry, string $candidate): bool {
       return $carry ?: $candidate === '*';
@@ -473,7 +546,7 @@ abstract class HttpApiPluginBase extends PluginBase implements ContainerFactoryP
     $permission = sprintf('use %s api proxy', $this->getPluginId());
     $definition = $this->getPluginDefinition();
     $title = $this->t('Use the HTTP API proxy for %label', [
-      '%label' => $definition['label']
+      '%label' => $definition['label'],
     ]);
     return [$permission => ['title' => $title]];
   }

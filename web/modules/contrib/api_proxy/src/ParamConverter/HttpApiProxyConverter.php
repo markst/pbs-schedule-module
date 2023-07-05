@@ -3,7 +3,6 @@
 namespace Drupal\api_proxy\ParamConverter;
 
 use Drupal\api_proxy\Plugin\HttpApiInterface;
-use Drupal\api_proxy\Plugin\HttpApiPluginBase;
 use Drupal\api_proxy\Plugin\HttpApiPluginManager;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Http\Exception\CacheableNotFoundHttpException;

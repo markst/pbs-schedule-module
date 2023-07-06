@@ -2,8 +2,6 @@
 
 namespace Drupal\api_proxy_pbs\Controller;
 
-require_once __DIR__ . '/../../vendor/autoload.php';
-
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Url;

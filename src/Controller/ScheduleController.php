@@ -239,18 +239,18 @@ class ScheduleController extends ControllerBase
     protected function handleException(Exception $e)
     {
         if ($e instanceof Rest404Exception) {
-            return new CacheableJsonResponse(
+            return new JsonResponse(
                 ['error' => $e->getMessage()],
                 404
             );
         } elseif ($e instanceof Rest403Exception) {
-            return new CacheableJsonResponse(
+            return new JsonResponse(
                 ['error' => $e->getMessage()],
                 403
             );
         }
 
-        return new CacheableJsonResponse(
+        return new JsonResponse(
             ['error' => 'Internal server error.'],
             500
         );

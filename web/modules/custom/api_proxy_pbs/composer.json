@@ -3,6 +3,6 @@
     "type": "drupal-module",
     "require": {
         "drupal/api_proxy": "^2.0.2",
-        "symfony/http-client": "^5.0"
+        "symfony/http-client": "^5.0 || ^6.0"
     }
 }

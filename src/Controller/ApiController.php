@@ -19,9 +19,9 @@ class ApiController extends ControllerBase
 {
     protected $subRequestController;
 
-    public function __construct(SubRequestController $sub_request_controller)
+    public function __construct(SubRequestController $subRequestController)
     {
-        $this->subRequestController = $sub_request_controller;
+        $this->subRequestController = $subRequestController;
     }
 
     public static function create(ContainerInterface $container)
@@ -41,7 +41,7 @@ class ApiController extends ControllerBase
      * @param  Array $cache_contexts array cache contexts.
      * @return CacheableJsonResponse
      */
-    protected function cachedReponse(
+    protected function cachedResponse(
         $data,
         $ttl = 3600,
         $cache_contexts = ['url']
@@ -50,22 +50,16 @@ class ApiController extends ControllerBase
         $response
             ->setPublic()
             ->setMaxAge($ttl)
-            ->setExpires(new \DateTime('@' . (REQUEST_TIME + $ttl)));
+            ->setExpires(new \DateTime('@' . (REQUEST_TIME + $ttl)))
+            ->headers->set('Content-Type', 'application/json; charset=utf-8');
 
-        $response->headers->set(
-            'Content-Type',
-            'application/json; charset=utf-8'
-        );
-
-        $response->addCacheableDependency(
-            CacheableMetadata::createFromRenderArray([
-                // Add Cache settings for Max-age and URL context.
-                '#cache' => [
-                    'max-age' => $ttl,
-                    'contexts' => $cache_contexts,
-                ],
-            ])
-        );
+        $cacheMetadata = CacheableMetadata::createFromRenderArray([
+            '#cache' => [
+                'max-age' => $ttl,
+                'contexts' => $cache_contexts,
+            ],
+        ]);
+        $response->addCacheableDependency($cacheMetadata);
 
         return $response;
     }
@@ -76,7 +70,7 @@ class ApiController extends ControllerBase
      */
     public function getChannel()
     {
-        return $this->cachedReponse(
+        return $this->cachedResponse(
             $this->configuration()
         );
     }
@@ -98,7 +92,7 @@ class ApiController extends ControllerBase
      */
     public function getSchedule()
     {
-        return $this->cachedReponse(
+        return $this->cachedResponse(
             $this->subRequestController->getJSONSubrequest(
                 '/rest/stations/3pbs/guides/fm'
             ),
@@ -112,7 +106,7 @@ class ApiController extends ControllerBase
      */
     public function getPrograms()
     {
-        return $this->cachedReponse(
+        return $this->cachedResponse(
             $this->subRequestController->getJSONSubrequest(
                 '/rest/stations/3pbs/programs'
             ),
@@ -126,7 +120,7 @@ class ApiController extends ControllerBase
      */
     public function getProgram($program)
     {
-        return $this->cachedReponse(
+        return $this->cachedResponse(
             $this->subRequestController->getJSONSubrequest(
                 "/rest/stations/3pbs/programs/{$program}"
             ),
@@ -141,7 +135,7 @@ class ApiController extends ControllerBase
     public function getEpisodes($program)
     {
         $params = \Drupal::request()->query->all();
-        return $this->cachedReponse(
+        return $this->cachedResponse(
             $this->subRequestController->getJSONSubrequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes" .
                     '?' .
@@ -169,15 +163,11 @@ class ApiController extends ControllerBase
             $episode = $this->subRequestController->getJSONSubrequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes/{$date}"
             );
-            return $this->cachedReponse($episode, 3600);
-        } catch (Throwable $t) {
+
+            return $this->cachedResponse($episode, 3600);
+        } catch (\Throwable $t) {
             return (new JsonResponse([
-                'data' => json_decode($e->getMessage()),
-                'status' => 404,
-            ]))->setStatusCode(404);
-        } catch (\Exception | \Error $e) {
-            return (new JsonResponse([
-                'data' => json_decode($e->getMessage()),
+                'error' => $t->getMessage(),
                 'status' => 404,
             ]))->setStatusCode(404);
         }
@@ -193,15 +183,11 @@ class ApiController extends ControllerBase
             $playlist = $this->subRequestController->getJSONSubrequest(
                 "/rest/stations/3pbs/programs/{$program}/episodes/{$date}/playlists"
             );
-            return $this->cachedReponse($playlist, 10);
-        } catch (Throwable $t) {
+
+            return $this->cachedResponse($playlist, 10);
+        } catch (\Throwable $t) {
             return (new JsonResponse([
-                'data' => json_decode($e->getMessage()),
-                'status' => 404,
-            ]))->setStatusCode(404);
-        } catch (\Exception | \Error $e) {
-            return (new JsonResponse([
-                'data' => json_decode($e->getMessage()),
+                'error' => $t->getMessage(),
                 'status' => 404,
             ]))->setStatusCode(404);
         }

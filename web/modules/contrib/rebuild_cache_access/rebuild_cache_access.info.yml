@@ -7,7 +7,7 @@ core_version_requirement: ^8 || ^9 || ^10
 dependencies:
   - drupal:toolbar
 
-# Information added by Drupal.org packaging script on 2022-07-24
-version: '8.x-1.8'
+# Information added by Drupal.org packaging script on 2023-07-10
+version: '8.x-1.9'
 project: 'rebuild_cache_access'
-datestamp: 1658665208
+datestamp: 1688988263

@@ -152,6 +152,8 @@ class PBSAirnetController extends ControllerBase {
         // Load the fortnightly program data.
         $programs = $this->loadJson('https://schedule.pbsfm.org.au/api/fortnight', 'pbsapi_programs', $time_offset);
         $dst_change = FALSE;
+        $previous_start_dst = FALSE;
+        $previous_end_dst = FALSE;
 
         foreach ($programs['data'] as $program) {
           // Find the Program's corresponding day of a fortnightly schedule.
@@ -176,9 +178,11 @@ class PBSAirnetController extends ControllerBase {
             }
 
             // Fix when Daylight Saving starts between programs.
-            if ($start_dst == 1 && $end_dst == 1 & $dst_change != TRUE & $program_count >=2) {
-              $dst_change = TRUE;
-              $end_date = dstEndDate($search_day, $program->duration, 1);
+            if ($program_count >= 2) {
+              if ($start_dst == 1 && $end_dst == 1 & $previous_start_dst == 0 && $previous_end_dst == 0) {
+                $dst_change = TRUE;
+                $end_date = dstEndDate($search_day, $program->duration, 1);
+              }
             }
 
             // Fix when Daylight Saving ends within a program.
@@ -188,6 +192,10 @@ class PBSAirnetController extends ControllerBase {
 
             // Fix when Daylight Saving ends between programs.
             // Not required as the end time remains the same.
+
+            // Set previous program dst values.
+            $previous_start_dst = $start_dst;
+            $previous_end_dst = $end_dst;
 
             // Match the Program by the search time.
             if ($search_date >= $start_date  && $search_date < $end_date) {
@@ -301,5 +309,6 @@ class PBSAirnetController extends ControllerBase {
 function dstEndDate($date, $duration, $offset) {
   $end_date = date_create($date);
     $duration = $duration - ($offset * 60 * 60) - 1;
-  return $end_date->add(new DateInterval('PT' . $duration . 'S'));
+  $end_date->add(new DateInterval('PT' . $duration . 'S'));
+  return $end_date;
 }

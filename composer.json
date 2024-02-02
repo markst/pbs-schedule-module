@@ -23,6 +23,7 @@
         "drupal/core-recommended": "^9",
         "drupal/queue_ui": "^3.1",
         "drupal/rebuild_cache_access": "^1.8",
+        "drupal/upgrade_status": "^4.0",
         "drush/drush": "^11.4",
         "symfony/http-client": "^5.4"
     },

@@ -12,8 +12,7 @@ module:
   block: 0
   block_content: 0
   breakpoint: 0
-  ckeditor: 0
-  color: 0
+  ckeditor5: 0
   comment: 0
   config: 0
   contact: 0
@@ -40,8 +39,8 @@ module:
   path: 0
   path_alias: 0
   pbs_airnet_api: 0
+  phpass: 0
   queue_ui: 0
-  rdf: 0
   search: 0
   serialization: 0
   shortcut: 0
@@ -51,11 +50,11 @@ module:
   toolbar: 0
   tour: 0
   update: 0
+  upgrade_status: 0
   user: 0
   views_ui: 0
   views: 10
   standard: 1000
 theme:
-  bartik: 0
-  seven: 0
+  claro: 0
 profile: standard

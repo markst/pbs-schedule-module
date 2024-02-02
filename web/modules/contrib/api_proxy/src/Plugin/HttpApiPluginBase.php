@@ -352,9 +352,8 @@ abstract class HttpApiPluginBase extends PluginBase implements ContainerFactoryP
    */
   public function corsResponse(Request $request): CacheableResponse {
     $headers = $this->calculateCorsHeaders($request);
-    return empty($headers)
-      ? CacheableResponse::create(NULL, 200)
-      : CacheableResponse::create(NULL, 200, $headers)
+    $response = new CacheableResponse(NULL, 200, $headers);
+    return $response
         ->setVary('Origin', FALSE)
         ->setCache([
           'max_age' => $headers['Access-Control-Max-Age'],

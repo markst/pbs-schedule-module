@@ -93,7 +93,7 @@ class PBSAirnetController extends ControllerBase {
       $response = new CacheableJsonResponse($data);
       $response->setPublic();
       $response->setMaxAge($ttl); // Configurable `admin/config/development/performance`
-      $response->setExpires(new \DateTime('@' . (REQUEST_TIME + $ttl)));
+      $response->setExpires(new \DateTime('@' . (\Drupal::time()->getRequestTime() + $ttl)));
       $response->headers->set(
         'Content-Type',
         'application/json; charset=utf-8'
@@ -210,7 +210,7 @@ class PBSAirnetController extends ControllerBase {
       $response = new CacheableJsonResponse($data);
       $response->setPublic();
       $response->setMaxAge($ttl); // Configurable `admin/config/development/performance`
-      $response->setExpires(new \DateTime('@' . (REQUEST_TIME + $ttl)));
+      $response->setExpires(new \DateTime('@' . (\Drupal::time()->getRequestTime() + $ttl)));
       $response->headers->set(
         'Content-Type',
         'application/json; charset=utf-8'

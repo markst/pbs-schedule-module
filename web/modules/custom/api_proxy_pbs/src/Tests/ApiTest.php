@@ -30,6 +30,6 @@ class ApiTests extends BrowserTestBase
     public function testFortnightEndpointExists()
     {
         $this->drupalGet('api/fortnight');
-        $this->assertResponse(200);
+        $this->assertSession()->statusCodeEquals(200);
     }
 }

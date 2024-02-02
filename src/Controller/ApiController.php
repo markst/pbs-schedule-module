@@ -50,7 +50,7 @@ class ApiController extends ControllerBase
         $response
             ->setPublic()
             ->setMaxAge($ttl)
-            ->setExpires(new \DateTime('@' . (REQUEST_TIME + $ttl)))
+            ->setExpires(new \DateTime('@' . (\Drupal::time()->getRequestTime() + $ttl)))
             ->headers->set('Content-Type', 'application/json; charset=utf-8');
 
         $cacheMetadata = CacheableMetadata::createFromRenderArray([

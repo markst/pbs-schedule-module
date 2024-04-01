@@ -16,7 +16,7 @@ class StreamController extends ControllerBase
      * @param string $date
      *   The episode ID in the format YYYY-MM-DD HH:MM:SS.
      *
-     * @return TrustedRedirectResponse
+     * @return TrustedRedirectResponse|JsonResponse
      *   Redirect response to the audio URL or an error message.
      */
     public function getAudioUrl($program, $date)
@@ -53,8 +53,8 @@ class StreamController extends ControllerBase
             // If PublishState is not "Published" or AudioUrl is not available, throw an error
             throw new \Exception('Audio is not published');
         } catch (\Exception $e) {
-            // Return an error response if an exception occurs
-            return new JsonResponse(['error' => $e->getMessage()], 400);
+            // Return an error response with the API URL if an exception occurs
+            return new JsonResponse(['error' => $e->getMessage(), 'api_url' => $apiUrl], 400);
         }
     }
 }

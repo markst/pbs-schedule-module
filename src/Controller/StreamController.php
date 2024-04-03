@@ -39,9 +39,23 @@ class StreamController extends ControllerBase
 
             // Check if the response is valid JSON
             $data = json_decode($response, true);
+
             if (!$data || !isset($data['PublishState'])) {
-                // Return an error response with the API URL
-                throw new \Exception('Invalid response from API');
+                // Fetch the show name
+                $showName = $this->getShowName($program);
+                if (!$showName) {
+                    throw new \Exception('Invalid response from API');
+                }
+                // Extract clip name from the show name and retry fetching data
+                $clipName = str_replace(' ', '-', $showName) . '-' . $formattedDate;
+                $apiUrl = "https://omny.fm/api/programs/{$program}/clips/{$clipName}";
+
+                // Retry fetching data with the updated API URL
+                $response = file_get_contents($apiUrl);
+                $data = json_decode($response, true);
+                if (!$data || !isset($data['PublishState'])) {
+                    throw new \Exception('Invalid response from API');
+                }
             }
 
             // Check if PublishState is "Published"

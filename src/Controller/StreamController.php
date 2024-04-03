@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class StreamController extends ControllerBase
 {
     /**
-     * Fetches the audio URL from the API endpoint for the given program and date.
+     * Fetches the audio URL from the API endpoint for the given slug and date.
      *
-     * @param string $program
+     * @param string $slug
      *   The program slug.
      * @param string $date
      *   The episode ID in the format YYYY-MM-DD HH:MM:SS.
@@ -19,7 +19,7 @@ class StreamController extends ControllerBase
      * @return TrustedRedirectResponse|JsonResponse
      *   Redirect response to the audio URL or an error message.
      */
-    public function getAudioUrl($program, $date)
+    public function getAudioUrl($slug, $date)
     {
         try {
             // Attempt to parse the date
@@ -31,8 +31,8 @@ class StreamController extends ControllerBase
             // Format the date
             $formattedDate = $dateTime->format('j-F-Y');
 
-            // Generate the API URL based on the program and formatted date
-            $apiUrl = "https://omny.fm/api/programs/{$program}/clips/{$program}-{$formattedDate}";
+            // Generate the API URL based on the slug and formatted date
+            $apiUrl = "https://omny.fm/api/slugs/{$slug}/clips/{$slug}-{$formattedDate}";
 
             // Fetch data from the API endpoint
             $response = file_get_contents($apiUrl);
@@ -42,13 +42,13 @@ class StreamController extends ControllerBase
 
             if (!$data || !isset($data['PublishState'])) {
                 // Fetch the show name
-                $showName = $this->getShowName($program);
+                $showName = $this->getShowName($slug);
                 if (!$showName) {
                     throw new \Exception('Invalid response from API');
                 }
                 // Extract clip name from the show name and retry fetching data
                 $clipName = str_replace(' ', '-', $showName) . '-' . $formattedDate;
-                $apiUrl = "https://omny.fm/api/programs/{$program}/clips/{$clipName}";
+                $apiUrl = "https://omny.fm/api/slugs/{$slug}/clips/{$clipName}";
 
                 // Retry fetching data with the updated API URL
                 $response = file_get_contents($apiUrl);
@@ -73,25 +73,25 @@ class StreamController extends ControllerBase
     }
 
     /**
-     * Fetches the show name from the program data.
+     * Fetches the show name from the slug data.
      *
-     * @param string $program
-     *   The program slug.
+     * @param string $slug
+     *   The slug slug.
      *
      * @return string|false
      *   The show name if found, otherwise false.
      */
-    public function getShowName($program)
+    public function getShowName($slug)
     {
         try {
-            // Fetch program data from the API endpoint
-            $programData = json_decode(file_get_contents("https://omny.fm/api/programs/{$program}"), true);
-            if (!$programData || !isset($programData['Name'])) {
+            // Fetch slug data from the API endpoint
+            $slugData = json_decode(file_get_contents("https://omny.fm/api/slugs/{$slug}"), true);
+            if (!$slugData || !isset($slugData['Name'])) {
                 throw new \Exception('Invalid response from API');
             }
 
             // Extract and normalize the show name
-            $showName = $programData['Name'];
+            $showName = $slugData['Name'];
             $showName = strtolower($showName); // Convert to lowercase
             $showName = preg_replace('/[^a-z0-9-]/', '', $showName); // Remove unexpected characters
             $showName = str_replace(' ', '-', $showName); // Replace spaces with hyphens

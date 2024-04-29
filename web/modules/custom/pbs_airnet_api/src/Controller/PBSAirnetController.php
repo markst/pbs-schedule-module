@@ -151,6 +151,7 @@ class PBSAirnetController extends ControllerBase {
 
         // Load the fortnightly program data.
         $programs = $this->loadJson('https://schedule.pbsfm.org.au/api/fortnight', 'pbsapi_programs', $time_offset);
+        $program_count = 0; // Initialize $program_count before the loop.
         $dst_change = FALSE;
         $previous_start_dst = FALSE;
         $previous_end_dst = FALSE;

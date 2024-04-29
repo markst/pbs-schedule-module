@@ -89,3 +89,25 @@ api_proxy_pbs.playlists:
         type: entity:program                
       date:
         type: entity:date
+
+api_proxy_pbs.stream:
+  path: '/api/programs/{slug}/episodes/{date}/stream'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\StreamController::getAudioUrl'
+  requirements:
+    _access: 'TRUE'
+  options:
+    parameters:
+      slug:
+        type: entity:slug                
+      date:
+        type: entity:date
+
+api_proxy_pbs.omny:
+  path: '/api/omny-programs'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\StreamController::getProgramMapping'
+  requirements:
+    _access: 'TRUE'

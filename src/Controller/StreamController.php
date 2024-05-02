@@ -32,7 +32,7 @@ class StreamController extends ControllerBase
             $formattedDate = $dateTime->format('j-F-Y');
 
             // Generate the API URL based on the slug and formatted date
-            $apiUrl = "https://omny.fm/api/slugs/{$slug}/clips/{$slug}-{$formattedDate}";
+            $apiUrl = "https://omny.fm/api/programs/{$slug}/clips/{$slug}-{$formattedDate}";
 
             // Fetch data from the API endpoint
             $response = file_get_contents($apiUrl);
@@ -48,7 +48,7 @@ class StreamController extends ControllerBase
                 }
                 // Extract clip name from the show name and retry fetching data
                 $clipName = str_replace(' ', '-', $showName) . '-' . $formattedDate;
-                $apiUrl = "https://omny.fm/api/slugs/{$slug}/clips/{$clipName}";
+                $apiUrl = "https://omny.fm/api/programs/{$slug}/clips/{$clipName}";
 
                 // Retry fetching data with the updated API URL
                 $response = file_get_contents($apiUrl);
@@ -73,10 +73,10 @@ class StreamController extends ControllerBase
     }
 
     /**
-     * Fetches the show name from the slug data.
+     * Fetches the show name from the program slug.
      *
      * @param string $slug
-     *   The slug slug.
+     *   The program slug.
      *
      * @return string|false
      *   The show name if found, otherwise false.
@@ -84,14 +84,14 @@ class StreamController extends ControllerBase
     public function getShowName($slug)
     {
         try {
-            // Fetch slug data from the API endpoint
-            $slugData = json_decode(file_get_contents("https://omny.fm/api/slugs/{$slug}"), true);
-            if (!$slugData || !isset($slugData['Name'])) {
+            // Fetch program data from the API endpoint
+            $programData = json_decode(file_get_contents("https://omny.fm/api/programs/{$slug}"), true);
+            if (!$programData || !isset($programData['Name'])) {
                 throw new \Exception('Invalid response from API');
             }
 
             // Extract and normalize the show name
-            $showName = $slugData['Name'];
+            $showName = $programData['Name'];
             $showName = strtolower($showName); // Convert to lowercase
             $showName = preg_replace('/[^a-z0-9-]/', '', $showName); // Remove unexpected characters
             $showName = str_replace(' ', '-', $showName); // Replace spaces with hyphens

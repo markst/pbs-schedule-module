@@ -9,12 +9,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class StreamController extends ControllerBase
 {
     /**
-     * Fetches the audio URL from the API endpoint for the given slug and date.
+     * Fetches the audio URL from the API endpoint for the given slug and date,
+     * constructing the URL with the formatted program name if necessary.
      *
      * @param string $slug
-     *   The program slug.
+     *   The initial program slug (typically from Airnet).
      * @param string $date
-     *   The episode ID in the format YYYY-MM-DD HH:MM:SS.
+     *   The episode date in the format YYYY-MM-DD HH:MM:SS.
      *
      * @return TrustedRedirectResponse|JsonResponse
      *   Redirect response to the audio URL or an error message.
@@ -28,33 +29,30 @@ class StreamController extends ControllerBase
                 throw new \Exception('Invalid date format');
             }
 
-            // Format the date
+            // Format the date for the URL
             $formattedDate = $dateTime->format('j-F-Y');
 
-            // Generate the API URL based on the slug and formatted date
+            // Generate the initial API URL based on the slug
             $apiUrl = "https://omny.fm/api/programs/{$slug}/clips/{$slug}-{$formattedDate}";
 
             // Fetch data from the API endpoint
             $response = file_get_contents($apiUrl);
-
-            // Check if the response is valid JSON
             $data = json_decode($response, true);
 
             if (!$data || !isset($data['PublishState'])) {
-                // Fetch the show name
-                $showName = $this->getShowName($slug);
-                if (!$showName) {
-                    throw new \Exception('Invalid response from API');
+                // Fetch the Omny slug and formatted program name if initial attempt fails
+                $slugInfo = $this->getOmnySlug($slug);
+                if (!$slugInfo) {
+                    throw new \Exception('Failed to fetch the Omny slug and formatted name');
                 }
-                // Extract clip name from the show name and retry fetching data
-                $clipName = str_replace(' ', '-', $showName) . '-' . $formattedDate;
-                $apiUrl = "https://omny.fm/api/programs/{$slug}/clips/{$clipName}";
 
-                // Retry fetching data with the updated API URL
+                // Construct a new API URL using both the slug and the formatted program name
+                $apiUrl = "https://omny.fm/api/programs/{$slugInfo['slug']}/clips/{$slugInfo['formattedName']}-{$formattedDate}";
                 $response = file_get_contents($apiUrl);
                 $data = json_decode($response, true);
+
                 if (!$data || !isset($data['PublishState'])) {
-                    throw new \Exception('Invalid response from API');
+                    throw new \Exception('Invalid response from API after retry');
                 }
             }
 
@@ -68,108 +66,55 @@ class StreamController extends ControllerBase
             throw new \Exception('Audio is not published');
         } catch (\Exception $e) {
             // Return an error response with the API URL if an exception occurs
-            return new JsonResponse(['error' => $e->getMessage(), 'api_url' => $apiUrl], 400);
+            return new JsonResponse(['error' => $e->getMessage(), 'api_url' => isset($apiUrl) ? $apiUrl : 'N/A'], 400);
         }
     }
 
     /**
-     * Fetches the show name from the program slug.
+     * Retrieves the Omny slug and formatted program name that match the given initial slug.
+     * This method is used when the initial attempt to fetch program data fails, 
+     * indicating a possible mismatch between the provided slug and the Omny slug naming conventions.
      *
-     * @param string $slug
-     *   The program slug.
+     * @param string $airnetSlug
+     *   The initial program slug, typically from Airnet.
      *
-     * @return string|false
-     *   The show name if found, otherwise false.
+     * @return array|false
+     *   Returns an associative array with 'slug' and 'formattedName' if a match is found,
+     *   otherwise false if no match is found.
      */
-    public function getShowName($slug)
+    public function getOmnySlug($airnetSlug)
     {
         try {
-            // Fetch program data from the API endpoint
-            $programData = json_decode(file_get_contents("https://omny.fm/api/programs/{$slug}"), true);
-            if (!$programData || !isset($programData['Name'])) {
+            // Fetch all programs from Omny for the organization
+            $apiUrl = "https://api.omny.fm/orgs/1270a58a-2c51-457c-b8c6-aced0086cad6/programs";
+            $response = file_get_contents($apiUrl);
+            $omnyPrograms = json_decode($response, true);
+
+            if (!$omnyPrograms || !isset($omnyPrograms['Programs'])) {
                 throw new \Exception('Invalid response from API');
             }
 
-            // Extract and normalize the show name
-            $showName = $programData['Name'];
-            $showName = strtolower($showName); // Convert to lowercase
-            $showName = preg_replace('/[^a-z0-9-]/', '', $showName); // Remove unexpected characters
-            $showName = str_replace(' ', '-', $showName); // Replace spaces with hyphens
-
-            return $showName;
-        } catch (\Exception $e) {
-            // Log or handle the exception as needed
-            return false;
-        }
-    }
-
-    /**
-     * Fetches programs from the given URL and returns them as an associative array.
-     *
-     * @param string $url The URL to fetch the programs from.
-     * @return array The list of programs as an associative array.
-     */
-    function fetchPrograms($url)
-    {
-        $response = file_get_contents($url);
-        return json_decode($response, true);
-    }
-
-    /**
-     * Match programs by slug from Airnet with their corresponding programs on Omny.
-     *
-     * @return JsonResponse
-     *   A JSON response containing the mapping of Airnet programs to Omny programs.
-     */
-    public function getProgramMapping()
-    {
-        $airnetPrograms = $this->fetchPrograms('http://dev.schedule.pbsfm.org.au/api/fortnight');
-        $omnyPrograms = $this->fetchPrograms('https://api.omny.fm/orgs/1270a58a-2c51-457c-b8c6-aced0086cad6/programs');
-
-        // Filter out programs with slug as string "null" or empty string from Airnet
-        $filteredAirnetPrograms = array_filter($airnetPrograms, function ($program) {
-            return isset($program['slug']) && $program['slug'] !== "null" && $program['slug'] !== "";
-        });
-
-        $programMapping = [];
-
-        // Match programs by slug
-        foreach ($filteredAirnetPrograms as $airnetProgram) {
-            $airnetSlug = $airnetProgram['slug'];
-            $airnetName = $airnetProgram['name'];
-
-
             foreach ($omnyPrograms['Programs'] as $omnyProgram) {
-                // Try matching by slug first
-                similar_text($omnyProgram['Slug'], $airnetSlug, $slugPercent);
-                if ($slugPercent > 99) {
-                    // Add the mapping to the result
-                    $programMapping[$airnetName] = [
-                        'omny_program_id' => $omnyProgram['Id'],
-                        'omny_program_name' => $omnyProgram['Name'],
-                        'omny_program_slug' => $omnyProgram['Slug'],
-                        'airnet_program_slug' => $airnetProgram['slug'],
-                        'slug_match' => $slugPercent,
-                    ];
-                    break; // No need to continue if we've found a match
-                }
+                $slugPercent = 0;
+                similar_text(strtolower($omnyProgram['Slug']), strtolower($airnetSlug), $slugPercent);
 
-                // Then match program
-                similar_text($omnyProgram['Name'], $airnetName, $namePercent);
-                if ($namePercent > 80) {
-                    // Add the mapping to the result
-                    $programMapping[$airnetName] = [
-                        'omny_program_id' => $omnyProgram['Id'],
-                        'omny_program_name' => $omnyProgram['Name'],
-                        'omny_program_slug' => $omnyProgram['Slug'],
-                        'airnet_program_slug' => $airnetProgram['slug'],
-                        'program_match' => $namePercent,
+                if ($slugPercent > 80) { // Threshold can be adjusted based on specific needs
+                    // Format the program name according to the specified rules
+                    $formattedName = strtolower($omnyProgram['Name']);
+                    $formattedName = preg_replace('/[^a-z0-9-]/', '', $formattedName);
+                    $formattedName = str_replace(' ', '-', $formattedName);
+
+                    // Return both slug and formatted program name
+                    return [
+                        'slug' => $omnyProgram['Slug'],
+                        'formattedName' => $formattedName
                     ];
-                    break; // No need to continue if we've found a match
                 }
             }
-        }
 
-        return new JsonResponse($programMapping);
+            return false;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

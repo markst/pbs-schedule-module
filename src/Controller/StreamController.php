@@ -9,13 +9,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class StreamController extends ControllerBase
 {
     /**
-     * Fetches the audio URL from the API endpoint for the given slug and date, 
-     * trying with the initial slug and then retrieving the Omny slug if the initial attempt fails.
+     * Fetches the audio URL from the API endpoint for the given slug and date,
+     * constructing the URL with the formatted program name if necessary.
      *
      * @param string $slug
-     *   The Airnet program slug.
+     *   The initial program slug (typically from Airnet).
      * @param string $date
-     *   The episode ID in the format YYYY-MM-DD HH:MM:SS.
+     *   The episode date in the format YYYY-MM-DD HH:MM:SS.
      *
      * @return TrustedRedirectResponse|JsonResponse
      *   Redirect response to the audio URL or an error message.
@@ -29,10 +29,10 @@ class StreamController extends ControllerBase
                 throw new \Exception('Invalid date format');
             }
 
-            // Format the date
+            // Format the date for the URL
             $formattedDate = $dateTime->format('j-F-Y');
 
-            // Generate the API URL based on the initial slug and formatted date
+            // Generate the initial API URL based on the slug
             $apiUrl = "https://omny.fm/api/programs/{$slug}/clips/{$slug}-{$formattedDate}";
 
             // Fetch data from the API endpoint
@@ -40,14 +40,14 @@ class StreamController extends ControllerBase
             $data = json_decode($response, true);
 
             if (!$data || !isset($data['PublishState'])) {
-                // Fetch the Omny slug using the initial slug and name
-                $omnySlug = $this->getOmnySlug($slug);
-                if (!$omnySlug) {
-                    throw new \Exception('Failed to fetch the Omny slug');
+                // Fetch the Omny slug and formatted program name if initial attempt fails
+                $slugInfo = $this->getOmnySlug($slug);
+                if (!$slugInfo) {
+                    throw new \Exception('Failed to fetch the Omny slug and formatted name');
                 }
 
-                // Retry with the Omny slug
-                $apiUrl = "https://omny.fm/api/programs/{$omnySlug}/clips/{$omnySlug}-{$formattedDate}";
+                // Construct a new API URL using both the slug and the formatted program name
+                $apiUrl = "https://omny.fm/api/programs/{$slugInfo['slug']}/clips/{$slugInfo['formattedName']}-{$formattedDate}";
                 $response = file_get_contents($apiUrl);
                 $data = json_decode($response, true);
 
@@ -71,15 +71,16 @@ class StreamController extends ControllerBase
     }
 
     /**
-     * Retrieves the Omny slug that matches the given initial slug and program name. 
+     * Retrieves the Omny slug and formatted program name that match the given initial slug.
      * This method is used when the initial attempt to fetch program data fails, 
-     * indicating a possible mismatch between Airnet and Omny slug naming conventions.
+     * indicating a possible mismatch between the provided slug and the Omny slug naming conventions.
      *
      * @param string $airnetSlug
      *   The initial program slug, typically from Airnet.
      *
-     * @return string|false
-     *   Returns the matching Omny slug if found, otherwise false if no match is found.
+     * @return array|false
+     *   Returns an associative array with 'slug' and 'formattedName' if a match is found,
+     *   otherwise false if no match is found.
      */
     public function getOmnySlug($airnetSlug)
     {
@@ -93,20 +94,26 @@ class StreamController extends ControllerBase
                 throw new \Exception('Invalid response from API');
             }
 
-            // Loop through each program to find the best match based on slug and name
             foreach ($omnyPrograms['Programs'] as $omnyProgram) {
                 $slugPercent = 0;
                 similar_text(strtolower($omnyProgram['Slug']), strtolower($airnetSlug), $slugPercent);
-                // Check if the similarity for either slug or name is above the thresholds
-                if ($slugPercent > 90) { // Threshold can be adjusted based on specific needs
-                    return $omnyProgram['Slug'];
+
+                if ($slugPercent > 80) { // Threshold can be adjusted based on specific needs
+                    // Format the program name according to the specified rules
+                    $formattedName = strtolower($omnyProgram['Name']);
+                    $formattedName = preg_replace('/[^a-z0-9-]/', '', $formattedName);
+                    $formattedName = str_replace(' ', '-', $formattedName);
+
+                    // Return both slug and formatted program name
+                    return [
+                        'slug' => $omnyProgram['Slug'],
+                        'formattedName' => $formattedName
+                    ];
                 }
             }
 
-            // No suitable match found, return false
             return false;
         } catch (\Exception $e) {
-            // Log the error or handle it as needed
             return false;
         }
     }

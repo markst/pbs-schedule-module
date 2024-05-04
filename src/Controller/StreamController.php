@@ -9,10 +9,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class StreamController extends ControllerBase
 {
     /**
-     * Fetches the audio URL from the API endpoint for the given slug and date.
+     * Fetches the audio URL from the API endpoint for the given slug and date, 
+     * trying with the initial slug and then retrieving the Omny slug if the initial attempt fails.
      *
      * @param string $slug
-     *   The program slug.
+     *   The Airnet program slug.
      * @param string $date
      *   The episode ID in the format YYYY-MM-DD HH:MM:SS.
      *
@@ -31,30 +32,27 @@ class StreamController extends ControllerBase
             // Format the date
             $formattedDate = $dateTime->format('j-F-Y');
 
-            // Generate the API URL based on the slug and formatted date
+            // Generate the API URL based on the initial slug and formatted date
             $apiUrl = "https://omny.fm/api/programs/{$slug}/clips/{$slug}-{$formattedDate}";
 
             // Fetch data from the API endpoint
             $response = file_get_contents($apiUrl);
-
-            // Check if the response is valid JSON
             $data = json_decode($response, true);
 
             if (!$data || !isset($data['PublishState'])) {
-                // Fetch the show name
-                $showName = $this->getShowName($slug);
-                if (!$showName) {
-                    throw new \Exception('Invalid response from API');
+                // Fetch the Omny slug using the initial slug and name
+                $omnySlug = $this->getOmnySlug($slug);
+                if (!$omnySlug) {
+                    throw new \Exception('Failed to fetch the Omny slug');
                 }
-                // Extract clip name from the show name and retry fetching data
-                $clipName = str_replace(' ', '-', $showName) . '-' . $formattedDate;
-                $apiUrl = "https://omny.fm/api/programs/{$slug}/clips/{$clipName}";
 
-                // Retry fetching data with the updated API URL
+                // Retry with the Omny slug
+                $apiUrl = "https://omny.fm/api/programs/{$omnySlug}/clips/{$omnySlug}-{$formattedDate}";
                 $response = file_get_contents($apiUrl);
                 $data = json_decode($response, true);
+
                 if (!$data || !isset($data['PublishState'])) {
-                    throw new \Exception('Invalid response from API');
+                    throw new \Exception('Invalid response from API after retry');
                 }
             }
 
@@ -68,37 +66,47 @@ class StreamController extends ControllerBase
             throw new \Exception('Audio is not published');
         } catch (\Exception $e) {
             // Return an error response with the API URL if an exception occurs
-            return new JsonResponse(['error' => $e->getMessage(), 'api_url' => $apiUrl], 400);
+            return new JsonResponse(['error' => $e->getMessage(), 'api_url' => isset($apiUrl) ? $apiUrl : 'N/A'], 400);
         }
     }
 
     /**
-     * Fetches the show name from the program slug.
+     * Retrieves the Omny slug that matches the given initial slug and program name. 
+     * This method is used when the initial attempt to fetch program data fails, 
+     * indicating a possible mismatch between Airnet and Omny slug naming conventions.
      *
-     * @param string $slug
-     *   The program slug.
+     * @param string $airnetSlug
+     *   The initial program slug, typically from Airnet.
      *
      * @return string|false
-     *   The show name if found, otherwise false.
+     *   Returns the matching Omny slug if found, otherwise false if no match is found.
      */
-    public function getShowName($slug)
+    public function getOmnySlug($airnetSlug)
     {
         try {
-            // Fetch program data from the API endpoint
-            $programData = json_decode(file_get_contents("https://omny.fm/api/programs/{$slug}"), true);
-            if (!$programData || !isset($programData['Name'])) {
+            // Fetch all programs from Omny for the organization
+            $apiUrl = "https://api.omny.fm/orgs/1270a58a-2c51-457c-b8c6-aced0086cad6/programs";
+            $response = file_get_contents($apiUrl);
+            $omnyPrograms = json_decode($response, true);
+
+            if (!$omnyPrograms || !isset($omnyPrograms['Programs'])) {
                 throw new \Exception('Invalid response from API');
             }
 
-            // Extract and normalize the show name
-            $showName = $programData['Name'];
-            $showName = strtolower($showName); // Convert to lowercase
-            $showName = preg_replace('/[^a-z0-9-]/', '', $showName); // Remove unexpected characters
-            $showName = str_replace(' ', '-', $showName); // Replace spaces with hyphens
+            // Loop through each program to find the best match based on slug and name
+            foreach ($omnyPrograms['Programs'] as $omnyProgram) {
+                $slugPercent = 0;
+                similar_text(strtolower($omnyProgram['Slug']), strtolower($airnetSlug), $slugPercent);
+                // Check if the similarity for either slug or name is above the thresholds
+                if ($slugPercent > 90) { // Threshold can be adjusted based on specific needs
+                    return $omnyProgram['Slug'];
+                }
+            }
 
-            return $showName;
+            // No suitable match found, return false
+            return false;
         } catch (\Exception $e) {
-            // Log or handle the exception as needed
+            // Log the error or handle it as needed
             return false;
         }
     }

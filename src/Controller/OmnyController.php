@@ -3,19 +3,13 @@
 namespace Drupal\api_proxy_pbs\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Drupal\Core\Cache\CacheableJsonResponse;
 
 class OmnyController extends ControllerBase
 {
-    /**
-     * Fetches programs from the given URL and returns them as an associative array, using Drupal's cache when possible.
-     *
-     * @param string $url The URL to fetch the programs from.
-     * @return array The list of programs as an associative array.
-     */
     private function fetchPrograms($url)
     {
-        $cid = 'programs_cache:' . md5($url); // Cache ID unique to the URL
+        $cid = 'programs_cache:' . md5($url);
         $cached_data = \Drupal::cache()->get($cid);
 
         if (!empty($cached_data)) {
@@ -23,8 +17,7 @@ class OmnyController extends ControllerBase
         } else {
             $response = file_get_contents($url);
             $data = json_decode($response, true);
-            // Cache this data with a custom expiration time, e.g., 1 hour
-            \Drupal::cache()->set($cid, $data, time() + 3600);
+            \Drupal::cache()->set($cid, $data, time() + 3600); // Adjust cache time as needed
             return $data;
         }
     }
@@ -40,13 +33,11 @@ class OmnyController extends ControllerBase
         $airnetUrl = 'http://dev.schedule.pbsfm.org.au/api/fortnight';
         $omnyUrl = 'https://api.omny.fm/orgs/1270a58a-2c51-457c-b8c6-aced0086cad6/programs';
 
-        // Attempt to retrieve from cache first
-        $mappingCacheId = 'program_mapping_cache';
-        $cachedMapping = \Drupal::cache()->get($mappingCacheId);
-
-        if (!empty($cachedMapping)) {
-            return new JsonResponse($cachedMapping->data);
-        }
+        $overrides = [
+            "tigerbeats" => "tiger-beats-elephant-grooves",
+            "blackheartsrevue" => "bleeding-black-hearts-revue",
+            "lca" => "lights-camera-action"
+        ];
 
         $airnetPrograms = $this->fetchPrograms($airnetUrl);
         $omnyPrograms = $this->fetchPrograms($omnyUrl);
@@ -59,20 +50,22 @@ class OmnyController extends ControllerBase
 
         foreach ($filteredAirnetPrograms as $airnetProgram) {
             $airnetSlug = $airnetProgram['slug'];
-            $programMapping[$airnetSlug] = "no-match-found"; // Default to no match found
 
             foreach ($omnyPrograms['Programs'] as $omnyProgram) {
                 similar_text($omnyProgram['Slug'], $airnetSlug, $slugPercent);
                 if ($slugPercent > 80) {
                     $programMapping[$airnetSlug] = $omnyProgram['Slug'];
-                    break; // Stop searching after finding a match
+                    break;
+                } else if (array_key_exists($airnetSlug, $overrides)) {
+                    $programMapping[$airnetSlug] = $overrides[$airnetSlug];
+                } else {
+                    $programMapping[$airnetSlug] = "no-match-found";
                 }
             }
         }
 
-        // Cache the final mapping result
-        \Drupal::cache()->set($mappingCacheId, $programMapping, time() + 3600);
-
-        return new JsonResponse($programMapping);
+        $response = new CacheableJsonResponse($programMapping);
+        $response->addCacheableDependency((object)['tags' => ['http_response']]);
+        return $response;
     }
 }

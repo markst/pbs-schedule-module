@@ -63,7 +63,7 @@ class PBSAirnetController extends ControllerBase
       // Lookup Program Name
       else {
         $time_offset = 1 * 60 * 60;
-        $programs = $this->loadJson('https://schedule.pbsfm.org.au/api/fortnight', 'pbsapi_programs', $time_offset);
+        $programs = $this->loadJson('https://schedule.pbsfm.org.au/api/programs', 'pbsapi_programs', $time_offset);
         $data = [];
 
         foreach ($programs['data'] as $program) {

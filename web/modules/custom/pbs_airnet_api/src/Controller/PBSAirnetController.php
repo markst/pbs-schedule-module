@@ -20,7 +20,8 @@ use Drupal\api_proxy_pbs\Controller\ScheduleController;
 /**
  * Cache demo main page.
  */
-class PBSAirnetController extends ControllerBase {
+class PBSAirnetController extends ControllerBase
+{
 
   /**
    * @var CacheBackendInterface
@@ -30,14 +31,16 @@ class PBSAirnetController extends ControllerBase {
   /**
    * Class constructor.
    */
-  public function __construct(CacheBackendInterface $cacheBackend) {
+  public function __construct(CacheBackendInterface $cacheBackend)
+  {
     $this->cacheBackend = $cacheBackend;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container)
+  {
     return new static(
       $container->get('cache.default')
     );
@@ -48,7 +51,8 @@ class PBSAirnetController extends ControllerBase {
    *
    * @return CacheableJsonResponse
    */
-  public function showname($date) {
+  public function showname($date)
+  {
     try {
       // Clear cache
       if ($date == 'clear') {
@@ -118,9 +122,7 @@ class PBSAirnetController extends ControllerBase {
       );
 
       return $response;
-    }
-    catch
-    (Exception $e) {
+    } catch (Exception $e) {
       return $this->handleException($e);
     }
   }
@@ -130,7 +132,8 @@ class PBSAirnetController extends ControllerBase {
    *
    * @return CacheableJsonResponse
    */
-  public function schedule($date) {
+  public function schedule($date)
+  {
     try {
       // Clear cache
       if ($date == 'clear') {
@@ -164,7 +167,7 @@ class PBSAirnetController extends ControllerBase {
           // Match a Program day to the search day.
           if ($program->day == $day) {
             $program_count++;
-            $search_day = substr($date, 0,8) . substr($program->startTime, 10, 9);
+            $search_day = substr($date, 0, 8) . substr($program->startTime, 10, 9);
             $start_date = date_create($search_day);
             $end_date = date_create($search_day);
             $duration = $program->duration - 1;
@@ -236,9 +239,7 @@ class PBSAirnetController extends ControllerBase {
       );
 
       return $response;
-    }
-    catch
-    (Exception $e) {
+    } catch (Exception $e) {
       return $this->handleException($e);
     }
   }
@@ -248,14 +249,14 @@ class PBSAirnetController extends ControllerBase {
    *
    * @return array
    */
-  private function loadJson($request_uri, $cache_name, $time_offset) {
+  private function loadJson($request_uri, $cache_name, $time_offset)
+  {
     if ($cache = $this->cacheBackend->get($cache_name)) {
       return [
         'data' => $cache->data,
         'means' => 'cache',
       ];
-    }
-    else {
+    } else {
       $guzzle = new Client();
       $response = $guzzle->get($request_uri);
       $json = json_decode($response->getBody());
@@ -273,8 +274,9 @@ class PBSAirnetController extends ControllerBase {
   /**
    * Clears the stored JSON from the cache.
    */
-  function clearJson($cache_name) {
-    $programs = $this->loadJson('https://airnet.org.au/rest/stations/3pbs/guides/fm', $cache_name .'_programs', CacheBackendInterface::CACHE_PERMANENT);
+  function clearJson($cache_name)
+  {
+    $programs = $this->loadJson('https://airnet.org.au/rest/stations/3pbs/guides/fm', $cache_name . '_programs', CacheBackendInterface::CACHE_PERMANENT);
 
     foreach ($programs['data'] as $key => $program) {
       $slug = $program->slug;
@@ -307,9 +309,10 @@ class PBSAirnetController extends ControllerBase {
 /**
  * Function to update end date for DST.
  */
-function dstEndDate($date, $duration, $offset) {
+function dstEndDate($date, $duration, $offset)
+{
   $end_date = date_create($date);
-    $duration = $duration - ($offset * 60 * 60) - 1;
+  $duration = $duration - ($offset * 60 * 60) - 1;
   $end_date->add(new DateInterval('PT' . $duration . 'S'));
   return $end_date;
 }

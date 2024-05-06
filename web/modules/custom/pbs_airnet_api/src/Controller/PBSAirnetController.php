@@ -71,7 +71,7 @@ class PBSAirnetController extends ControllerBase
         foreach ($programs['data'] as $program) {
           $slug = $program->slug;
 
-          $episodes = $this->loadJson('https://airnet.org.au/rest/stations/3pbs/programs/' . $slug . '/episodes', 'pbsapi_' . $slug, $time_offset);
+          $episodes = $this->loadJson('https://schedule.pbsfm.org.au/api/programs/' . $slug . '/episodes?numBefore=100', 'pbsapi_' . $slug, $time_offset);
 
           foreach ($episodes['data'] as $episode) {
             $start_date = str_replace(' ', '', $episode->start);
@@ -278,7 +278,7 @@ class PBSAirnetController extends ControllerBase
    */
   function clearJson($cache_name)
   {
-    $programs = $this->loadJson('https://airnet.org.au/rest/stations/3pbs/guides/fm', $cache_name . '_programs', CacheBackendInterface::CACHE_PERMANENT);
+    $programs = $this->loadJson('https://schedule.pbsfm.org.au/api/programs', $cache_name . '_programs', CacheBackendInterface::CACHE_PERMANENT);
 
     foreach ($programs['data'] as $key => $program) {
       $slug = $program->slug;

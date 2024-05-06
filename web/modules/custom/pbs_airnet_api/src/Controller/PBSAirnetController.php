@@ -14,6 +14,8 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Controller\ControllerBase;
 use \GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 use Drupal\api_proxy_pbs\Controller\ScheduleController;
 
 
@@ -303,6 +305,24 @@ class PBSAirnetController extends ControllerBase
     $args[] = &$data;
     call_user_func_array('array_multisort', $args);
     return array_pop($args);
+  }
+
+  /**
+   * Handles exceptions for the controller.
+   *
+   * @param \Exception $e
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   */
+  protected function handleException(\Exception $e)
+  {
+    // Return a JSON response indicating an error
+    $response = new JsonResponse([
+      'error' => 'An error occurred',
+      'message' => $e->getMessage(),
+    ]);
+    $response->setStatusCode(500);
+    $response->headers->set('Content-Type', 'application/json; charset=utf-8');
+    return $response;
   }
 }
 

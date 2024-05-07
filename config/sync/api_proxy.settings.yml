@@ -5,8 +5,8 @@ api_proxies:
     id: airnet
     forwardHeaders: 1
     additionalHeaders: {  }
-    forceCache: 0
-    forcedCacheTtl: '180'
+    forceCache: 1
+    forcedCacheTtl: '0'
     cors:
       origin:
         - '*'

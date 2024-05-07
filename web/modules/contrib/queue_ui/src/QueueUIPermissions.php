@@ -3,11 +3,14 @@
 namespace Drupal\queue_ui;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Queue\QueueWorkerManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides dynamic permissions for the queue_ui module.
+ *
+ * @phpstan-consistent-constructor
  */
 class QueueUIPermissions implements ContainerInjectionInterface {
 
@@ -21,13 +24,23 @@ class QueueUIPermissions implements ContainerInjectionInterface {
   private $queueWorkerManager;
 
   /**
+   * Constructor for QueueUIPermissions.
+   *
+   * @param \Drupal\Core\Queue\QueueWorkerManagerInterface|null $queueWorkerManager
+   *   Queue worker manager instance.
+   */
+  public function __construct(QueueWorkerManagerInterface $queueWorkerManager = NULL) {
+    if ($queueWorkerManager === NULL) {
+      $queueWorkerManager = \Drupal::service('plugin.manager.queue_worker');
+    }
+    $this->queueWorkerManager = $queueWorkerManager;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    $instance = new static();
-    $instance->queueWorkerManager = $container->get('plugin.manager.queue_worker');
-
-    return $instance;
+    return new static($container->get('plugin.manager.queue_worker'));
   }
 
   /**

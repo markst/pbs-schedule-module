@@ -185,9 +185,9 @@ class QueueUIBatch implements QueueUIBatchInterface {
       );
     }
     elseif (!isset($results['processed'])) {
-      $this->messenger->addWarning(\Drupal::translation()
-        ->translate("Items were not processed. Try to release existing items or add new items to the queues.")
-      );
+      $this->messenger->addWarning($this->t(
+        "Items were not processed. Try to release existing items or add new items to the queues."
+      ));
     }
 
     // Display errors.

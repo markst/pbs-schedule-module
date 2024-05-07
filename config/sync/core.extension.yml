@@ -4,7 +4,6 @@ module:
   admin_toolbar: 0
   admin_toolbar_search: 0
   admin_toolbar_tools: 0
-  api_pbs: 0
   api_proxy: 0
   api_proxy_pbs: 0
   automated_cron: 0

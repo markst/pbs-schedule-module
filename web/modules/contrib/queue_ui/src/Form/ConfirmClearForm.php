@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Class ConfirmClearForm declaration.
  *
  * @package Drupal\queue_ui\Form
+ * @phpstan-consistent-constructor
  */
 class ConfirmClearForm extends ConfirmFormBase {
 

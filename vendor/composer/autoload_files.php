@@ -27,7 +27,6 @@ return array(
     '2f69d3914119f042cca9e44442d5ce95' => $baseDir . '/web/core/includes/bootstrap.inc',
     'c7b4a5d8b94d270f0f9a84f81e1dd63d' => $vendorDir . '/open-telemetry/api/Trace/functions.php',
     '6124b4c8570aa390c21fafd04a26c69f' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
-    'c9d07b32a2e02bc0fc582d4f0c1b56cc' => $vendorDir . '/laminas/laminas-servicemanager/src/autoload.php',
     'c695cb998ba36e4bafc3d028efc7d113' => $vendorDir . '/open-telemetry/sdk/Common/Util/functions.php',
     'd991bdbfe253499825156f17c4a721db' => $vendorDir . '/open-telemetry/sdk/Logs/Exporter/_register.php',
     '01d424d2624f29a2eef00b09eb00935e' => $vendorDir . '/open-telemetry/sdk/Metrics/MetricExporter/_register.php',

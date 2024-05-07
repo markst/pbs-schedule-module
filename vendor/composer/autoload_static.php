@@ -28,7 +28,6 @@ class ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9
         '2f69d3914119f042cca9e44442d5ce95' => __DIR__ . '/../..' . '/web/core/includes/bootstrap.inc',
         'c7b4a5d8b94d270f0f9a84f81e1dd63d' => __DIR__ . '/..' . '/open-telemetry/api/Trace/functions.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
-        'c9d07b32a2e02bc0fc582d4f0c1b56cc' => __DIR__ . '/..' . '/laminas/laminas-servicemanager/src/autoload.php',
         'c695cb998ba36e4bafc3d028efc7d113' => __DIR__ . '/..' . '/open-telemetry/sdk/Common/Util/functions.php',
         'd991bdbfe253499825156f17c4a721db' => __DIR__ . '/..' . '/open-telemetry/sdk/Logs/Exporter/_register.php',
         '01d424d2624f29a2eef00b09eb00935e' => __DIR__ . '/..' . '/open-telemetry/sdk/Metrics/MetricExporter/_register.php',
@@ -55,6 +54,10 @@ class ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9
         'm' => 
         array (
             'mglaman\\PHPStanDrupal\\' => 22,
+        ),
+        'd' => 
+        array (
+            'dekor\\' => 6,
         ),
         'W' => 
         array (
@@ -152,15 +155,11 @@ class ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9
         'M' => 
         array (
             'Micheh\\PhpCodeSniffer\\' => 22,
-            'MathieuViossat\\Util\\' => 20,
             'Masterminds\\' => 12,
         ),
         'L' => 
         array (
             'League\\Container\\' => 17,
-            'Laminas\\Text\\' => 13,
-            'Laminas\\Stdlib\\' => 15,
-            'Laminas\\ServiceManager\\' => 23,
         ),
         'J' => 
         array (
@@ -244,8 +243,8 @@ class ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
         'phootwork\\lang\\' => 
         array (
@@ -258,6 +257,10 @@ class ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9
         'mglaman\\PHPStanDrupal\\' => 
         array (
             0 => __DIR__ . '/..' . '/mglaman/phpstan-drupal/src',
+        ),
+        'dekor\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dekor/php-array-table/src',
         ),
         'Webmozart\\Assert\\' => 
         array (
@@ -553,10 +556,6 @@ class ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9
         array (
             0 => __DIR__ . '/..' . '/micheh/phpcs-gitlab/src',
         ),
-        'MathieuViossat\\Util\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/mathieuviossat/arraytotexttable/src',
-        ),
         'Masterminds\\' => 
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
@@ -564,18 +563,6 @@ class ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9
         'League\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/container/src',
-        ),
-        'Laminas\\Text\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/laminas/laminas-text/src',
-        ),
-        'Laminas\\Stdlib\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/laminas/laminas-stdlib/src',
-        ),
-        'Laminas\\ServiceManager\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/laminas/laminas-servicemanager/src',
         ),
         'JsonSchema\\' => 
         array (
@@ -803,10 +790,6 @@ class ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9
         ),
     );
 
-    public static $fallbackDirsPsr0 = array (
-        0 => __DIR__ . '/..' . '/pear/pear-core-minimal/src',
-    );
-
     public static $classMap = array (
         'AllowDynamicProperties' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/AllowDynamicProperties.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
@@ -845,7 +828,11 @@ class ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9
         'Drupal\\Core\\Site\\Settings' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Core/Site/Settings.php',
         'JsonException' => __DIR__ . '/..' . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
+        'OS_Guess' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/OS/Guess.php',
         'Override' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/Override.php',
+        'PEAR' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/PEAR.php',
+        'PEAR_Error' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/PEAR.php',
+        'PEAR_ErrorStack' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/PEAR/ErrorStack.php',
         'PEAR_Exception' => __DIR__ . '/..' . '/pear/pear_exception/PEAR/Exception.php',
         'PHPUnit\\Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit\\Framework\\ActualValueIsNotAnObjectException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Exception/ActualValueIsNotAnObjectException.php',
@@ -1237,6 +1224,7 @@ class ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9
         'PharIo\\Manifest\\ManifestLoader' => __DIR__ . '/..' . '/phar-io/manifest/src/ManifestLoader.php',
         'PharIo\\Manifest\\ManifestLoaderException' => __DIR__ . '/..' . '/phar-io/manifest/src/exceptions/ManifestLoaderException.php',
         'PharIo\\Manifest\\ManifestSerializer' => __DIR__ . '/..' . '/phar-io/manifest/src/ManifestSerializer.php',
+        'PharIo\\Manifest\\NoEmailAddressException' => __DIR__ . '/..' . '/phar-io/manifest/src/exceptions/NoEmailAddressException.php',
         'PharIo\\Manifest\\PhpElement' => __DIR__ . '/..' . '/phar-io/manifest/src/xml/PhpElement.php',
         'PharIo\\Manifest\\PhpExtensionRequirement' => __DIR__ . '/..' . '/phar-io/manifest/src/values/PhpExtensionRequirement.php',
         'PharIo\\Manifest\\PhpVersionRequirement' => __DIR__ . '/..' . '/phar-io/manifest/src/values/PhpVersionRequirement.php',
@@ -1478,6 +1466,7 @@ class ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9
         'SensitiveParameter' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/SensitiveParameter.php',
         'SensitiveParameterValue' => __DIR__ . '/..' . '/symfony/polyfill-php82/Resources/stubs/SensitiveParameterValue.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'System' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/System.php',
         'TheSeer\\Tokenizer\\Exception' => __DIR__ . '/..' . '/theseer/tokenizer/src/Exception.php',
         'TheSeer\\Tokenizer\\NamespaceUri' => __DIR__ . '/..' . '/theseer/tokenizer/src/NamespaceUri.php',
         'TheSeer\\Tokenizer\\NamespaceUriException' => __DIR__ . '/..' . '/theseer/tokenizer/src/NamespaceUriException.php',
@@ -1496,7 +1485,6 @@ class ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9
             $loader->prefixLengthsPsr4 = ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9::$fallbackDirsPsr0;
             $loader->classMap = ComposerStaticInit1eb55d738d0c1bcf729fb662ed7203e9::$classMap;
 
         }, null, ClassLoader::class);

@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Class ConfirmItemReleaseForm declaration.
  *
  * @package Drupal\queue_ui\Form
+ * @phpstan-consistent-constructor
  */
 class ConfirmItemReleaseForm extends ConfirmFormBase {
 

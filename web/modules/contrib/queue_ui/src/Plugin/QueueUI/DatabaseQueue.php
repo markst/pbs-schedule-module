@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Defines the default Drupal Queue UI backend.
  *
+ * @phpstan-consistent-constructor
  * @QueueUI(
  *   id = "database_queue",
  *   class_name = "DatabaseQueue"

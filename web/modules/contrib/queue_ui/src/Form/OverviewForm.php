@@ -4,6 +4,8 @@ namespace Drupal\queue_ui\Form;
 
 use Drupal\Core\Database\Database;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerManagerInterface;
@@ -14,13 +16,12 @@ use Drupal\Core\Url;
 use Drupal\queue_ui\QueueUIBatchInterface;
 use Drupal\queue_ui\QueueUIManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Form\FormBase;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Class QueueUIOverviewForm declaration.
  *
  * @package Drupal\queue_ui\Form
+ * @phpstan-consistent-constructor
  */
 class OverviewForm extends FormBase {
 

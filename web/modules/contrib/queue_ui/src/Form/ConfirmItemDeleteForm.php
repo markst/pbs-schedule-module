@@ -4,7 +4,7 @@ namespace Drupal\queue_ui\Form;
 
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\Messenger;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
 use Drupal\queue_ui\QueueUIManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Class ConfirmItemDeleteForm declaration.
  *
  * @package Drupal\queue_ui\Form
+ * @phpstan-consistent-constructor
  */
 class ConfirmItemDeleteForm extends ConfirmFormBase {
 
@@ -40,12 +41,12 @@ class ConfirmItemDeleteForm extends ConfirmFormBase {
   /**
    * ConfirmItemDeleteForm constructor.
    *
-   * @param \Drupal\Core\Messenger\Messenger $messenger
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
    * @param \Drupal\queue_ui\QueueUIManager $queueUIManager
    *   The QueueUIManager object.
    */
-  public function __construct(Messenger $messenger, QueueUIManager $queueUIManager) {
+  public function __construct(MessengerInterface $messenger, QueueUIManager $queueUIManager) {
     $this->messenger = $messenger;
     $this->queueUIManager = $queueUIManager;
   }

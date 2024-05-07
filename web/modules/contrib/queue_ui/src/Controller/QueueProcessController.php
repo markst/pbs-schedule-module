@@ -6,11 +6,14 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\queue_ui\QueueUIBatchInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Controller for the queue process route.
+ *
+ * @phpstan-consistent-constructor
  */
 class QueueProcessController implements ContainerInjectionInterface {
 
@@ -22,13 +25,23 @@ class QueueProcessController implements ContainerInjectionInterface {
   protected $batch;
 
   /**
+   * Constructor for QueueProcessController.
+   *
+   * @param \Drupal\queue_ui\QueueUIBatchInterface|null $batch
+   *   Queue UI batch instance.
+   */
+  public function __construct(QueueUIBatchInterface $batch = NULL) {
+    if ($batch === NULL) {
+      $batch = \Drupal::service('queue_ui.batch');
+    }
+    $this->batch = $batch;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    $instance = new static();
-    $instance->batch = $container->get('queue_ui.batch');
-
-    return $instance;
+    return new static($container->get('queue_ui.batch'));
   }
 
   /**

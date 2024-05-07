@@ -40,7 +40,7 @@ class BulkOperationsTest extends WebDriverTestBase {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function testDefaultBulkOperation(): void {
+  final public function testDefaultBulkOperation(): void {
     $this->drupalLogin($this->createUser(['admin queue_ui']));
     $formUrl = Url::fromRoute('queue_ui.overview_form');
     $session = $this->assertSession();
@@ -53,6 +53,8 @@ class BulkOperationsTest extends WebDriverTestBase {
       'queues[queue_order_worker_E]' => 'queue_order_worker_E',
       'queues[queue_order_worker_F]' => 'queue_order_worker_F',
     ], 'Apply to selected items');
+    $session->waitForText('Processing queues');
+    $session->waitForElementRemoved('css', '[data-drupal-progress]');
     $this->assertJsCondition('document.querySelector("[data-drupal-messages]")');
     $session->statusMessageContains(
       'Items were not processed. Try to release existing items or add new items to the queues.'

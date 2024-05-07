@@ -267,8 +267,6 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
 
     /**
      * Is this attribute allowed?
-     *
-     * @return bool
      */
     protected function isAllowedAttribute(object|string $classOrObject, string $attribute, ?string $format = null, array $context = [])
     {
@@ -399,10 +397,16 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
                         continue;
                     }
 
+                    $constructorParameterType = 'unknown';
+                    $reflectionType = $constructorParameter->getType();
+                    if ($reflectionType instanceof \ReflectionNamedType) {
+                        $constructorParameterType = $reflectionType->getName();
+                    }
+
                     $exception = NotNormalizableValueException::createForUnexpectedDataType(
                         sprintf('Failed to create object because the class misses the "%s" property.', $constructorParameter->name),
                         $data,
-                        ['unknown'],
+                        [$constructorParameterType],
                         $attributeContext['deserialization_path'] ?? null,
                         true
                     );

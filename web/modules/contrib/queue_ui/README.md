@@ -1,15 +1,4 @@
-QUEUE UI
---------
-
- * Introduction
- * Requirements
- * Features
- * Installation
- * Maintainers
-
-
-INTRODUCTION
-------------
+# Queue UI
 
 The Queue UI module provides a user interface to viewing and managing Drupal
 queues created via the Queue API which began in Drupal 7.
@@ -20,46 +9,53 @@ extended to non-core classes of the Queue Inspection, which is going to need
 converting to the plugin system before it can be extended by other contribute
 modules.
 
- * For a full description of the module visit:
-   https://www.drupal.org/project/queue_ui
+Features:
 
- * To submit bug reports and feature suggestions, or to track changes visit:
-   https://www.drupal.org/project/issues/queue_ui
+- View queues and number of items
+- Developers can define meta info about queues they create and process
+- Process queue with Batch API
+- Process queue during cron
+- Remove leases
+- Delete queue
 
- * Queue operations API:
-   https://api.drupal.org/api/drupal/core%21core.api.php/group/queue
+For a full description of the module, visit the
+[project page](https://www.drupal.org/project/queue_ui).
+
+Submit bug reports and feature suggestions, or track changes in the
+[issue queue](https://www.drupal.org/project/issues/queue_ui).
 
 
-REQUIREMENTS
-------------
+## Table of contents
+
+- Requirements
+- Installation
+- Configuration
+- Maintainers
+
+
+## Requirements
 
 This module requires no modules outside of Drupal core.
 
 
-FEATURES
---------
+## Installation
 
- * View queues and number of items
- * Developers can define meta info about queues they create and process
- * Process queue with Batch API
- * Process queue during cron
- * Remove leases
- * Delete queue
+Install as you would normally install a contributed Drupal module. For further
+information, see
+[Installing Drupal Modules](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules).
 
 
-INSTALLATION
-------------
+## Configuration
 
- * Install the Queue UI module as you would normally install a contributed
-   Drupal module. Visit https://www.drupal.org/node/1897420 for further
-   information.
+There are no configuration provided.
 
 
-MAINTAINERS
------------
+## Maintainers
 
- * Brecht Ceyssens (bceyssens) - https://www.drupal.org/u/bceyssens
+- Oleh Vehera - [voleger](https://www.drupal.org/u/voleger)
+- Oleksandr Dekhteruk - [pifagor](https://www.drupal.org/u/pifagor)
+- DrupalSpoons Bot - [drupalspoons](https://www.drupal.org/u/drupalspoons)
 
-Supporting organization:
+**Supporting organization:**
 
- * Nascom - https://www.drupal.org/nascom
+- [Nascom](https://www.drupal.org/nascom)

@@ -3,8 +3,8 @@
 namespace Drupal\queue_ui\Commands;
 
 use Drupal\Core\Batch\BatchBuilder;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Queue\QueueWorkerManagerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\queue_ui\QueueUIBatchInterface;
 use Drupal\queue_ui\QueueUIManager;
 use Drush\Commands\DrushCommands;

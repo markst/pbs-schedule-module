@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Class InspectForm declaration.
  *
  * @package Drupal\queue_ui\Form
+ * @phpstan-consistent-constructor
  */
 class InspectForm extends FormBase {
 
@@ -101,6 +102,7 @@ class InspectForm extends FormBase {
         ],
       ];
     }
+    return $form;
   }
 
   /**

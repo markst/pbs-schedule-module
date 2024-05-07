@@ -53,11 +53,6 @@
  <rule ref="Generic.Functions.FunctionCallArgumentSpacing.NoSpaceAfterComma">
   <severity>0</severity>
  </rule>
- <rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie">
-  <properties>
-   <property name="checkClosures" value="true"/>
-  </properties>
- </rule>
 
  <rule ref="Generic.NamingConventions.ConstructorName" />
  <rule ref="Generic.NamingConventions.UpperCaseConstantName" />
@@ -123,6 +118,14 @@
  <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator" />
  <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses" />
  <rule ref="SlevomatCodingStandard.PHP.ShortList" />
+ <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+  <exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing"/>
+  <properties>
+   <property name="linesCountBeforeDeclare" value="1"/>
+   <property name="linesCountAfterDeclare" value="1"/>
+   <property name="spacesCountAroundEqualsSign" value="0"/>
+  </properties>
+ </rule>
 
  <rule ref="Squiz.Arrays.ArrayDeclaration" />
  <!-- Disable some error messages that we do not want. -->
@@ -247,24 +250,6 @@
   <severity>0</severity>
  </rule>
 
- <rule ref="Squiz.Functions.MultiLineFunctionDeclaration" />
- <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine">
-  <severity>0</severity>
- </rule>
- <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.ContentAfterBrace">
-  <severity>0</severity>
- </rule>
- <!-- Standard yet to be finalized on this (https://www.drupal.org/node/1539712). -->
- <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.FirstParamSpacing">
-  <severity>0</severity>
- </rule>
- <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.Indent">
-  <severity>0</severity>
- </rule>
- <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.CloseBracketLine">
-  <severity>0</severity>
- </rule>
-
  <rule ref="Squiz.PHP.LowercasePHPFunctions" />
  <rule ref="Squiz.PHP.NonExecutableCode" />
  <rule ref="Squiz.Strings.ConcatenationSpacing">
@@ -298,7 +283,7 @@
  <exclude-pattern>*/\.svn/*</exclude-pattern>
  <exclude-pattern>*/\.hg/*</exclude-pattern>
  <exclude-pattern>*/\.bzr/*</exclude-pattern>
- 
+
  <!-- Ignore minified CSS files.-->
  <exclude-pattern>*\.min\.css$</exclude-pattern>
 </ruleset>

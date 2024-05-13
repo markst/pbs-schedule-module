@@ -103,3 +103,11 @@ api_proxy_pbs.stream:
         type: entity:slug                
       date:
         type: entity:date
+
+api_proxy_pbs.omny:
+  path: '/api/omny-programs'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\OmnyController::getProgramMapping'
+  requirements:
+    _access: 'TRUE'

@@ -187,7 +187,6 @@ class ApiController extends ControllerBase
 
             return $this->cachedResponse($playlist, 10);
         } catch (\Throwable $t) {
-            \Drupal::logger('api_proxy_pbs')->error('Error fetching playlist for program ' . $program . ' on date ' . $date . ': ' . $t->getMessage());
             return (new JsonResponse([
                 'error' => $t->getMessage(),
                 'status' => 404,

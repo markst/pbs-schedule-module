@@ -142,7 +142,17 @@ class SubRequestController extends ControllerBase implements ContainerInjectionI
             if ($response->getStatusCode() == 200) {
                 return json_decode($response->getContent(), true);
             } else {
-                throw new \Exception("Error: " . $response->getReasonPhrase());
+                // Access the content of the response to see if it contains specific error messages.
+                $content = $response->getContent();
+                $error_message = json_decode($content, true);
+
+                if (isset($error_message['message'])) {
+                    // Use the error message from the response body if available.
+                    throw new \Exception("API Error: " . $error_message['message']);
+                } else {
+                    // Fallback to generic error with status code.
+                    throw new \Exception("HTTP Error: " . $response->getStatusCode());
+                }
             }
         } catch (TransportExceptionInterface | ClientExceptionInterface $e) {
             // Handle exceptions.

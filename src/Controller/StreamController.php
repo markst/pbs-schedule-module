@@ -91,6 +91,7 @@ class StreamController extends ControllerBase
             $omnyPrograms = json_decode($response, true);
 
             if (!$omnyPrograms || !isset($omnyPrograms['Programs'])) {
+                \Drupal::logger('api_proxy_pbs')->error('Invalid or no response from Omny API while fetching programs.');
                 throw new \Exception('Invalid response from API');
             }
 
@@ -104,6 +105,8 @@ class StreamController extends ControllerBase
                     $formattedName = preg_replace('/[^a-z0-9-]/', '', $formattedName);
                     $formattedName = str_replace(' ', '-', $formattedName);
 
+                    \Drupal::logger('api_proxy_pbs')->info("Matching program found: {$omnyProgram['Slug']} with similarity {$slugPercent}%.");
+
                     // Return both slug and formatted program name
                     return [
                         'slug' => $omnyProgram['Slug'],
@@ -112,8 +115,10 @@ class StreamController extends ControllerBase
                 }
             }
 
+            \Drupal::logger('api_proxy_pbs')->notice("No matching program found for slug: {$airnetSlug}.");
             return false;
         } catch (\Exception $e) {
+            \Drupal::logger('api_proxy_pbs')->error("Exception encountered while fetching programs: {$e->getMessage()}");
             return false;
         }
     }

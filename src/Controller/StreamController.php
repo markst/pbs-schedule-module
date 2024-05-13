@@ -102,8 +102,8 @@ class StreamController extends ControllerBase
                 if ($slugPercent > 80) { // Threshold can be adjusted based on specific needs
                     // Format the program name according to the specified rules
                     $formattedName = strtolower($omnyProgram['Name']);
-                    $formattedName = preg_replace('/[^a-z0-9-]/', '', $formattedName);
                     $formattedName = str_replace(' ', '-', $formattedName);
+                    $formattedName = preg_replace('/[^a-z0-9-]/', '', $formattedName);
 
                     \Drupal::logger('api_proxy_pbs')->info("Matching program found: {$omnyProgram['Slug']} with similarity {$slugPercent}%.");
 

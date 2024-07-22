@@ -166,6 +166,7 @@ class ApiController extends ControllerBase
 
             return $this->cachedResponse($episode, 3600);
         } catch (\Throwable $t) {
+            \Drupal::logger('api_proxy_pbs')->error('Error fetching episode for program ' . $program . ' on date ' . $date . ': ' . $t->getMessage());
             return (new JsonResponse([
                 'error' => $t->getMessage(),
                 'status' => 404,

@@ -52,6 +52,7 @@ class StreamController extends ControllerBase
                 $data = json_decode($response, true);
 
                 if (!$data || !isset($data['PublishState'])) {
+                    // TODO: Log error or rely on exception?
                     throw new \Exception('Invalid response from API after retry');
                 }
             }
@@ -71,55 +72,42 @@ class StreamController extends ControllerBase
     }
 
     /**
-     * Retrieves the Omny slug and formatted program name that match the given initial slug.
-     * This method is used when the initial attempt to fetch program data fails, 
-     * indicating a possible mismatch between the provided slug and the Omny slug naming conventions.
+     * Fetches the Omny slug and formatted program name for a given Airnet slug.
      *
      * @param string $airnetSlug
-     *   The initial program slug, typically from Airnet.
+     *   The Airnet slug.
      *
-     * @return array|false
-     *   Returns an associative array with 'slug' and 'formattedName' if a match is found,
-     *   otherwise false if no match is found.
+     * @return array|null
+     *   An array containing the Omny slug and formatted program name, or null on failure.
      */
     public function getOmnySlug($airnetSlug)
     {
         try {
-            // Fetch all programs from Omny for the organization
-            $apiUrl = "https://api.omny.fm/orgs/1270a58a-2c51-457c-b8c6-aced0086cad6/programs";
-            $response = file_get_contents($apiUrl);
-            $omnyPrograms = json_decode($response, true);
+            $base_url = \Drupal::request()->getSchemeAndHttpHost();
+            $apiUrl = $base_url . '/api/omny-programs';
+            /*
+            $apiUrl = $GLOBALS['base_url'] . '/api/omny-programs';
+            */
+            $response = file_get_contents($apiUrl); // TODO: Identify if we're safe to use `file_get_contents`
+            $programMapping = json_decode($response, true);
 
-            if (!$omnyPrograms || !isset($omnyPrograms['Programs'])) {
-                \Drupal::logger('api_proxy_pbs')->error('Invalid or no response from Omny API while fetching programs.');
-                throw new \Exception('Invalid response from API');
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('JSON decode error: ' . json_last_error_msg());
             }
 
-            foreach ($omnyPrograms['Programs'] as $omnyProgram) {
-                $slugPercent = 0;
-                similar_text(strtolower($omnyProgram['Slug']), strtolower($airnetSlug), $slugPercent);
-
-                if ($slugPercent > 80) { // Threshold can be adjusted based on specific needs
-                    // Format the program name according to the specified rules
-                    $formattedName = strtolower($omnyProgram['Name']);
-                    $formattedName = str_replace(' ', '-', $formattedName);
-                    $formattedName = preg_replace('/[^a-z0-9-]/', '', $formattedName);
-
-                    \Drupal::logger('api_proxy_pbs')->info("Matching program found: {$omnyProgram['Slug']} with similarity {$slugPercent}%.");
-
-                    // Return both slug and formatted program name
-                    return [
-                        'slug' => $omnyProgram['Slug'],
-                        'formattedName' => $formattedName
-                    ];
-                }
+            if (isset($programMapping[$airnetSlug])) {
+                $omnySlug = $programMapping[$airnetSlug];
+                $formattedName = $omnySlug; // TODO: Formatted name different from omny slug?
+                return [
+                    'slug' => $omnySlug,
+                    'formattedName' => $formattedName
+                ];
+            } else {
+                throw new \Exception("No matching program found. $apiUrl");
             }
-
-            \Drupal::logger('api_proxy_pbs')->notice("No matching program found for slug: {$airnetSlug}.");
-            return false;
         } catch (\Exception $e) {
-            \Drupal::logger('api_proxy_pbs')->error("Exception encountered while fetching programs: {$e->getMessage()}");
-            return false;
+            \Drupal::logger('Error fetching Omny slug: @message', ['@message' => $e->getMessage()]);
+            return null;
         }
     }
 }

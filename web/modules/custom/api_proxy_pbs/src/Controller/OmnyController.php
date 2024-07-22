@@ -60,6 +60,7 @@ class OmnyController extends ControllerBase
                     $programMapping[$airnetSlug] = $overrides[$airnetSlug];
                 } else {
                     $programMapping[$airnetSlug] = "no-match-found";
+                    \Drupal::logger('api_proxy_pbs')->error("Unable to find program on Omny: $airnetSlug");
                 }
             }
         }

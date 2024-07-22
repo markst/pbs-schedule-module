@@ -83,7 +83,11 @@ class StreamController extends ControllerBase
     public function getOmnySlug($airnetSlug)
     {
         try {
+            $base_url = \Drupal::request()->getSchemeAndHttpHost();
+            $apiUrl = $base_url . '/api/omny-programs';
+            /*
             $apiUrl = $GLOBALS['base_url'] . '/api/omny-programs';
+            */
             $response = file_get_contents($apiUrl); // TODO: Identify if we're safe to use `file_get_contents`
             $programMapping = json_decode($response, true);
 

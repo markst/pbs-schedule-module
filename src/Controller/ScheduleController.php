@@ -28,7 +28,8 @@ class ScheduleController extends ControllerBase
         // SubRequestController::create($container);
         $controller = new SubRequestController(
             \Drupal::service('http_kernel.basic'),
-            \Drupal::requestStack()
+            \Drupal::requestStack(),
+            "https://airnet.org.au"
         );
         return new static($controller);
     }
@@ -110,71 +111,73 @@ class ScheduleController extends ControllerBase
         }
 
         // Loop through the entire fortnight schedule:
-        return array_map(function ($og_program) use (
-            $programs,
-            $insomnia_lookup
-        ) {
-            // global $insomnia_lookup, $programs;
+        return array_map(
+            function ($og_program) use (
+                $programs,
+                $insomnia_lookup
+            ) {
+                // global $insomnia_lookup, $programs;
 
-            // Week 0 or 1:
-            $week = ((int) $og_program['day']) > 7;
+                // Week 0 or 1:
+                $week = ((int) $og_program['day']) > 7;
 
-            // For each insomnia program:
-            switch ($og_program['slug']) {
-                case 'insomnia_monday':
-                case 'insomnia_tuesday':
-                case 'insomnia_wednesday':
-                case 'insomnia_thursday':
-                case 'insomnia_friday':
-                case 'insomnia_sunday':
-                    // do lookup on insomnialookup for correct slug:
-                    $old_slug = $og_program['slug'];
-                    $new_slug_info = $insomnia_lookup[$old_slug][$week];
+                // For each insomnia program:
+                switch ($og_program['slug']) {
+                    case 'insomnia_monday':
+                    case 'insomnia_tuesday':
+                    case 'insomnia_wednesday':
+                    case 'insomnia_thursday':
+                    case 'insomnia_friday':
+                    case 'insomnia_sunday':
+                        // do lookup on insomnialookup for correct slug:
+                        $old_slug = $og_program['slug'];
+                        $new_slug_info = $insomnia_lookup[$old_slug][$week];
 
-                    $i = array_search(
-                        $new_slug_info['slug'],
-                        array_column($programs, 'slug')
-                    );
+                        $i = array_search(
+                            $new_slug_info['slug'],
+                            array_column($programs, 'slug')
+                        );
 
-                    if ($i == false) {
-                        return $og_program;
-                    }
+                        if ($i == false) {
+                            return $og_program;
+                        }
 
-                    $new_program = $programs[$i];
+                        $new_program = $programs[$i];
 
-                    // Carry existing attributes:
-                    $new_program['day'] = strval($og_program['day']);
-                    $new_program['start'] = $og_program['start'];
-                    $new_program['duration'] =
-                        $og_program['duration'] != null
+                        // Carry existing attributes:
+                        $new_program['day'] = strval($og_program['day']);
+                        $new_program['start'] = $og_program['start'];
+                        $new_program['duration'] =
+                            $og_program['duration'] != null
                             ? $og_program['duration']
                             : 14400;
-                    $new_program['profileImage'] =
-                        $new_slug_info['profileImage'];
+                        $new_program['profileImage'] =
+                            $new_slug_info['profileImage'];
 
-                    // Remove stale `onairnow`:
-                    unset($new_program['onairnow']);
-                    // Set the ISO 8601 date;
-                    $new_program['startTime'] = $this->startDate($og_program);
+                        // Remove stale `onairnow`:
+                        unset($new_program['onairnow']);
+                        // Set the ISO 8601 date;
+                        $new_program['startTime'] = $this->startDate($og_program);
 
-                    return $new_program;
-                    break;
-                default:
-                    // Remove unused attributes:
-                    unset($og_program['onairnow']);
-                    unset($og_program['bannerImageSmall']);
-                    unset($og_program['profileImageSmall']);
-                    unset($og_program['url']);
-                    // Set the ISO 8601 date;
-                    $og_program['startTime'] = $this->startDate($og_program);
-                    // Replace the 'day' attribute with a string day:
-                    $og_program['day'] = strval($og_program['day']);
+                        return $new_program;
+                        break;
+                    default:
+                        // Remove unused attributes:
+                        unset($og_program['onairnow']);
+                        unset($og_program['bannerImageSmall']);
+                        unset($og_program['profileImageSmall']);
+                        unset($og_program['url']);
+                        // Set the ISO 8601 date;
+                        $og_program['startTime'] = $this->startDate($og_program);
+                        // Replace the 'day' attribute with a string day:
+                        $og_program['day'] = strval($og_program['day']);
 
-                    return $og_program;
-                    break;
-            }
-        },
-        $two_week);
+                        return $og_program;
+                        break;
+                }
+            },
+            $two_week
+        );
     }
 
     /**

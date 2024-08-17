@@ -5,8 +5,9 @@ namespace Drupal\api_proxy_pbs\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Psr\Log\LoggerInterface;
 
 /**
  * Provides a StreamController for handling audio streaming via Omny Studio API.
@@ -87,7 +88,7 @@ class StreamController extends ControllerBase
                     $data = $this->findClipByDate($omnySlug, $dateTime);
 
                     if (!$data || !isset($data['PublishState'])) {
-                        throw new \Exception('Invalid response from API after retry.');
+                        throw new \Exception("Unable to find a clip for the date {$dateTime->format('Y-m-d')} with slug {$omnySlug} after multiple attempts.");
                     }
                 }
             }
@@ -162,16 +163,18 @@ class StreamController extends ControllerBase
      * @throws \Exception
      *   Throws an exception if the API call fails or returns an invalid response.
      */
-    public function findClipByDate(string $programSlug, \DateTime $targetDate): ?array
+    function findClipByDate(string $programSlug, \DateTime $targetDate): ?array
     {
-        $initialPageSize = 10; // Smaller page size for the first request
-        $subsequentPageSize = 100; // Larger page size for subsequent requests
-        $pageSize = $initialPageSize;
+        $pageSize = 10; // Fixed page size of 10 items
         $cursor = null;
         $foundClip = null;
 
+        // Define a buffer in minutes
+        $bufferInMinutes = 1;
+
         do {
             $url = $this->buildUrl($programSlug, $pageSize, $cursor);
+            $this->logger->info("Fetching clips with url $url");
 
             try {
                 $response = file_get_contents($url);
@@ -191,7 +194,11 @@ class StreamController extends ControllerBase
                         $captureStart = new \DateTime($recordingMetadata['CaptureStartUtc']);
                         $captureEnd = new \DateTime($recordingMetadata['CaptureEndUtc']);
 
-                        // Check if the target date is within the capture start and end
+                        // Apply buffer to the capture start and end times
+                        $captureStart->modify("-{$bufferInMinutes} minutes");
+                        $captureEnd->modify("+{$bufferInMinutes} minutes");
+
+                        // Check if the target date is within the modified capture start and end
                         if ($targetDate >= $captureStart && $targetDate <= $captureEnd) {
                             $foundClip = $clip;
                             break;
@@ -202,13 +209,11 @@ class StreamController extends ControllerBase
                 if ($foundClip) {
                     break;
                 }
-
-                $pageSize = $subsequentPageSize;
             } catch (\Exception $e) {
                 $this->logger->error('Error in findClipByDate: @message', ['@message' => $e->getMessage()]);
                 return null;
             }
-        } while ($cursor);
+        } while ($cursor);  // Continue looping as long as the cursor is not null
 
         return $foundClip;
     }

@@ -59,8 +59,8 @@ class StreamController extends ControllerBase
     public function getAudioUrl($slug, $date)
     {
         try {
-            // Attempt to parse the date
-            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $date);
+            // Force the time zone to AEST when creating the DateTime object
+            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $date, new \DateTimeZone('Australia/Sydney'));
             if (!$dateTime) {
                 throw new \Exception('Invalid date format');
             }
@@ -179,6 +179,10 @@ class StreamController extends ControllerBase
         // Define a buffer in minutes
         $bufferInMinutes = 1;
 
+        // Convert targetDate to UTC for comparison
+        $targetDateUtc = clone $targetDate;
+        $targetDateUtc->setTimezone(new \DateTimeZone('UTC'));
+
         do {
             $url = $this->buildUrl($programSlug, $pageSize, $cursor);
             $this->logger->info("Fetching clips with url $url");
@@ -205,8 +209,8 @@ class StreamController extends ControllerBase
                         $captureStart->modify("-{$bufferInMinutes} minutes");
                         $captureEnd->modify("+{$bufferInMinutes} minutes");
 
-                        // Check if the target date is within the modified capture start and end
-                        if ($targetDate >= $captureStart && $targetDate <= $captureEnd) {
+                        // Check if the target date (now in UTC) is within the modified capture start and end
+                        if ($targetDateUtc >= $captureStart && $targetDateUtc <= $captureEnd) {
                             $foundClip = $clip;
                             break;
                         }

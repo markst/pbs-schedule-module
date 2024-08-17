@@ -119,10 +119,14 @@ class StreamController extends ControllerBase
      * @return string|null
      *   The Omny slug, or null if not found.
      */
-    public function getOmnySlug($airnetSlug): ?string
+    function getOmnySlug($airnetSlug): ?string
     {
         try {
+            /*
+            Using localhost doesn't seem to work:
             $base_url = \Drupal::request()->getSchemeAndHttpHost();
+            */
+            $base_url = 'http://dev.schedule.pbsfm.org.au';
             $apiUrl = $base_url . '/api/omny-programs';
             $response = file_get_contents($apiUrl);
 

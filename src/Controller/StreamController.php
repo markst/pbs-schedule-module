@@ -83,6 +83,9 @@ class StreamController extends ControllerBase
                 $response = @file_get_contents($apiUrl);
                 $data = $response ? json_decode($response, true) : null;
 
+                // Attempt again with omnySlug / omnySlug slugs?
+                // $apiUrl = $this->baseUrl . "programs/{$omnySlug}/clips/{$slug}-{$formattedDate}";
+
                 if (!$data || !isset($data['PublishState'])) {
                     // Third attempt: Use findClipByDate to search through clips by date range
                     $data = $this->findClipByDate($omnySlug, $dateTime);

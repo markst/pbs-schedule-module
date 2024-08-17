@@ -29,7 +29,8 @@ class ApiController extends ControllerBase
         // SubRequestController::create($container);
         $controller = new SubRequestController(
             \Drupal::service('http_kernel.basic'),
-            \Drupal::requestStack()
+            \Drupal::requestStack(),
+            "https://airnet.org.au"
         );
         return new static($controller);
     }

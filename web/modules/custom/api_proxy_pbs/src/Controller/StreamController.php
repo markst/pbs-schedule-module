@@ -5,8 +5,9 @@ namespace Drupal\api_proxy_pbs\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Psr\Log\LoggerInterface;
 
 /**
  * Provides a StreamController for handling audio streaming via Omny Studio API.
@@ -58,8 +59,8 @@ class StreamController extends ControllerBase
     public function getAudioUrl($slug, $date)
     {
         try {
-            // Attempt to parse the date
-            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $date);
+            // Force the time zone to AEST when creating the DateTime object
+            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $date, new \DateTimeZone('Australia/Sydney'));
             if (!$dateTime) {
                 throw new \Exception('Invalid date format');
             }
@@ -82,12 +83,15 @@ class StreamController extends ControllerBase
                 $response = @file_get_contents($apiUrl);
                 $data = $response ? json_decode($response, true) : null;
 
+                // Attempt again with omnySlug / omnySlug slugs?
+                // $apiUrl = $this->baseUrl . "programs/{$omnySlug}/clips/{$slug}-{$formattedDate}";
+
                 if (!$data || !isset($data['PublishState'])) {
                     // Third attempt: Use findClipByDate to search through clips by date range
                     $data = $this->findClipByDate($omnySlug, $dateTime);
 
                     if (!$data || !isset($data['PublishState'])) {
-                        throw new \Exception('Invalid response from API after retry.');
+                        throw new \Exception("Unable to find a clip for the date {$dateTime->format('Y-m-d')} with slug {$omnySlug} after multiple attempts.");
                     }
                 }
             }
@@ -118,10 +122,14 @@ class StreamController extends ControllerBase
      * @return string|null
      *   The Omny slug, or null if not found.
      */
-    public function getOmnySlug($airnetSlug): ?string
+    function getOmnySlug($airnetSlug): ?string
     {
         try {
+            /*
+            Using localhost doesn't seem to work:
             $base_url = \Drupal::request()->getSchemeAndHttpHost();
+            */
+            $base_url = 'http://dev.schedule.pbsfm.org.au';
             $apiUrl = $base_url . '/api/omny-programs';
             $response = file_get_contents($apiUrl);
 
@@ -162,16 +170,22 @@ class StreamController extends ControllerBase
      * @throws \Exception
      *   Throws an exception if the API call fails or returns an invalid response.
      */
-    public function findClipByDate(string $programSlug, \DateTime $targetDate): ?array
+    function findClipByDate(string $programSlug, \DateTime $targetDate): ?array
     {
-        $initialPageSize = 10; // Smaller page size for the first request
-        $subsequentPageSize = 100; // Larger page size for subsequent requests
-        $pageSize = $initialPageSize;
+        $pageSize = 10; // Fixed page size of 10 items
         $cursor = null;
         $foundClip = null;
 
+        // Define a buffer in minutes
+        $bufferInMinutes = 1;
+
+        // Convert targetDate to UTC for comparison
+        $targetDateUtc = clone $targetDate;
+        $targetDateUtc->setTimezone(new \DateTimeZone('UTC'));
+
         do {
             $url = $this->buildUrl($programSlug, $pageSize, $cursor);
+            $this->logger->info("Fetching clips with url $url");
 
             try {
                 $response = file_get_contents($url);
@@ -191,8 +205,12 @@ class StreamController extends ControllerBase
                         $captureStart = new \DateTime($recordingMetadata['CaptureStartUtc']);
                         $captureEnd = new \DateTime($recordingMetadata['CaptureEndUtc']);
 
-                        // Check if the target date is within the capture start and end
-                        if ($targetDate >= $captureStart && $targetDate <= $captureEnd) {
+                        // Apply buffer to the capture start and end times
+                        $captureStart->modify("-{$bufferInMinutes} minutes");
+                        $captureEnd->modify("+{$bufferInMinutes} minutes");
+
+                        // Check if the target date (now in UTC) is within the modified capture start and end
+                        if ($targetDateUtc >= $captureStart && $targetDateUtc <= $captureEnd) {
                             $foundClip = $clip;
                             break;
                         }
@@ -202,13 +220,11 @@ class StreamController extends ControllerBase
                 if ($foundClip) {
                     break;
                 }
-
-                $pageSize = $subsequentPageSize;
             } catch (\Exception $e) {
                 $this->logger->error('Error in findClipByDate: @message', ['@message' => $e->getMessage()]);
                 return null;
             }
-        } while ($cursor);
+        } while ($cursor);  // Continue looping as long as the cursor is not null
 
         return $foundClip;
     }

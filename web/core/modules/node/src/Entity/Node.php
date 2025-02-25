@@ -95,6 +95,7 @@ class Node extends EditorialContentEntityBase implements NodeInterface {
    * @var true|null
    *   TRUE if the node is being previewed and NULL if it is not.
    */
+  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
   public $in_preview = NULL;
 
   /**
@@ -138,6 +139,15 @@ class Node extends EditorialContentEntityBase implements NodeInterface {
    * {@inheritdoc}
    */
   public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+    if ($update && \Drupal::moduleHandler()->moduleExists('search')) {
+      // Remove deleted translations from the search index.
+      foreach ($this->translations as $langcode => $translation) {
+        if ($translation['status'] === static::TRANSLATION_REMOVED) {
+          \Drupal::service('search.index')->clear('node_search', $this->id(), $langcode);
+        }
+      }
+    }
+
     parent::postSave($storage, $update);
 
     // Update the node access table for this node, but only if it is the
@@ -191,7 +201,7 @@ class Node extends EditorialContentEntityBase implements NodeInterface {
   /**
    * {@inheritdoc}
    */
-  public function access($operation = 'view', AccountInterface $account = NULL, $return_as_object = FALSE) {
+  public function access($operation = 'view', ?AccountInterface $account = NULL, $return_as_object = FALSE) {
     // This override exists to set the operation to the default value "view".
     return parent::access($operation, $account, $return_as_object);
   }

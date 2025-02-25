@@ -8,7 +8,6 @@
  * customized by user themes.
  */
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Url;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Crypt;
@@ -474,7 +473,7 @@ function template_preprocess_time(&$variables) {
   /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
   $date_formatter = \Drupal::service('date.formatter');
   // Format the 'datetime' attribute based on the timestamp.
-  // @see http://www.w3.org/TR/html5-author/the-time-element.html#attr-time-datetime
+  // @see https://www.w3.org/TR/html5-author/the-time-element.html#attr-time-datetime
   if (!isset($variables['attributes']['datetime']) && isset($variables['timestamp'])) {
     $variables['attributes']['datetime'] = $date_formatter->format($variables['timestamp'], 'html_datetime', '', 'UTC');
   }
@@ -522,26 +521,6 @@ function template_preprocess_datetime_form(&$variables) {
 
   $variables['content'] = $element;
 
-  // Add instructional text describing the required date and time formats.
-  // This will be hidden on JavaScript-enabled browsers that have a native
-  // datepicker.
-  if (!empty($element['#date_date_format'])) {
-    $placeholder_date = 'YYYY-MM-DD';
-    $variables['attributes']['data-drupal-field-elements'] = 'date' . ($element['#date_time_element'] === 'none' ? '' : '-time');
-    $date_format = is_array($element['#date_date_format']) ? $element['#date_date_format'][0] : date($element['#date_date_format']);
-    $variables['content']['date']['#attributes']['placeholder'] = $placeholder_date;
-    $help_date = t('Enter the date using the format @placeholder_date (e.g., @date_format).', ['@date_format' => $date_format, '@placeholder_date' => $placeholder_date]);
-    $variables['content']['date']['#attributes']['data-help'] = $help_date;
-
-    // Include time formatting instructions when a time input is present.
-    if (!empty($element['#date_time_format'])) {
-      $placeholder_time = 'hh:mm:ss';
-      $time_format = is_array($element['#date_time_format']) ? $element['#date_time_format'][0] : date($element['#date_time_format']);
-      $variables['content']['time']['#attributes']['placeholder'] = $placeholder_time;
-      $help_time = t('Enter the time using the format @placeholder_time (e.g., @time_format).', ['@time_format' => $time_format, '@placeholder_time' => $placeholder_time]);
-      $variables['content']['time']['#attributes']['data-help'] = $help_time;
-    }
-  }
 }
 
 /**
@@ -641,7 +620,7 @@ function template_preprocess_datetime_wrapper(&$variables) {
  *     technology. Headings allow screen reader and keyboard only users to
  *     navigate to or skip the links. See
  *     http://juicystudio.com/article/screen-readers-display-none.php and
- *     http://www.w3.org/TR/WCAG-TECHS/H42.html for more information.
+ *     https://www.w3.org/TR/WCAG-TECHS/H42.html for more information.
  *
  * @see \Drupal\Core\Utility\LinkGenerator
  * @see \Drupal\Core\Utility\LinkGenerator::generate()
@@ -768,8 +747,8 @@ function template_preprocess_links(&$variables) {
  *     accessibility requirements, so it is strongly encouraged for code
  *     building variables for image.html.twig templates to pass a meaningful
  *     value for this variable.
- *     - http://www.w3.org/TR/REC-html40/struct/objects.html#h-13.8
- *     - http://www.w3.org/TR/xhtml1/dtds.html
+ *     - https://www.w3.org/TR/REC-html40/struct/objects.html#h-13.8
+ *     - https://www.w3.org/TR/xhtml1/dtds.html
  *     - http://dev.w3.org/html5/spec/Overview.html#alt
  *   - title: The title text is displayed when the image is hovered in some
  *     popular browsers.
@@ -786,7 +765,7 @@ function template_preprocess_image(&$variables) {
     $variables['attributes']['src'] = $file_url_generator->generateString($variables['uri']);
   }
   // Generate a srcset attribute conforming to the spec at
-  // http://www.w3.org/html/wg/drafts/html/master/embedded-content.html#attr-img-srcset
+  // https://www.w3.org/html/wg/drafts/html/master/embedded-content.html#attr-img-srcset
   if (!empty($variables['srcset'])) {
     $srcset = [];
     foreach ($variables['srcset'] as $src) {
@@ -864,16 +843,16 @@ function template_preprocess_image(&$variables) {
  *     - Any HTML attributes, such as "colspan", to apply to the table cell.
  *     Here's an example for $rows:
  *     @code
- *     $rows = array(
+ *     $rows = [
  *       // Simple row
- *       array(
+ *       [
  *         'Cell 1', 'Cell 2', 'Cell 3'
- *       ),
+ *       ],
  *       // Row with attributes on the row and some of its cells.
- *       array(
- *         'data' => array('Cell 1', array('data' => 'Cell 2', 'colspan' => 2)), 'class' => array('funky')
- *       ),
- *     );
+ *       [
+ *         'data' => ['Cell 1', ['data' => 'Cell 2', 'colspan' => 2]], 'class' => ['funky']
+ *       ],
+ *     ];
  *     @endcode
  *   - footer: An array of table rows which will be printed within a <tfoot>
  *     tag, in the same format as the rows element (see above).
@@ -889,23 +868,23 @@ function template_preprocess_image(&$variables) {
  *       associative array of HTML attributes.
  *     Here's an example for $colgroup:
  *     @code
- *     $colgroup = array(
+ *     $colgroup = [
  *       // <colgroup> with one <col> element.
- *       array(
- *         array(
- *           'class' => array('funky'), // Attribute for the <col> element.
- *         ),
- *       ),
+ *       [
+ *         [
+ *           'class' => ['funky'], // Attribute for the <col> element.
+ *         ],
+ *       ],
  *       // <colgroup> with attributes and inner <col> elements.
- *       array(
- *         'data' => array(
- *           array(
- *             'class' => array('funky'), // Attribute for the <col> element.
- *           ),
- *         ),
- *         'class' => array('jazzy'), // Attribute for the <colgroup> element.
- *       ),
- *     );
+ *       [
+ *         'data' => [
+ *           [
+ *             'class' => ['funky'], // Attribute for the <col> element.
+ *           ],
+ *         ],
+ *         'class' => ['jazzy'], // Attribute for the <colgroup> element.
+ *       ],
+ *     ];
  *     @endcode
  *     These optional tags are used to group and set properties on columns
  *     within a table. For example, one may easily group three columns and
@@ -1749,6 +1728,7 @@ function template_preprocess_breadcrumb(&$variables) {
  *     - #tags: An array of labels for the controls in the pager.
  *     - #element: An optional integer to distinguish between multiple pagers on
  *       one page.
+ *     - #pagination_heading_level: An optional heading level for the pager.
  *     - #parameters: An associative array of query string parameters to append
  *       to the pager links.
  *     - #route_parameters: An associative array of the route parameters.
@@ -1875,6 +1855,10 @@ function template_preprocess_pager(&$variables) {
 
   $variables['items'] = $items;
   $variables['heading_id'] = Html::getUniqueId('pagination-heading');
+  $variables['pagination_heading_level'] = $variables['pager']['#pagination_heading_level'] ?? 'h4';
+  if (!preg_match('/^h[1-6]$/', $variables['pagination_heading_level'])) {
+    $variables['pagination_heading_level'] = 'h4';
+  }
 
   // The rendered link needs to play well with any other query parameter used
   // on the page, like exposed filters, so for the cacheability all query
@@ -1903,10 +1887,6 @@ function template_preprocess_menu_local_task(&$variables) {
 
   if (!empty($variables['element']['#active'])) {
     $variables['is_active'] = TRUE;
-
-    // Add text to indicate active tab for non-visual users.
-    $active = new FormattableMarkup('<span class="visually-hidden">@label</span>', ['@label' => t('(active tab)')]);
-    $link_text = t('@local-task-title@active', ['@local-task-title' => $link_text, '@active' => $active]);
   }
 
   $link['localized_options']['set_active_class'] = TRUE;
@@ -2003,8 +1983,8 @@ function drupal_common_theme() {
       // accessibility requirements, so it is strongly encouraged for code
       // building variables for image.html.twig templates to pass a meaningful
       // value for the alt variable.
-      // - http://www.w3.org/TR/REC-html40/struct/objects.html#h-13.8
-      // - http://www.w3.org/TR/xhtml1/dtds.html
+      // - https://www.w3.org/TR/REC-html40/struct/objects.html#h-13.8
+      // - https://www.w3.org/TR/xhtml1/dtds.html
       // - http://dev.w3.org/html5/spec/Overview.html#alt
       // The title attribute is optional in all cases, so it is omitted by
       // default.
@@ -2026,7 +2006,7 @@ function drupal_common_theme() {
       'variables' => ['items' => [], 'title' => '', 'list_type' => 'ul', 'wrapper_attributes' => [], 'attributes' => [], 'empty' => NULL, 'context' => []],
     ],
     'feed_icon' => [
-      'variables' => ['url' => NULL, 'title' => NULL],
+      'variables' => ['url' => NULL, 'title' => NULL, 'attributes' => []],
     ],
     'progress_bar' => [
       'variables' => ['label' => NULL, 'percent' => NULL, 'message' => NULL],

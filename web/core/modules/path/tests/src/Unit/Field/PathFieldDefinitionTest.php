@@ -15,7 +15,7 @@ class PathFieldDefinitionTest extends BaseFieldDefinitionTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function getPluginId() {
+  protected function getPluginId(): string {
     return 'path';
   }
 
@@ -30,7 +30,7 @@ class PathFieldDefinitionTest extends BaseFieldDefinitionTestBase {
    * @covers ::getColumns
    * @covers ::getSchema
    */
-  public function testGetColumns() {
+  public function testGetColumns(): void {
     $this->assertSame([], $this->definition->getColumns());
   }
 

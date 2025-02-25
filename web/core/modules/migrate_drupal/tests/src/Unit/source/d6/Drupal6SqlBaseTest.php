@@ -17,6 +17,8 @@ class Drupal6SqlBaseTest extends MigrateTestCase {
 
   /**
    * Define bare minimum migration configuration.
+   *
+   * @var string[]
    */
   protected $migrationConfiguration = [
     'id' => 'Drupal6SqlBase',
@@ -29,6 +31,8 @@ class Drupal6SqlBaseTest extends MigrateTestCase {
 
   /**
    * Minimum database contents needed to test Drupal6SqlBase.
+   *
+   * @var string[]
    */
   protected $databaseContents = [
     'system' => [
@@ -80,7 +84,7 @@ class Drupal6SqlBaseTest extends MigrateTestCase {
   /**
    * Tests for Drupal6SqlBase::getSystemData().
    */
-  public function testGetSystemData() {
+  public function testGetSystemData(): void {
     $system_data = $this->base->getSystemData();
     // Should be 1 theme and 2 modules.
     $this->assertCount(1, $system_data['theme']);
@@ -93,7 +97,7 @@ class Drupal6SqlBaseTest extends MigrateTestCase {
   /**
    * Tests for Drupal6SqlBase::moduleExists().
    */
-  public function testDrupal6ModuleExists() {
+  public function testDrupal6ModuleExists(): void {
     // This module should exist.
     $this->assertTrue($this->base->moduleExistsWrapper('module1'));
 
@@ -105,7 +109,7 @@ class Drupal6SqlBaseTest extends MigrateTestCase {
   /**
    * Tests for Drupal6SqlBase::getModuleSchemaVersion().
    */
-  public function testGetModuleSchemaVersion() {
+  public function testGetModuleSchemaVersion(): void {
     // Non-existent module.
     $this->assertFalse($this->base->getModuleSchemaVersionWrapper('module3'));
 
@@ -119,7 +123,7 @@ class Drupal6SqlBaseTest extends MigrateTestCase {
   /**
    * Tests for Drupal6SqlBase::variableGet().
    */
-  public function testVariableGet() {
+  public function testVariableGet(): void {
     // Test default value.
     $this->assertEquals('my_default', $this->base->variableGetWrapper('non_existent_variable', 'my_default'));
 

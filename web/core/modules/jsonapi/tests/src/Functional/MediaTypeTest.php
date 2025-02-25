@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\jsonapi\Functional;
 
 use Drupal\Core\Url;
@@ -9,7 +11,6 @@ use Drupal\media\Entity\MediaType;
  * JSON:API integration test for the "MediaType" config entity type.
  *
  * @group jsonapi
- * @group #slow
  */
 class MediaTypeTest extends ConfigEntityResourceTestBase {
 

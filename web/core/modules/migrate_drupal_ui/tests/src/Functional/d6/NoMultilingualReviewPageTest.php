@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\migrate_drupal_ui\Functional\d6;
 
 use Drupal\Tests\migrate_drupal_ui\Functional\NoMultilingualReviewPageTestBase;
@@ -23,7 +25,6 @@ class NoMultilingualReviewPageTest extends NoMultilingualReviewPageTestBase {
     'datetime_range',
     'language',
     'telephone',
-    'statistics',
     'syslog',
     'update',
     // Test migrations states.
@@ -42,7 +43,7 @@ class NoMultilingualReviewPageTest extends NoMultilingualReviewPageTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function getSourceBasePath() {
+  protected function getSourceBasePath(): string {
     return __DIR__ . '/files';
   }
 
@@ -101,7 +102,6 @@ class NoMultilingualReviewPageTest extends NoMultilingualReviewPageTestBase {
       'Poll',
       'Profile',
       'Search',
-      'Statistics',
       'Syslog',
       'System',
       'Taxonomy',
@@ -153,6 +153,7 @@ class NoMultilingualReviewPageTest extends NoMultilingualReviewPageTestBase {
       'Option Widgets',
       'Poll aggregate',
       'Profile translation',
+      'Statistics',
       'String translation',
       'Synchronize translations',
       'Taxonomy translation',

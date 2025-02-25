@@ -73,7 +73,7 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
                 // Make sure we don't try to load any of Composer's classes
                 // while the autoloader is being setup.
                 if (strpos($class, 'Composer\\') === 0) {
-                    return;
+                    return false;
                 }
 
                 if (strpos(__DIR__, 'phar://') !== 0
@@ -204,7 +204,7 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
             }
 
             // Since PHP 7.4 get_declared_classes() does not guarantee any order, making
-            // it impossible to use order to determine which is the parent an which is the child.
+            // it impossible to use order to determine which is the parent and which is the child.
             // Let's reduce the list of candidates by removing all the classes known to be "parents".
             // That way, at the end, only the "main" class just included will remain.
             $newClasses = array_reduce(
@@ -298,7 +298,7 @@ if (class_exists('PHP_CodeSniffer\Autoload', false) === false) {
          *
          * @param string $class The name of the class.
          *
-         * @throws \Exception If the class name has not been loaded
+         * @throws \Exception If the class name has not been loaded.
          * @return string
          */
         public static function getLoadedFileName($class)

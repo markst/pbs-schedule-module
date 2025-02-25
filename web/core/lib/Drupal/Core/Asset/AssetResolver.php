@@ -91,44 +91,98 @@ class AssetResolver implements AssetResolverInterface {
    * $assets = new AttachedAssets();
    * $assets->setLibraries(['core/a', 'core/b', 'core/c']);
    * $assets->setAlreadyLoadedLibraries(['core/c']);
-   * $resolver->getLibrariesToLoad($assets) === ['core/a', 'core/b', 'core/d']
+   * $resolver->getLibrariesToLoad($assets, 'js') === ['core/a', 'core/b', 'core/d']
    * @endcode
+   *
+   * The attached assets tend to be in the order that libraries were attached
+   * during a request. To minimize the number of unique aggregated asset URLs
+   * and files, we normalize the list by filtering out libraries that don't
+   * include the asset type being built as well as ensuring a reliable order of
+   * the libraries based on their dependencies.
    *
    * @param \Drupal\Core\Asset\AttachedAssetsInterface $assets
    *   The assets attached to the current response.
+   * @param string|null $asset_type
+   *   The asset type to load.
    *
    * @return string[]
    *   A list of libraries and their dependencies, in the order they should be
    *   loaded, excluding any libraries that have already been loaded.
    */
-  protected function getLibrariesToLoad(AttachedAssetsInterface $assets) {
-    // The order of libraries passed in via assets can differ, so to reduce
-    // variation, first normalize the requested libraries to the minimal
-    // representative set before then expanding the list to include all
-    // dependencies.
+  protected function getLibrariesToLoad(AttachedAssetsInterface $assets, ?string $asset_type = NULL) {
     // @see Drupal\FunctionalTests\Core\Asset\AssetOptimizationTestUmami
-    // @todo: https://www.drupal.org/project/drupal/issues/1945262
-    $libraries = $assets->getLibraries();
-    if ($libraries) {
-      $libraries = $this->libraryDependencyResolver->getMinimalRepresentativeSubset($libraries);
-    }
-    return array_diff(
-      $this->libraryDependencyResolver->getLibrariesWithDependencies($libraries),
+    // @todo https://www.drupal.org/project/drupal/issues/1945262
+    $libraries_to_load = array_diff(
+      $this->libraryDependencyResolver->getLibrariesWithDependencies($assets->getLibraries()),
       $this->libraryDependencyResolver->getLibrariesWithDependencies($assets->getAlreadyLoadedLibraries())
     );
+    if ($asset_type) {
+      $libraries_to_load = $this->filterLibrariesByType($libraries_to_load, $asset_type);
+    }
+
+    // We now have a complete list of libraries requested. However, this list
+    // could be in any order depending on when libraries were attached during
+    // the page request, which can result in different file contents and URLs
+    // even for an otherwise identical set of libraries. To ensure that any
+    // particular set of libraries results in the same aggregate URL, sort the
+    // libraries, then generate the minimum representative set again.
+    sort($libraries_to_load);
+    $minimum_libraries = $this->libraryDependencyResolver->getMinimalRepresentativeSubset($libraries_to_load);
+    $libraries_to_load = array_diff(
+      $this->libraryDependencyResolver->getLibrariesWithDependencies($minimum_libraries),
+      $this->libraryDependencyResolver->getLibrariesWithDependencies($assets->getAlreadyLoadedLibraries())
+    );
+
+    // Now remove any libraries without the relevant asset type again, since
+    // they have been brought back in via dependencies.
+    if ($asset_type) {
+      $libraries_to_load = $this->filterLibrariesByType($libraries_to_load, $asset_type);
+    }
+
+    return $libraries_to_load;
+  }
+
+  /**
+   * Filter libraries that don't contain an asset type.
+   *
+   * @param array $libraries
+   *   An array of library definitions.
+   * @param string $asset_type
+   *   The type of asset, either 'js' or 'css'.
+   *
+   * @return array
+   *   The filtered libraries array.
+   */
+  protected function filterLibrariesByType(array $libraries, string $asset_type): array {
+    foreach ($libraries as $key => $library) {
+      [$extension, $name] = explode('/', $library, 2);
+      $definition = $this->libraryDiscovery->getLibraryByName($extension, $name);
+      if (empty($definition[$asset_type])) {
+        unset($libraries[$key]);
+      }
+    }
+    return $libraries;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCssAssets(AttachedAssetsInterface $assets, $optimize, LanguageInterface $language = NULL) {
+  public function getCssAssets(AttachedAssetsInterface $assets, $optimize, ?LanguageInterface $language = NULL) {
+    if (!$assets->getLibraries()) {
+      return [];
+    }
+    // Get the complete list of libraries to load including dependencies.
+    $libraries_to_load = $this->getLibrariesToLoad($assets, 'css');
+
+    if (!$libraries_to_load) {
+      return [];
+    }
     if (!isset($language)) {
       $language = $this->languageManager->getCurrentLanguage();
     }
     $theme_info = $this->themeManager->getActiveTheme();
     // Add the theme name to the cache key since themes may implement
     // hook_library_info_alter().
-    $libraries_to_load = $this->getLibrariesToLoad($assets);
     $cid = 'css:' . $theme_info->getName() . ':' . $language->getId() . Crypt::hashBase64(serialize($libraries_to_load)) . (int) $optimize;
     if ($cached = $this->cache->get($cid)) {
       return $cached->data;
@@ -146,24 +200,22 @@ class AssetResolver implements AssetResolverInterface {
     foreach ($libraries_to_load as $library) {
       [$extension, $name] = explode('/', $library, 2);
       $definition = $this->libraryDiscovery->getLibraryByName($extension, $name);
-      if (isset($definition['css'])) {
-        foreach ($definition['css'] as $options) {
-          $options += $default_options;
-          // Copy the asset library license information to each file.
-          $options['license'] = $definition['license'];
+      foreach ($definition['css'] as $options) {
+        $options += $default_options;
+        // Copy the asset library license information to each file.
+        $options['license'] = $definition['license'];
 
-          // Files with a query string cannot be preprocessed.
-          if ($options['type'] === 'file' && $options['preprocess'] && str_contains($options['data'], '?')) {
-            $options['preprocess'] = FALSE;
-          }
-
-          // Always add a tiny value to the weight, to conserve the insertion
-          // order.
-          $options['weight'] += count($css) / 30000;
-
-          // CSS files are being keyed by the full path.
-          $css[$options['data']] = $options;
+        // Files with a query string cannot be preprocessed.
+        if ($options['type'] === 'file' && $options['preprocess'] && str_contains($options['data'], '?')) {
+          $options['preprocess'] = FALSE;
         }
+
+        // Always add a tiny value to the weight, to conserve the insertion
+        // order.
+        $options['weight'] += count($css) / 30000;
+
+        // CSS files are being keyed by the full path.
+        $css[$options['data']] = $options;
       }
     }
 
@@ -176,7 +228,7 @@ class AssetResolver implements AssetResolverInterface {
       uasort($css, [static::class, 'sort']);
 
       if ($optimize) {
-        $css = \Drupal::service('asset.css.collection_optimizer')->optimize($css, $libraries_to_load, $language);
+        $css = \Drupal::service('asset.css.collection_optimizer')->optimize($css, array_values($libraries_to_load), $language);
       }
     }
     $this->cache->set($cid, $css, CacheBackendInterface::CACHE_PERMANENT, ['library_info']);
@@ -199,7 +251,7 @@ class AssetResolver implements AssetResolverInterface {
   protected function getJsSettingsAssets(AttachedAssetsInterface $assets) {
     $settings = [];
 
-    foreach ($this->getLibrariesToLoad($assets) as $library) {
+    foreach ($this->getLibrariesToLoad($assets, 'js') as $library) {
       [$extension, $name] = explode('/', $library, 2);
       $definition = $this->libraryDiscovery->getLibraryByName($extension, $name);
       if (isset($definition['drupalSettings'])) {
@@ -213,15 +265,37 @@ class AssetResolver implements AssetResolverInterface {
   /**
    * {@inheritdoc}
    */
-  public function getJsAssets(AttachedAssetsInterface $assets, $optimize, LanguageInterface $language = NULL) {
+  public function getJsAssets(AttachedAssetsInterface $assets, $optimize, ?LanguageInterface $language = NULL) {
+    if (!$assets->getLibraries() && !$assets->getSettings()) {
+      return [[], []];
+    }
     if (!isset($language)) {
       $language = $this->languageManager->getCurrentLanguage();
     }
     $theme_info = $this->themeManager->getActiveTheme();
+
+    // Get the complete list of libraries to load including dependencies.
+    $libraries_to_load = $this->getLibrariesToLoad($assets, 'js');
+
+    // Collect all libraries that contain JS assets and are in the header.
+    $header_js_libraries = [];
+    foreach ($libraries_to_load as $key => $library) {
+      [$extension, $name] = explode('/', $library, 2);
+      $definition = $this->libraryDiscovery->getLibraryByName($extension, $name);
+      if (!empty($definition['header'])) {
+        $header_js_libraries[] = $library;
+      }
+    }
+
+    // If all the libraries to load contained only CSS, there is nothing further
+    // to do here, so return early.
+    if (!$libraries_to_load && !$assets->getSettings()) {
+      return [[], []];
+    }
+
     // Add the theme name to the cache key since themes may implement
     // hook_library_info_alter(). Additionally add the current language to
     // support translation of JavaScript files via hook_js_alter().
-    $libraries_to_load = $this->getLibrariesToLoad($assets);
     $cid = 'js:' . $theme_info->getName() . ':' . $language->getId() . ':' . Crypt::hashBase64(serialize($libraries_to_load)) . (int) (count($assets->getSettings()) > 0) . (int) $optimize;
 
     if ($cached = $this->cache->get($cid)) {
@@ -239,15 +313,6 @@ class AssetResolver implements AssetResolverInterface {
         'version' => NULL,
       ];
 
-      // Collect all libraries that contain JS assets and are in the header.
-      $header_js_libraries = [];
-      foreach ($libraries_to_load as $library) {
-        [$extension, $name] = explode('/', $library, 2);
-        $definition = $this->libraryDiscovery->getLibraryByName($extension, $name);
-        if (isset($definition['js']) && !empty($definition['header'])) {
-          $header_js_libraries[] = $library;
-        }
-      }
       // The current list of header JS libraries are only those libraries that
       // are in the header, but their dependencies must also be loaded for them
       // to function correctly, so update the list with those.
@@ -256,28 +321,26 @@ class AssetResolver implements AssetResolverInterface {
       foreach ($libraries_to_load as $library) {
         [$extension, $name] = explode('/', $library, 2);
         $definition = $this->libraryDiscovery->getLibraryByName($extension, $name);
-        if (isset($definition['js'])) {
-          foreach ($definition['js'] as $options) {
-            $options += $default_options;
-            // Copy the asset library license information to each file.
-            $options['license'] = $definition['license'];
+        foreach ($definition['js'] as $options) {
+          $options += $default_options;
+          // Copy the asset library license information to each file.
+          $options['license'] = $definition['license'];
 
-            // 'scope' is a calculated option, based on which libraries are
-            // marked to be loaded from the header (see above).
-            $options['scope'] = in_array($library, $header_js_libraries) ? 'header' : 'footer';
+          // 'scope' is a calculated option, based on which libraries are
+          // marked to be loaded from the header (see above).
+          $options['scope'] = in_array($library, $header_js_libraries) ? 'header' : 'footer';
 
-            // Preprocess can only be set if caching is enabled and no
-            // attributes are set.
-            $options['preprocess'] = $options['cache'] && empty($options['attributes']) ? $options['preprocess'] : FALSE;
+          // Preprocess can only be set if caching is enabled and no
+          // attributes are set.
+          $options['preprocess'] = $options['cache'] && empty($options['attributes']) ? $options['preprocess'] : FALSE;
 
-            // Always add a tiny value to the weight, to conserve the insertion
-            // order.
-            $options['weight'] += count($javascript) / 30000;
+          // Always add a tiny value to the weight, to conserve the insertion
+          // order.
+          $options['weight'] += count($javascript) / 30000;
 
-            // Local and external files must keep their name as the associative
-            // key so the same JavaScript file is not added twice.
-            $javascript[$options['data']] = $options;
-          }
+          // Local and external files must keep their name as the associative
+          // key so the same JavaScript file is not added twice.
+          $javascript[$options['data']] = $options;
         }
       }
 

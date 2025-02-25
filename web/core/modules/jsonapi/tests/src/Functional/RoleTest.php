@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\jsonapi\Functional;
 
 use Drupal\Core\Url;
@@ -9,7 +11,6 @@ use Drupal\user\Entity\Role;
  * JSON:API integration test for the "Role" config entity type.
  *
  * @group jsonapi
- * @group #slow
  */
 class RoleTest extends ConfigEntityResourceTestBase {
 

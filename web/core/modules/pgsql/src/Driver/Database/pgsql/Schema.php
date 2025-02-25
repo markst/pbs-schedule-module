@@ -506,8 +506,8 @@ EOD;
   /**
    * {@inheritdoc}
    */
-  public function tableExists($table) {
-    $prefixInfo = $this->getPrefixInfo($table, TRUE);
+  public function tableExists($table, $add_prefix = TRUE) {
+    $prefixInfo = $this->getPrefixInfo($table, $add_prefix);
 
     return (bool) $this->connection->query("SELECT 1 FROM pg_tables WHERE schemaname = :schema AND tablename = :table", [':schema' => $prefixInfo['schema'], ':table' => $prefixInfo['table']])->fetchField();
   }
@@ -576,17 +576,21 @@ EOD;
       // cSpell:disable-next-line
       // Example (drupal_Gk7Su_T1jcBHVuvSPeP22_I3Ni4GrVEgTYlIYnBJkro_idx).
       if (str_contains($index->indexname, 'drupal_')) {
-        preg_match('/^drupal_(.*)_' . preg_quote($index_type) . '/', $index->indexname, $matches);
+        preg_match('/^drupal_(.*)_' . preg_quote($index_type, NULL) . '/', $index->indexname, $matches);
         $index_name = $matches[1];
       }
       else {
         // Make sure to remove the suffix from index names, because
         // $this->ensureIdentifiersLength() will add the suffix again and thus
         // would result in a wrong index name.
-        preg_match('/^' . preg_quote($table_name) . '__(.*)__' . preg_quote($index_type) . '/', $index->indexname, $matches);
+        preg_match('/^' . preg_quote($table_name, NULL) . '__(.*)__' . preg_quote($index_type, NULL) . '/', $index->indexname, $matches);
         $index_name = $matches[1];
       }
-      $this->connection->query('ALTER INDEX "' . $this->defaultSchema . '"."' . $index->indexname . '" RENAME TO ' . $this->ensureIdentifiersLength($new_name, $index_name, $index_type));
+      // The renaming of an index will fail when the there exists an table with
+      // the same name as the renamed index.
+      if (!$this->tableExists($this->ensureIdentifiersLength($new_name, $index_name, $index_type), FALSE)) {
+        $this->connection->query('ALTER INDEX "' . $this->defaultSchema . '"."' . $index->indexname . '" RENAME TO ' . $this->ensureIdentifiersLength($new_name, $index_name, $index_type));
+      }
     }
 
     // Ensure the new table name does not include schema syntax.
@@ -879,13 +883,13 @@ EOD;
       ':table_name' => $full_name,
     ])->fetchAll();
     foreach ($result as $row) {
-      if (preg_match('/_pkey$/', $row->index_name)) {
+      if (str_ends_with($row->index_name, '_pkey')) {
         $index_schema['primary key'][] = $row->column_name;
       }
-      elseif (preg_match('/_key$/', $row->index_name)) {
+      elseif (str_ends_with($row->index_name, '_key')) {
         $index_schema['unique keys'][$row->index_name][] = $row->column_name;
       }
-      elseif (preg_match('/_idx$/', $row->index_name)) {
+      elseif (str_ends_with($row->index_name, '_idx')) {
         $index_schema['indexes'][$row->index_name][] = $row->column_name;
       }
     }

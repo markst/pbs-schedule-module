@@ -18,6 +18,10 @@
        *   An array of filter rules.
        */
       getRules() {
+        Drupal.deprecationError({
+          message:
+            'Drupal.filterConfiguration.liveSettingParsers.filter_html.getRules() is deprecated in drupal:10.3.0 and is removed from drupal:11.0.0. See https://www.drupal.org/node/3422372.',
+        });
         const currentValue = document.querySelector(
           '#edit-filters-filter-html-settings-allowed-html',
         ).value;
@@ -82,6 +86,11 @@
     newFeatures: {},
 
     attach(context, settings) {
+      Drupal.deprecationError({
+        message:
+          'Drupal.behaviors.filterFilterHtmlUpdating is deprecated in drupal:10.3.0 and is removed from drupal:11.0.0. See https://www.drupal.org/node/3422372.',
+      });
+
       const that = this;
       once(
         'filter-filter_html-updating',
@@ -150,7 +159,7 @@
           .forEach((tag) => {
             userTagsWithoutOverrides[tag] = this.userTags[tag];
           });
-
+        // eslint-disable-next-line no-jquery/no-val
         this.$allowedHTMLFormItem.val(
           `${this._generateSetting(
             userTagsWithoutOverrides,
@@ -159,6 +168,7 @@
       }
       // Restore to original state.
       else {
+        // eslint-disable-next-line no-jquery/no-val
         this.$allowedHTMLFormItem.val(this._generateSetting(this.userTags));
       }
     },
@@ -393,6 +403,10 @@
    *   The corresponding HTML.
    */
   Drupal.theme.filterFilterHTMLUpdateMessage = function (tags) {
+    Drupal.deprecationError({
+      message:
+        'Drupal.theme.filterFilterHTMLUpdateMessage() is deprecated in drupal:10.3.0 and is removed from drupal:11.0.0. See https://www.drupal.org/node/3422372.',
+    });
     let html = '';
     const tagList =
       Drupal.behaviors.filterFilterHtmlUpdating._generateSetting(tags);

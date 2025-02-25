@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\jsonapi\Functional;
 
 use Drupal\Core\Cache\Cache;
@@ -12,7 +14,6 @@ use Drupal\node\Entity\NodeType;
  * JSON:API integration test for "ContentLanguageSettings" config entity type.
  *
  * @group jsonapi
- * @group #slow
  */
 class ContentLanguageSettingsTest extends ConfigEntityResourceTestBase {
 
@@ -123,7 +124,7 @@ class ContentLanguageSettingsTest extends ConfigEntityResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function getExpectedCacheContexts(array $sparse_fieldset = NULL) {
+  protected function getExpectedCacheContexts(?array $sparse_fieldset = NULL) {
     return Cache::mergeContexts(parent::getExpectedCacheContexts(), ['languages:language_interface']);
   }
 
@@ -149,7 +150,7 @@ class ContentLanguageSettingsTest extends ConfigEntityResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static function getExpectedCollectionCacheability(AccountInterface $account, array $collection, array $sparse_fieldset = NULL, $filtered = FALSE) {
+  protected static function getExpectedCollectionCacheability(AccountInterface $account, array $collection, ?array $sparse_fieldset = NULL, $filtered = FALSE) {
     $cacheability = parent::getExpectedCollectionCacheability($account, $collection, $sparse_fieldset, $filtered);
     if (static::entityAccess(reset($collection), 'view', $account)->isAllowed()) {
       $cacheability->addCacheContexts(['languages:language_interface']);

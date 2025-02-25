@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace OpenTelemetry\API\Instrumentation;
 
+use OpenTelemetry\API\Logs\EventLoggerProviderInterface;
 use OpenTelemetry\API\Logs\LoggerProviderInterface;
+use OpenTelemetry\API\Logs\NoopEventLoggerProvider;
 use OpenTelemetry\API\Logs\NoopLoggerProvider;
 use OpenTelemetry\API\Metrics\MeterProviderInterface;
 use OpenTelemetry\API\Metrics\Noop\NoopMeterProvider;
@@ -28,6 +30,7 @@ final class Configurator implements ImplicitContextKeyedInterface
     private ?MeterProviderInterface $meterProvider = null;
     private ?TextMapPropagatorInterface $propagator = null;
     private ?LoggerProviderInterface $loggerProvider = null;
+    private ?EventLoggerProviderInterface $eventLoggerProvider = null;
 
     private function __construct()
     {
@@ -43,6 +46,7 @@ final class Configurator implements ImplicitContextKeyedInterface
 
     /**
      * Creates a configurator that uses noop instances for not configured values.
+     * @phan-suppress PhanDeprecatedFunction
      */
     public static function createNoop(): Configurator
     {
@@ -50,7 +54,8 @@ final class Configurator implements ImplicitContextKeyedInterface
             ->withTracerProvider(new NoopTracerProvider())
             ->withMeterProvider(new NoopMeterProvider())
             ->withPropagator(new NoopTextMapPropagator())
-            ->withLoggerProvider(new NoopLoggerProvider())
+            ->withLoggerProvider(NoopLoggerProvider::getInstance())
+            ->withEventLoggerProvider(new NoopEventLoggerProvider())
         ;
     }
 
@@ -59,6 +64,9 @@ final class Configurator implements ImplicitContextKeyedInterface
         return $this->storeInContext()->activate();
     }
 
+    /**
+     * @phan-suppress PhanDeprecatedFunction
+     */
     public function storeInContext(?ContextInterface $context = null): ContextInterface
     {
         $context ??= Context::getCurrent();
@@ -74,6 +82,9 @@ final class Configurator implements ImplicitContextKeyedInterface
         }
         if ($this->loggerProvider !== null) {
             $context = $context->with(ContextKeys::loggerProvider(), $this->loggerProvider);
+        }
+        if ($this->eventLoggerProvider !== null) {
+            $context = $context->with(ContextKeys::eventLoggerProvider(), $this->eventLoggerProvider);
         }
 
         return $context;
@@ -107,6 +118,17 @@ final class Configurator implements ImplicitContextKeyedInterface
     {
         $self = clone $this;
         $self->loggerProvider = $loggerProvider;
+
+        return $self;
+    }
+
+    /**
+     * @deprecated
+     */
+    public function withEventLoggerProvider(?EventLoggerProviderInterface $eventLoggerProvider): Configurator
+    {
+        $self = clone $this;
+        $self->eventLoggerProvider = $eventLoggerProvider;
 
         return $self;
     }

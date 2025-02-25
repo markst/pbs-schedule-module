@@ -1,6 +1,6 @@
 <?php
 
-// DO NOT EDIT, this is an Auto-generated file from script/semantic-convention/templates/AttributeValues.php.j2
+// DO NOT EDIT, this is an Auto-generated file from script/semantic-conventions/
 
 declare(strict_types=1);
 
@@ -9,1873 +9,4166 @@ namespace OpenTelemetry\SemConv;
 interface TraceAttributeValues
 {
     /**
-     * The URL of the OpenTelemetry schema for these keys and values.
+     * The URL of the OpenTelemetry schema for these values.
      */
-    public const SCHEMA_URL = 'https://opentelemetry.io/schemas/1.25.0';
+    public const SCHEMA_URL = 'https://opentelemetry.io/schemas/1.30.0';
     /**
-     * @see TraceAttributes::ANDROID_STATE Any time before Activity.onResume() or, if the app has no Activity, Context.startService() has been called in the app for the first time
+     * Any time before Activity.onResume() or, if the app has no Activity, Context.startService() has been called in the app for the first time.
+     *
+     * @see TraceAttributes::ANDROID_STATE
      */
     public const ANDROID_STATE_CREATED = 'created';
 
     /**
-     * @see TraceAttributes::ANDROID_STATE Any time after Activity.onPause() or, if the app has no Activity, Context.stopService() has been called when the app was in the foreground state
+     * Any time after Activity.onPause() or, if the app has no Activity, Context.stopService() has been called when the app was in the foreground state.
+     *
+     * @see TraceAttributes::ANDROID_STATE
      */
     public const ANDROID_STATE_BACKGROUND = 'background';
 
     /**
-     * @see TraceAttributes::ANDROID_STATE Any time after Activity.onResume() or, if the app has no Activity, Context.startService() has been called when the app was in either the created or background states
+     * Any time after Activity.onResume() or, if the app has no Activity, Context.startService() has been called when the app was in either the created or background states.
+     *
+     * @see TraceAttributes::ANDROID_STATE
      */
     public const ANDROID_STATE_FOREGROUND = 'foreground';
 
     /**
-     * @see TraceAttributes::ASPNETCORE_RATE_LIMITING_RESULT Lease was acquired
+     * Exception was handled by the exception handling middleware.
+     *
+     * @see TraceAttributes::ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT
+     */
+    public const ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_HANDLED = 'handled';
+
+    /**
+     * Exception was not handled by the exception handling middleware.
+     *
+     * @see TraceAttributes::ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT
+     */
+    public const ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_UNHANDLED = 'unhandled';
+
+    /**
+     * Exception handling was skipped because the response had started.
+     *
+     * @see TraceAttributes::ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT
+     */
+    public const ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_SKIPPED = 'skipped';
+
+    /**
+     * Exception handling didn't run because the request was aborted.
+     *
+     * @see TraceAttributes::ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT
+     */
+    public const ASPNETCORE_DIAGNOSTICS_EXCEPTION_RESULT_ABORTED = 'aborted';
+
+    /**
+     * Lease was acquired
+     *
+     * @see TraceAttributes::ASPNETCORE_RATE_LIMITING_RESULT
      */
     public const ASPNETCORE_RATE_LIMITING_RESULT_ACQUIRED = 'acquired';
 
     /**
-     * @see TraceAttributes::ASPNETCORE_RATE_LIMITING_RESULT Lease request was rejected by the endpoint limiter
+     * Lease request was rejected by the endpoint limiter
+     *
+     * @see TraceAttributes::ASPNETCORE_RATE_LIMITING_RESULT
      */
     public const ASPNETCORE_RATE_LIMITING_RESULT_ENDPOINT_LIMITER = 'endpoint_limiter';
 
     /**
-     * @see TraceAttributes::ASPNETCORE_RATE_LIMITING_RESULT Lease request was rejected by the global limiter
+     * Lease request was rejected by the global limiter
+     *
+     * @see TraceAttributes::ASPNETCORE_RATE_LIMITING_RESULT
      */
     public const ASPNETCORE_RATE_LIMITING_RESULT_GLOBAL_LIMITER = 'global_limiter';
 
     /**
-     * @see TraceAttributes::ASPNETCORE_RATE_LIMITING_RESULT Lease request was canceled
+     * Lease request was canceled
+     *
+     * @see TraceAttributes::ASPNETCORE_RATE_LIMITING_RESULT
      */
     public const ASPNETCORE_RATE_LIMITING_RESULT_REQUEST_CANCELED = 'request_canceled';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Alibaba Cloud Elastic Compute Service
+     * Match succeeded
+     *
+     * @see TraceAttributes::ASPNETCORE_ROUTING_MATCH_STATUS
+     */
+    public const ASPNETCORE_ROUTING_MATCH_STATUS_SUCCESS = 'success';
+
+    /**
+     * Match failed
+     *
+     * @see TraceAttributes::ASPNETCORE_ROUTING_MATCH_STATUS
+     */
+    public const ASPNETCORE_ROUTING_MATCH_STATUS_FAILURE = 'failure';
+
+    /**
+     * ec2
+     *
+     * @see TraceAttributes::AWS_ECS_LAUNCHTYPE
+     */
+    public const AWS_ECS_LAUNCHTYPE_EC2 = 'ec2';
+
+    /**
+     * fargate
+     *
+     * @see TraceAttributes::AWS_ECS_LAUNCHTYPE
+     */
+    public const AWS_ECS_LAUNCHTYPE_FARGATE = 'fargate';
+
+    /**
+     * Gateway (HTTP) connection.
+     *
+     * @see TraceAttributes::AZURE_COSMOSDB_CONNECTION_MODE
+     */
+    public const AZURE_COSMOSDB_CONNECTION_MODE_GATEWAY = 'gateway';
+
+    /**
+     * Direct connection.
+     *
+     * @see TraceAttributes::AZURE_COSMOSDB_CONNECTION_MODE
+     */
+    public const AZURE_COSMOSDB_CONNECTION_MODE_DIRECT = 'direct';
+
+    /**
+     * strong
+     *
+     * @see TraceAttributes::AZURE_COSMOSDB_CONSISTENCY_LEVEL
+     */
+    public const AZURE_COSMOSDB_CONSISTENCY_LEVEL_STRONG = 'Strong';
+
+    /**
+     * bounded_staleness
+     *
+     * @see TraceAttributes::AZURE_COSMOSDB_CONSISTENCY_LEVEL
+     */
+    public const AZURE_COSMOSDB_CONSISTENCY_LEVEL_BOUNDED_STALENESS = 'BoundedStaleness';
+
+    /**
+     * session
+     *
+     * @see TraceAttributes::AZURE_COSMOSDB_CONSISTENCY_LEVEL
+     */
+    public const AZURE_COSMOSDB_CONSISTENCY_LEVEL_SESSION = 'Session';
+
+    /**
+     * eventual
+     *
+     * @see TraceAttributes::AZURE_COSMOSDB_CONSISTENCY_LEVEL
+     */
+    public const AZURE_COSMOSDB_CONSISTENCY_LEVEL_EVENTUAL = 'Eventual';
+
+    /**
+     * consistent_prefix
+     *
+     * @see TraceAttributes::AZURE_COSMOSDB_CONSISTENCY_LEVEL
+     */
+    public const AZURE_COSMOSDB_CONSISTENCY_LEVEL_CONSISTENT_PREFIX = 'ConsistentPrefix';
+
+    /**
+     * all
+     *
+     * @see TraceAttributes::CASSANDRA_CONSISTENCY_LEVEL
+     */
+    public const CASSANDRA_CONSISTENCY_LEVEL_ALL = 'all';
+
+    /**
+     * each_quorum
+     *
+     * @see TraceAttributes::CASSANDRA_CONSISTENCY_LEVEL
+     */
+    public const CASSANDRA_CONSISTENCY_LEVEL_EACH_QUORUM = 'each_quorum';
+
+    /**
+     * quorum
+     *
+     * @see TraceAttributes::CASSANDRA_CONSISTENCY_LEVEL
+     */
+    public const CASSANDRA_CONSISTENCY_LEVEL_QUORUM = 'quorum';
+
+    /**
+     * local_quorum
+     *
+     * @see TraceAttributes::CASSANDRA_CONSISTENCY_LEVEL
+     */
+    public const CASSANDRA_CONSISTENCY_LEVEL_LOCAL_QUORUM = 'local_quorum';
+
+    /**
+     * one
+     *
+     * @see TraceAttributes::CASSANDRA_CONSISTENCY_LEVEL
+     */
+    public const CASSANDRA_CONSISTENCY_LEVEL_ONE = 'one';
+
+    /**
+     * two
+     *
+     * @see TraceAttributes::CASSANDRA_CONSISTENCY_LEVEL
+     */
+    public const CASSANDRA_CONSISTENCY_LEVEL_TWO = 'two';
+
+    /**
+     * three
+     *
+     * @see TraceAttributes::CASSANDRA_CONSISTENCY_LEVEL
+     */
+    public const CASSANDRA_CONSISTENCY_LEVEL_THREE = 'three';
+
+    /**
+     * local_one
+     *
+     * @see TraceAttributes::CASSANDRA_CONSISTENCY_LEVEL
+     */
+    public const CASSANDRA_CONSISTENCY_LEVEL_LOCAL_ONE = 'local_one';
+
+    /**
+     * any
+     *
+     * @see TraceAttributes::CASSANDRA_CONSISTENCY_LEVEL
+     */
+    public const CASSANDRA_CONSISTENCY_LEVEL_ANY = 'any';
+
+    /**
+     * serial
+     *
+     * @see TraceAttributes::CASSANDRA_CONSISTENCY_LEVEL
+     */
+    public const CASSANDRA_CONSISTENCY_LEVEL_SERIAL = 'serial';
+
+    /**
+     * local_serial
+     *
+     * @see TraceAttributes::CASSANDRA_CONSISTENCY_LEVEL
+     */
+    public const CASSANDRA_CONSISTENCY_LEVEL_LOCAL_SERIAL = 'local_serial';
+
+    /**
+     * The pipeline run finished successfully.
+     *
+     * @see TraceAttributes::CICD_PIPELINE_RESULT
+     */
+    public const CICD_PIPELINE_RESULT_SUCCESS = 'success';
+
+    /**
+     * The pipeline run did not finish successfully, eg. due to a compile error or a failing test. Such failures are usually detected by non-zero exit codes of the tools executed in the pipeline run.
+     *
+     * @see TraceAttributes::CICD_PIPELINE_RESULT
+     */
+    public const CICD_PIPELINE_RESULT_FAILURE = 'failure';
+
+    /**
+     * The pipeline run failed due to an error in the CICD system, eg. due to the worker being killed.
+     *
+     * @see TraceAttributes::CICD_PIPELINE_RESULT
+     */
+    public const CICD_PIPELINE_RESULT_ERROR = 'error';
+
+    /**
+     * A timeout caused the pipeline run to be interrupted.
+     *
+     * @see TraceAttributes::CICD_PIPELINE_RESULT
+     */
+    public const CICD_PIPELINE_RESULT_TIMEOUT = 'timeout';
+
+    /**
+     * The pipeline run was cancelled, eg. by a user manually cancelling the pipeline run.
+     *
+     * @see TraceAttributes::CICD_PIPELINE_RESULT
+     */
+    public const CICD_PIPELINE_RESULT_CANCELLATION = 'cancellation';
+
+    /**
+     * The pipeline run was skipped, eg. due to a precondition not being met.
+     *
+     * @see TraceAttributes::CICD_PIPELINE_RESULT
+     */
+    public const CICD_PIPELINE_RESULT_SKIP = 'skip';
+
+    /**
+     * The run pending state spans from the event triggering the pipeline run until the execution of the run starts (eg. time spent in a queue, provisioning agents, creating run resources).
+     *
+     * @see TraceAttributes::CICD_PIPELINE_RUN_STATE
+     */
+    public const CICD_PIPELINE_RUN_STATE_PENDING = 'pending';
+
+    /**
+     * The executing state spans the execution of any run tasks (eg. build, test).
+     *
+     * @see TraceAttributes::CICD_PIPELINE_RUN_STATE
+     */
+    public const CICD_PIPELINE_RUN_STATE_EXECUTING = 'executing';
+
+    /**
+     * The finalizing state spans from when the run has finished executing (eg. cleanup of run resources).
+     *
+     * @see TraceAttributes::CICD_PIPELINE_RUN_STATE
+     */
+    public const CICD_PIPELINE_RUN_STATE_FINALIZING = 'finalizing';
+
+    /**
+     * build
+     *
+     * @see TraceAttributes::CICD_PIPELINE_TASK_TYPE
+     */
+    public const CICD_PIPELINE_TASK_TYPE_BUILD = 'build';
+
+    /**
+     * test
+     *
+     * @see TraceAttributes::CICD_PIPELINE_TASK_TYPE
+     */
+    public const CICD_PIPELINE_TASK_TYPE_TEST = 'test';
+
+    /**
+     * deploy
+     *
+     * @see TraceAttributes::CICD_PIPELINE_TASK_TYPE
+     */
+    public const CICD_PIPELINE_TASK_TYPE_DEPLOY = 'deploy';
+
+    /**
+     * The worker is not performing work for the CICD system. It is available to the CICD system to perform work on (online / idle).
+     *
+     * @see TraceAttributes::CICD_WORKER_STATE
+     */
+    public const CICD_WORKER_STATE_AVAILABLE = 'available';
+
+    /**
+     * The worker is performing work for the CICD system.
+     *
+     * @see TraceAttributes::CICD_WORKER_STATE
+     */
+    public const CICD_WORKER_STATE_BUSY = 'busy';
+
+    /**
+     * The worker is not available to the CICD system (disconnected / down).
+     *
+     * @see TraceAttributes::CICD_WORKER_STATE
+     */
+    public const CICD_WORKER_STATE_OFFLINE = 'offline';
+
+    /**
+     * Alibaba Cloud Elastic Compute Service
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_ALIBABA_CLOUD_ECS = 'alibaba_cloud_ecs';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Alibaba Cloud Function Compute
+     * Alibaba Cloud Function Compute
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_ALIBABA_CLOUD_FC = 'alibaba_cloud_fc';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Red Hat OpenShift on Alibaba Cloud
+     * Red Hat OpenShift on Alibaba Cloud
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_ALIBABA_CLOUD_OPENSHIFT = 'alibaba_cloud_openshift';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM AWS Elastic Compute Cloud
+     * AWS Elastic Compute Cloud
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AWS_EC2 = 'aws_ec2';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM AWS Elastic Container Service
+     * AWS Elastic Container Service
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AWS_ECS = 'aws_ecs';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM AWS Elastic Kubernetes Service
+     * AWS Elastic Kubernetes Service
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AWS_EKS = 'aws_eks';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM AWS Lambda
+     * AWS Lambda
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AWS_LAMBDA = 'aws_lambda';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM AWS Elastic Beanstalk
+     * AWS Elastic Beanstalk
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AWS_ELASTIC_BEANSTALK = 'aws_elastic_beanstalk';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM AWS App Runner
+     * AWS App Runner
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AWS_APP_RUNNER = 'aws_app_runner';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Red Hat OpenShift on AWS (ROSA)
+     * Red Hat OpenShift on AWS (ROSA)
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AWS_OPENSHIFT = 'aws_openshift';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Azure Virtual Machines
+     * Azure Virtual Machines
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AZURE_VM = 'azure_vm';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Azure Container Apps
+     * Azure Container Apps
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AZURE_CONTAINER_APPS = 'azure_container_apps';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Azure Container Instances
+     * Azure Container Instances
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AZURE_CONTAINER_INSTANCES = 'azure_container_instances';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Azure Kubernetes Service
+     * Azure Kubernetes Service
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AZURE_AKS = 'azure_aks';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Azure Functions
+     * Azure Functions
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AZURE_FUNCTIONS = 'azure_functions';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Azure App Service
+     * Azure App Service
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AZURE_APP_SERVICE = 'azure_app_service';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Azure Red Hat OpenShift
+     * Azure Red Hat OpenShift
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_AZURE_OPENSHIFT = 'azure_openshift';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Google Bare Metal Solution (BMS)
+     * Google Bare Metal Solution (BMS)
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_GCP_BARE_METAL_SOLUTION = 'gcp_bare_metal_solution';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Google Cloud Compute Engine (GCE)
+     * Google Cloud Compute Engine (GCE)
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_GCP_COMPUTE_ENGINE = 'gcp_compute_engine';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Google Cloud Run
+     * Google Cloud Run
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_GCP_CLOUD_RUN = 'gcp_cloud_run';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Google Cloud Kubernetes Engine (GKE)
+     * Google Cloud Kubernetes Engine (GKE)
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_GCP_KUBERNETES_ENGINE = 'gcp_kubernetes_engine';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Google Cloud Functions (GCF)
+     * Google Cloud Functions (GCF)
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_GCP_CLOUD_FUNCTIONS = 'gcp_cloud_functions';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Google Cloud App Engine (GAE)
+     * Google Cloud App Engine (GAE)
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_GCP_APP_ENGINE = 'gcp_app_engine';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Red Hat OpenShift on Google Cloud
+     * Red Hat OpenShift on Google Cloud
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_GCP_OPENSHIFT = 'gcp_openshift';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Red Hat OpenShift on IBM Cloud
+     * Red Hat OpenShift on IBM Cloud
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_IBM_CLOUD_OPENSHIFT = 'ibm_cloud_openshift';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Tencent Cloud Cloud Virtual Machine (CVM)
+     * Compute on Oracle Cloud Infrastructure (OCI)
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
+     */
+    public const CLOUD_PLATFORM_ORACLE_CLOUD_COMPUTE = 'oracle_cloud_compute';
+
+    /**
+     * Kubernetes Engine (OKE) on Oracle Cloud Infrastructure (OCI)
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
+     */
+    public const CLOUD_PLATFORM_ORACLE_CLOUD_OKE = 'oracle_cloud_oke';
+
+    /**
+     * Tencent Cloud Cloud Virtual Machine (CVM)
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_TENCENT_CLOUD_CVM = 'tencent_cloud_cvm';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Tencent Cloud Elastic Kubernetes Service (EKS)
+     * Tencent Cloud Elastic Kubernetes Service (EKS)
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_TENCENT_CLOUD_EKS = 'tencent_cloud_eks';
 
     /**
-     * @see TraceAttributes::CLOUD_PLATFORM Tencent Cloud Serverless Cloud Function (SCF)
+     * Tencent Cloud Serverless Cloud Function (SCF)
+     *
+     * @see TraceAttributes::CLOUD_PLATFORM
      */
     public const CLOUD_PLATFORM_TENCENT_CLOUD_SCF = 'tencent_cloud_scf';
 
     /**
-     * @see TraceAttributes::CLOUD_PROVIDER Alibaba Cloud
+     * Alibaba Cloud
+     *
+     * @see TraceAttributes::CLOUD_PROVIDER
      */
     public const CLOUD_PROVIDER_ALIBABA_CLOUD = 'alibaba_cloud';
 
     /**
-     * @see TraceAttributes::CLOUD_PROVIDER Amazon Web Services
+     * Amazon Web Services
+     *
+     * @see TraceAttributes::CLOUD_PROVIDER
      */
     public const CLOUD_PROVIDER_AWS = 'aws';
 
     /**
-     * @see TraceAttributes::CLOUD_PROVIDER Microsoft Azure
+     * Microsoft Azure
+     *
+     * @see TraceAttributes::CLOUD_PROVIDER
      */
     public const CLOUD_PROVIDER_AZURE = 'azure';
 
     /**
-     * @see TraceAttributes::CLOUD_PROVIDER Google Cloud Platform
+     * Google Cloud Platform
+     *
+     * @see TraceAttributes::CLOUD_PROVIDER
      */
     public const CLOUD_PROVIDER_GCP = 'gcp';
 
     /**
-     * @see TraceAttributes::CLOUD_PROVIDER Heroku Platform as a Service
+     * Heroku Platform as a Service
+     *
+     * @see TraceAttributes::CLOUD_PROVIDER
      */
     public const CLOUD_PROVIDER_HEROKU = 'heroku';
 
     /**
-     * @see TraceAttributes::CLOUD_PROVIDER IBM Cloud
+     * IBM Cloud
+     *
+     * @see TraceAttributes::CLOUD_PROVIDER
      */
     public const CLOUD_PROVIDER_IBM_CLOUD = 'ibm_cloud';
 
     /**
-     * @see TraceAttributes::CLOUD_PROVIDER Tencent Cloud
+     * Oracle Cloud Infrastructure (OCI)
+     *
+     * @see TraceAttributes::CLOUD_PROVIDER
+     */
+    public const CLOUD_PROVIDER_ORACLE_CLOUD = 'oracle_cloud';
+
+    /**
+     * Tencent Cloud
+     *
+     * @see TraceAttributes::CLOUD_PROVIDER
      */
     public const CLOUD_PROVIDER_TENCENT_CLOUD = 'tencent_cloud';
 
     /**
-     * @see TraceAttributes::CONTAINER_CPU_STATE When tasks of the cgroup are in user mode (Linux). When all container processes are in user mode (Windows)
+     * When tasks of the cgroup are in user mode (Linux). When all container processes are in user mode (Windows).
+     *
+     * @see TraceAttributes::CONTAINER_CPU_STATE
      */
     public const CONTAINER_CPU_STATE_USER = 'user';
 
     /**
-     * @see TraceAttributes::CONTAINER_CPU_STATE When CPU is used by the system (host OS)
+     * When CPU is used by the system (host OS)
+     *
+     * @see TraceAttributes::CONTAINER_CPU_STATE
      */
     public const CONTAINER_CPU_STATE_SYSTEM = 'system';
 
     /**
-     * @see TraceAttributes::CONTAINER_CPU_STATE When tasks of the cgroup are in kernel mode (Linux). When all container processes are in kernel mode (Windows)
+     * When tasks of the cgroup are in kernel mode (Linux). When all container processes are in kernel mode (Windows).
+     *
+     * @see TraceAttributes::CONTAINER_CPU_STATE
      */
     public const CONTAINER_CPU_STATE_KERNEL = 'kernel';
 
     /**
-     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL all
+     * user
+     *
+     * @see TraceAttributes::CPU_MODE
+     */
+    public const CPU_MODE_USER = 'user';
+
+    /**
+     * system
+     *
+     * @see TraceAttributes::CPU_MODE
+     */
+    public const CPU_MODE_SYSTEM = 'system';
+
+    /**
+     * nice
+     *
+     * @see TraceAttributes::CPU_MODE
+     */
+    public const CPU_MODE_NICE = 'nice';
+
+    /**
+     * idle
+     *
+     * @see TraceAttributes::CPU_MODE
+     */
+    public const CPU_MODE_IDLE = 'idle';
+
+    /**
+     * iowait
+     *
+     * @see TraceAttributes::CPU_MODE
+     */
+    public const CPU_MODE_IOWAIT = 'iowait';
+
+    /**
+     * interrupt
+     *
+     * @see TraceAttributes::CPU_MODE
+     */
+    public const CPU_MODE_INTERRUPT = 'interrupt';
+
+    /**
+     * steal
+     *
+     * @see TraceAttributes::CPU_MODE
+     */
+    public const CPU_MODE_STEAL = 'steal';
+
+    /**
+     * kernel
+     *
+     * @see TraceAttributes::CPU_MODE
+     */
+    public const CPU_MODE_KERNEL = 'kernel';
+
+    /**
+     * all
+     *
+     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL
      */
     public const DB_CASSANDRA_CONSISTENCY_LEVEL_ALL = 'all';
 
     /**
-     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL each_quorum
+     * each_quorum
+     *
+     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL
      */
     public const DB_CASSANDRA_CONSISTENCY_LEVEL_EACH_QUORUM = 'each_quorum';
 
     /**
-     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL quorum
+     * quorum
+     *
+     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL
      */
     public const DB_CASSANDRA_CONSISTENCY_LEVEL_QUORUM = 'quorum';
 
     /**
-     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL local_quorum
+     * local_quorum
+     *
+     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL
      */
     public const DB_CASSANDRA_CONSISTENCY_LEVEL_LOCAL_QUORUM = 'local_quorum';
 
     /**
-     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL one
+     * one
+     *
+     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL
      */
     public const DB_CASSANDRA_CONSISTENCY_LEVEL_ONE = 'one';
 
     /**
-     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL two
+     * two
+     *
+     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL
      */
     public const DB_CASSANDRA_CONSISTENCY_LEVEL_TWO = 'two';
 
     /**
-     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL three
+     * three
+     *
+     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL
      */
     public const DB_CASSANDRA_CONSISTENCY_LEVEL_THREE = 'three';
 
     /**
-     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL local_one
+     * local_one
+     *
+     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL
      */
     public const DB_CASSANDRA_CONSISTENCY_LEVEL_LOCAL_ONE = 'local_one';
 
     /**
-     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL any
+     * any
+     *
+     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL
      */
     public const DB_CASSANDRA_CONSISTENCY_LEVEL_ANY = 'any';
 
     /**
-     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL serial
+     * serial
+     *
+     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL
      */
     public const DB_CASSANDRA_CONSISTENCY_LEVEL_SERIAL = 'serial';
 
     /**
-     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL local_serial
+     * local_serial
+     *
+     * @see TraceAttributes::DB_CASSANDRA_CONSISTENCY_LEVEL
      */
     public const DB_CASSANDRA_CONSISTENCY_LEVEL_LOCAL_SERIAL = 'local_serial';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_CONNECTION_MODE Gateway (HTTP) connections mode
+     * idle
+     *
+     * @see TraceAttributes::DB_CLIENT_CONNECTION_STATE
+     */
+    public const DB_CLIENT_CONNECTION_STATE_IDLE = 'idle';
+
+    /**
+     * used
+     *
+     * @see TraceAttributes::DB_CLIENT_CONNECTION_STATE
+     */
+    public const DB_CLIENT_CONNECTION_STATE_USED = 'used';
+
+    /**
+     * idle
+     *
+     * @see TraceAttributes::DB_CLIENT_CONNECTIONS_STATE
+     */
+    public const DB_CLIENT_CONNECTIONS_STATE_IDLE = 'idle';
+
+    /**
+     * used
+     *
+     * @see TraceAttributes::DB_CLIENT_CONNECTIONS_STATE
+     */
+    public const DB_CLIENT_CONNECTIONS_STATE_USED = 'used';
+
+    /**
+     * Gateway (HTTP) connection.
+     *
+     * @see TraceAttributes::DB_COSMOSDB_CONNECTION_MODE
      */
     public const DB_COSMOSDB_CONNECTION_MODE_GATEWAY = 'gateway';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_CONNECTION_MODE Direct connection
+     * Direct connection.
+     *
+     * @see TraceAttributes::DB_COSMOSDB_CONNECTION_MODE
      */
     public const DB_COSMOSDB_CONNECTION_MODE_DIRECT = 'direct';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE invalid
+     * strong
+     *
+     * @see TraceAttributes::DB_COSMOSDB_CONSISTENCY_LEVEL
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_INVALID = 'Invalid';
+    public const DB_COSMOSDB_CONSISTENCY_LEVEL_STRONG = 'Strong';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE create
+     * bounded_staleness
+     *
+     * @see TraceAttributes::DB_COSMOSDB_CONSISTENCY_LEVEL
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_CREATE = 'Create';
+    public const DB_COSMOSDB_CONSISTENCY_LEVEL_BOUNDED_STALENESS = 'BoundedStaleness';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE patch
+     * session
+     *
+     * @see TraceAttributes::DB_COSMOSDB_CONSISTENCY_LEVEL
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_PATCH = 'Patch';
+    public const DB_COSMOSDB_CONSISTENCY_LEVEL_SESSION = 'Session';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE read
+     * eventual
+     *
+     * @see TraceAttributes::DB_COSMOSDB_CONSISTENCY_LEVEL
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_READ = 'Read';
+    public const DB_COSMOSDB_CONSISTENCY_LEVEL_EVENTUAL = 'Eventual';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE read_feed
+     * consistent_prefix
+     *
+     * @see TraceAttributes::DB_COSMOSDB_CONSISTENCY_LEVEL
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_READ_FEED = 'ReadFeed';
+    public const DB_COSMOSDB_CONSISTENCY_LEVEL_CONSISTENT_PREFIX = 'ConsistentPrefix';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE delete
+     * batch
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_DELETE = 'Delete';
+    public const DB_COSMOSDB_OPERATION_TYPE_BATCH = 'batch';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE replace
+     * create
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_REPLACE = 'Replace';
+    public const DB_COSMOSDB_OPERATION_TYPE_CREATE = 'create';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE execute
+     * delete
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_EXECUTE = 'Execute';
+    public const DB_COSMOSDB_OPERATION_TYPE_DELETE = 'delete';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE query
+     * execute
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_QUERY = 'Query';
+    public const DB_COSMOSDB_OPERATION_TYPE_EXECUTE = 'execute';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE head
+     * execute_javascript
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_HEAD = 'Head';
+    public const DB_COSMOSDB_OPERATION_TYPE_EXECUTE_JAVASCRIPT = 'execute_javascript';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE head_feed
+     * invalid
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_HEAD_FEED = 'HeadFeed';
+    public const DB_COSMOSDB_OPERATION_TYPE_INVALID = 'invalid';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE upsert
+     * head
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_UPSERT = 'Upsert';
+    public const DB_COSMOSDB_OPERATION_TYPE_HEAD = 'head';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE batch
+     * head_feed
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_BATCH = 'Batch';
+    public const DB_COSMOSDB_OPERATION_TYPE_HEAD_FEED = 'head_feed';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE query_plan
+     * patch
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_QUERY_PLAN = 'QueryPlan';
+    public const DB_COSMOSDB_OPERATION_TYPE_PATCH = 'patch';
 
     /**
-     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE execute_javascript
+     * query
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
      */
-    public const DB_COSMOSDB_OPERATION_TYPE_EXECUTE_JAVASCRIPT = 'ExecuteJavaScript';
+    public const DB_COSMOSDB_OPERATION_TYPE_QUERY = 'query';
 
     /**
-     * @see TraceAttributes::DB_SYSTEM Some other SQL database. Fallback only. See notes
+     * query_plan
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
+     */
+    public const DB_COSMOSDB_OPERATION_TYPE_QUERY_PLAN = 'query_plan';
+
+    /**
+     * read
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
+     */
+    public const DB_COSMOSDB_OPERATION_TYPE_READ = 'read';
+
+    /**
+     * read_feed
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
+     */
+    public const DB_COSMOSDB_OPERATION_TYPE_READ_FEED = 'read_feed';
+
+    /**
+     * replace
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
+     */
+    public const DB_COSMOSDB_OPERATION_TYPE_REPLACE = 'replace';
+
+    /**
+     * upsert
+     *
+     * @see TraceAttributes::DB_COSMOSDB_OPERATION_TYPE
+     */
+    public const DB_COSMOSDB_OPERATION_TYPE_UPSERT = 'upsert';
+
+    /**
+     * Some other SQL database. Fallback only. See notes.
+     *
+     * @see TraceAttributes::DB_SYSTEM
      */
     public const DB_SYSTEM_OTHER_SQL = 'other_sql';
 
     /**
-     * @see TraceAttributes::DB_SYSTEM Microsoft SQL Server
-     */
-    public const DB_SYSTEM_MSSQL = 'mssql';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Microsoft SQL Server Compact
-     */
-    public const DB_SYSTEM_MSSQLCOMPACT = 'mssqlcompact';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM MySQL
-     */
-    public const DB_SYSTEM_MYSQL = 'mysql';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Oracle Database
-     */
-    public const DB_SYSTEM_ORACLE = 'oracle';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM IBM Db2
-     */
-    public const DB_SYSTEM_DB2 = 'db2';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM PostgreSQL
-     */
-    public const DB_SYSTEM_POSTGRESQL = 'postgresql';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Amazon Redshift
-     */
-    public const DB_SYSTEM_REDSHIFT = 'redshift';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Apache Hive
-     */
-    public const DB_SYSTEM_HIVE = 'hive';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Cloudscape
-     */
-    public const DB_SYSTEM_CLOUDSCAPE = 'cloudscape';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM HyperSQL DataBase
-     */
-    public const DB_SYSTEM_HSQLDB = 'hsqldb';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Progress Database
-     */
-    public const DB_SYSTEM_PROGRESS = 'progress';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM SAP MaxDB
-     */
-    public const DB_SYSTEM_MAXDB = 'maxdb';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM SAP HANA
-     */
-    public const DB_SYSTEM_HANADB = 'hanadb';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Ingres
-     */
-    public const DB_SYSTEM_INGRES = 'ingres';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM FirstSQL
-     */
-    public const DB_SYSTEM_FIRSTSQL = 'firstsql';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM EnterpriseDB
-     */
-    public const DB_SYSTEM_EDB = 'edb';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM InterSystems Caché
-     */
-    public const DB_SYSTEM_CACHE = 'cache';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Adabas (Adaptable Database System)
+     * Adabas (Adaptable Database System)
+     *
+     * @see TraceAttributes::DB_SYSTEM
      */
     public const DB_SYSTEM_ADABAS = 'adabas';
 
     /**
-     * @see TraceAttributes::DB_SYSTEM Firebird
+     * Deprecated, use `intersystems_cache` instead.
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     * @deprecated Replaced by `intersystems_cache`.
      */
-    public const DB_SYSTEM_FIREBIRD = 'firebird';
+    public const DB_SYSTEM_CACHE = 'cache';
 
     /**
-     * @see TraceAttributes::DB_SYSTEM Apache Derby
+     * InterSystems Caché
+     *
+     * @see TraceAttributes::DB_SYSTEM
      */
-    public const DB_SYSTEM_DERBY = 'derby';
+    public const DB_SYSTEM_INTERSYSTEMS_CACHE = 'intersystems_cache';
 
     /**
-     * @see TraceAttributes::DB_SYSTEM FileMaker
-     */
-    public const DB_SYSTEM_FILEMAKER = 'filemaker';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Informix
-     */
-    public const DB_SYSTEM_INFORMIX = 'informix';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM InstantDB
-     */
-    public const DB_SYSTEM_INSTANTDB = 'instantdb';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM InterBase
-     */
-    public const DB_SYSTEM_INTERBASE = 'interbase';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM MariaDB
-     */
-    public const DB_SYSTEM_MARIADB = 'mariadb';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Netezza
-     */
-    public const DB_SYSTEM_NETEZZA = 'netezza';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Pervasive PSQL
-     */
-    public const DB_SYSTEM_PERVASIVE = 'pervasive';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM PointBase
-     */
-    public const DB_SYSTEM_POINTBASE = 'pointbase';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM SQLite
-     */
-    public const DB_SYSTEM_SQLITE = 'sqlite';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Sybase
-     */
-    public const DB_SYSTEM_SYBASE = 'sybase';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Teradata
-     */
-    public const DB_SYSTEM_TERADATA = 'teradata';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Vertica
-     */
-    public const DB_SYSTEM_VERTICA = 'vertica';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM H2
-     */
-    public const DB_SYSTEM_H2 = 'h2';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM ColdFusion IMQ
-     */
-    public const DB_SYSTEM_COLDFUSION = 'coldfusion';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Apache Cassandra
+     * Apache Cassandra
+     *
+     * @see TraceAttributes::DB_SYSTEM
      */
     public const DB_SYSTEM_CASSANDRA = 'cassandra';
 
     /**
-     * @see TraceAttributes::DB_SYSTEM Apache HBase
-     */
-    public const DB_SYSTEM_HBASE = 'hbase';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM MongoDB
-     */
-    public const DB_SYSTEM_MONGODB = 'mongodb';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Redis
-     */
-    public const DB_SYSTEM_REDIS = 'redis';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Couchbase
-     */
-    public const DB_SYSTEM_COUCHBASE = 'couchbase';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM CouchDB
-     */
-    public const DB_SYSTEM_COUCHDB = 'couchdb';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Microsoft Azure Cosmos DB
-     */
-    public const DB_SYSTEM_COSMOSDB = 'cosmosdb';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Amazon DynamoDB
-     */
-    public const DB_SYSTEM_DYNAMODB = 'dynamodb';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Neo4j
-     */
-    public const DB_SYSTEM_NEO4J = 'neo4j';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Apache Geode
-     */
-    public const DB_SYSTEM_GEODE = 'geode';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Elasticsearch
-     */
-    public const DB_SYSTEM_ELASTICSEARCH = 'elasticsearch';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM Memcached
-     */
-    public const DB_SYSTEM_MEMCACHED = 'memcached';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM CockroachDB
-     */
-    public const DB_SYSTEM_COCKROACHDB = 'cockroachdb';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM OpenSearch
-     */
-    public const DB_SYSTEM_OPENSEARCH = 'opensearch';
-
-    /**
-     * @see TraceAttributes::DB_SYSTEM ClickHouse
+     * ClickHouse
+     *
+     * @see TraceAttributes::DB_SYSTEM
      */
     public const DB_SYSTEM_CLICKHOUSE = 'clickhouse';
 
     /**
-     * @see TraceAttributes::DB_SYSTEM Cloud Spanner
+     * Deprecated, use `other_sql` instead.
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     * @deprecated Replaced by `other_sql`.
+     */
+    public const DB_SYSTEM_CLOUDSCAPE = 'cloudscape';
+
+    /**
+     * CockroachDB
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_COCKROACHDB = 'cockroachdb';
+
+    /**
+     * Deprecated, no replacement at this time.
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     * @deprecated Removed.
+     */
+    public const DB_SYSTEM_COLDFUSION = 'coldfusion';
+
+    /**
+     * Microsoft Azure Cosmos DB
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_COSMOSDB = 'cosmosdb';
+
+    /**
+     * Couchbase
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_COUCHBASE = 'couchbase';
+
+    /**
+     * CouchDB
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_COUCHDB = 'couchdb';
+
+    /**
+     * IBM Db2
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_DB2 = 'db2';
+
+    /**
+     * Apache Derby
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_DERBY = 'derby';
+
+    /**
+     * Amazon DynamoDB
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_DYNAMODB = 'dynamodb';
+
+    /**
+     * EnterpriseDB
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_EDB = 'edb';
+
+    /**
+     * Elasticsearch
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_ELASTICSEARCH = 'elasticsearch';
+
+    /**
+     * FileMaker
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_FILEMAKER = 'filemaker';
+
+    /**
+     * Firebird
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_FIREBIRD = 'firebird';
+
+    /**
+     * Deprecated, use `other_sql` instead.
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     * @deprecated Replaced by `other_sql`.
+     */
+    public const DB_SYSTEM_FIRSTSQL = 'firstsql';
+
+    /**
+     * Apache Geode
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_GEODE = 'geode';
+
+    /**
+     * H2
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_H2 = 'h2';
+
+    /**
+     * SAP HANA
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_HANADB = 'hanadb';
+
+    /**
+     * Apache HBase
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_HBASE = 'hbase';
+
+    /**
+     * Apache Hive
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_HIVE = 'hive';
+
+    /**
+     * HyperSQL DataBase
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_HSQLDB = 'hsqldb';
+
+    /**
+     * InfluxDB
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_INFLUXDB = 'influxdb';
+
+    /**
+     * Informix
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_INFORMIX = 'informix';
+
+    /**
+     * Ingres
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_INGRES = 'ingres';
+
+    /**
+     * InstantDB
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_INSTANTDB = 'instantdb';
+
+    /**
+     * InterBase
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_INTERBASE = 'interbase';
+
+    /**
+     * MariaDB (This value has stability level RELEASE CANDIDATE)
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_MARIADB = 'mariadb';
+
+    /**
+     * SAP MaxDB
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_MAXDB = 'maxdb';
+
+    /**
+     * Memcached
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_MEMCACHED = 'memcached';
+
+    /**
+     * MongoDB
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_MONGODB = 'mongodb';
+
+    /**
+     * Microsoft SQL Server (This value has stability level RELEASE CANDIDATE)
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_MSSQL = 'mssql';
+
+    /**
+     * Deprecated, Microsoft SQL Server Compact is discontinued.
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     * @deprecated Removed, use `other_sql` instead.
+     */
+    public const DB_SYSTEM_MSSQLCOMPACT = 'mssqlcompact';
+
+    /**
+     * MySQL (This value has stability level RELEASE CANDIDATE)
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_MYSQL = 'mysql';
+
+    /**
+     * Neo4j
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_NEO4J = 'neo4j';
+
+    /**
+     * Netezza
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_NETEZZA = 'netezza';
+
+    /**
+     * OpenSearch
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_OPENSEARCH = 'opensearch';
+
+    /**
+     * Oracle Database
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_ORACLE = 'oracle';
+
+    /**
+     * Pervasive PSQL
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_PERVASIVE = 'pervasive';
+
+    /**
+     * PointBase
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_POINTBASE = 'pointbase';
+
+    /**
+     * PostgreSQL (This value has stability level RELEASE CANDIDATE)
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_POSTGRESQL = 'postgresql';
+
+    /**
+     * Progress Database
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_PROGRESS = 'progress';
+
+    /**
+     * Redis
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_REDIS = 'redis';
+
+    /**
+     * Amazon Redshift
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_REDSHIFT = 'redshift';
+
+    /**
+     * Cloud Spanner
+     *
+     * @see TraceAttributes::DB_SYSTEM
      */
     public const DB_SYSTEM_SPANNER = 'spanner';
 
     /**
-     * @see TraceAttributes::DB_SYSTEM Trino
+     * SQLite
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_SQLITE = 'sqlite';
+
+    /**
+     * Sybase
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_SYBASE = 'sybase';
+
+    /**
+     * Teradata
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_TERADATA = 'teradata';
+
+    /**
+     * Trino
+     *
+     * @see TraceAttributes::DB_SYSTEM
      */
     public const DB_SYSTEM_TRINO = 'trino';
 
     /**
-     * @see TraceAttributes::DISK_IO_DIRECTION read
+     * Vertica
+     *
+     * @see TraceAttributes::DB_SYSTEM
+     */
+    public const DB_SYSTEM_VERTICA = 'vertica';
+
+    /**
+     * Some other SQL database. Fallback only.
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_OTHER_SQL = 'other_sql';
+
+    /**
+     * [Adabas (Adaptable Database System)](https://documentation.softwareag.com/?pf=adabas)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_SOFTWAREAG_ADABAS = 'softwareag.adabas';
+
+    /**
+     * [Actian Ingres](https://www.actian.com/databases/ingres/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_ACTIAN_INGRES = 'actian.ingres';
+
+    /**
+     * [Amazon DynamoDB](https://aws.amazon.com/pm/dynamodb/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_AWS_DYNAMODB = 'aws.dynamodb';
+
+    /**
+     * [Amazon Redshift](https://aws.amazon.com/redshift/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_AWS_REDSHIFT = 'aws.redshift';
+
+    /**
+     * [Azure Cosmos DB](https://learn.microsoft.com/azure/cosmos-db)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_AZURE_COSMOSDB = 'azure.cosmosdb';
+
+    /**
+     * [InterSystems Caché](https://www.intersystems.com/products/cache/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_INTERSYSTEMS_CACHE = 'intersystems.cache';
+
+    /**
+     * [Apache Cassandra](https://cassandra.apache.org/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_CASSANDRA = 'cassandra';
+
+    /**
+     * [ClickHouse](https://clickhouse.com/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_CLICKHOUSE = 'clickhouse';
+
+    /**
+     * [CockroachDB](https://www.cockroachlabs.com/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_COCKROACHDB = 'cockroachdb';
+
+    /**
+     * [Couchbase](https://www.couchbase.com/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_COUCHBASE = 'couchbase';
+
+    /**
+     * [Apache CouchDB](https://couchdb.apache.org/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_COUCHDB = 'couchdb';
+
+    /**
+     * [Apache Derby](https://db.apache.org/derby/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_DERBY = 'derby';
+
+    /**
+     * [Elasticsearch](https://www.elastic.co/elasticsearch)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_ELASTICSEARCH = 'elasticsearch';
+
+    /**
+     * [Firebird](https://www.firebirdsql.org/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_FIREBIRDSQL = 'firebirdsql';
+
+    /**
+     * [Google Cloud Spanner](https://cloud.google.com/spanner)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_GCP_SPANNER = 'gcp.spanner';
+
+    /**
+     * [Apache Geode](https://geode.apache.org/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_GEODE = 'geode';
+
+    /**
+     * [H2 Database](https://h2database.com/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_H2DATABASE = 'h2database';
+
+    /**
+     * [Apache HBase](https://hbase.apache.org/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_HBASE = 'hbase';
+
+    /**
+     * [Apache Hive](https://hive.apache.org/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_HIVE = 'hive';
+
+    /**
+     * [HyperSQL Database](https://hsqldb.org/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_HSQLDB = 'hsqldb';
+
+    /**
+     * [IBM Db2](https://www.ibm.com/db2)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_IBM_DB2 = 'ibm.db2';
+
+    /**
+     * [IBM Informix](https://www.ibm.com/products/informix)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_IBM_INFORMIX = 'ibm.informix';
+
+    /**
+     * [IBM Netezza](https://www.ibm.com/products/netezza)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_IBM_NETEZZA = 'ibm.netezza';
+
+    /**
+     * [InfluxDB](https://www.influxdata.com/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_INFLUXDB = 'influxdb';
+
+    /**
+     * [Instant](https://www.instantdb.com/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_INSTANTDB = 'instantdb';
+
+    /**
+     * [MariaDB](https://mariadb.org/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_MARIADB = 'mariadb';
+
+    /**
+     * [Memcached](https://memcached.org/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_MEMCACHED = 'memcached';
+
+    /**
+     * [MongoDB](https://www.mongodb.com/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_MONGODB = 'mongodb';
+
+    /**
+     * [Microsoft SQL Server](https://www.microsoft.com/sql-server)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_MICROSOFT_SQL_SERVER = 'microsoft.sql_server';
+
+    /**
+     * [MySQL](https://www.mysql.com/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_MYSQL = 'mysql';
+
+    /**
+     * [Neo4j](https://neo4j.com/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_NEO4J = 'neo4j';
+
+    /**
+     * [OpenSearch](https://opensearch.org/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_OPENSEARCH = 'opensearch';
+
+    /**
+     * [Oracle Database](https://www.oracle.com/database/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_ORACLE_DB = 'oracle.db';
+
+    /**
+     * [PostgreSQL](https://www.postgresql.org/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_POSTGRESQL = 'postgresql';
+
+    /**
+     * [Redis](https://redis.io/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_REDIS = 'redis';
+
+    /**
+     * [SAP HANA](https://www.sap.com/products/technology-platform/hana/what-is-sap-hana.html)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_SAP_HANA = 'sap.hana';
+
+    /**
+     * [SAP MaxDB](https://maxdb.sap.com/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_SAP_MAXDB = 'sap.maxdb';
+
+    /**
+     * [SQLite](https://www.sqlite.org/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_SQLITE = 'sqlite';
+
+    /**
+     * [Teradata](https://www.teradata.com/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_TERADATA = 'teradata';
+
+    /**
+     * [Trino](https://trino.io/)
+     *
+     * @see TraceAttributes::DB_SYSTEM_NAME
+     */
+    public const DB_SYSTEM_NAME_TRINO = 'trino';
+
+    /**
+     * failed
+     *
+     * @see TraceAttributes::DEPLOYMENT_STATUS
+     */
+    public const DEPLOYMENT_STATUS_FAILED = 'failed';
+
+    /**
+     * succeeded
+     *
+     * @see TraceAttributes::DEPLOYMENT_STATUS
+     */
+    public const DEPLOYMENT_STATUS_SUCCEEDED = 'succeeded';
+
+    /**
+     * read
+     *
+     * @see TraceAttributes::DISK_IO_DIRECTION
      */
     public const DISK_IO_DIRECTION_READ = 'read';
 
     /**
-     * @see TraceAttributes::DISK_IO_DIRECTION write
+     * write
+     *
+     * @see TraceAttributes::DISK_IO_DIRECTION
      */
     public const DISK_IO_DIRECTION_WRITE = 'write';
 
     /**
-     * @see TraceAttributes::ERROR_TYPE A fallback error value to be used when the instrumentation doesn&#39;t define a custom value
+     * A fallback error value to be used when the instrumentation doesn't define a custom value.
+     *
+     * @see TraceAttributes::ERROR_TYPE
      */
     public const ERROR_TYPE_OTHER = '_OTHER';
 
     /**
-     * @see TraceAttributes::FAAS_DOCUMENT_OPERATION When a new object is created
+     * When a new object is created.
+     *
+     * @see TraceAttributes::FAAS_DOCUMENT_OPERATION
      */
     public const FAAS_DOCUMENT_OPERATION_INSERT = 'insert';
 
     /**
-     * @see TraceAttributes::FAAS_DOCUMENT_OPERATION When an object is modified
+     * When an object is modified.
+     *
+     * @see TraceAttributes::FAAS_DOCUMENT_OPERATION
      */
     public const FAAS_DOCUMENT_OPERATION_EDIT = 'edit';
 
     /**
-     * @see TraceAttributes::FAAS_DOCUMENT_OPERATION When an object is deleted
+     * When an object is deleted.
+     *
+     * @see TraceAttributes::FAAS_DOCUMENT_OPERATION
      */
     public const FAAS_DOCUMENT_OPERATION_DELETE = 'delete';
 
     /**
-     * @see TraceAttributes::FAAS_INVOKED_PROVIDER Alibaba Cloud
+     * Alibaba Cloud
+     *
+     * @see TraceAttributes::FAAS_INVOKED_PROVIDER
      */
     public const FAAS_INVOKED_PROVIDER_ALIBABA_CLOUD = 'alibaba_cloud';
 
     /**
-     * @see TraceAttributes::FAAS_INVOKED_PROVIDER Amazon Web Services
+     * Amazon Web Services
+     *
+     * @see TraceAttributes::FAAS_INVOKED_PROVIDER
      */
     public const FAAS_INVOKED_PROVIDER_AWS = 'aws';
 
     /**
-     * @see TraceAttributes::FAAS_INVOKED_PROVIDER Microsoft Azure
+     * Microsoft Azure
+     *
+     * @see TraceAttributes::FAAS_INVOKED_PROVIDER
      */
     public const FAAS_INVOKED_PROVIDER_AZURE = 'azure';
 
     /**
-     * @see TraceAttributes::FAAS_INVOKED_PROVIDER Google Cloud Platform
+     * Google Cloud Platform
+     *
+     * @see TraceAttributes::FAAS_INVOKED_PROVIDER
      */
     public const FAAS_INVOKED_PROVIDER_GCP = 'gcp';
 
     /**
-     * @see TraceAttributes::FAAS_INVOKED_PROVIDER Tencent Cloud
+     * Tencent Cloud
+     *
+     * @see TraceAttributes::FAAS_INVOKED_PROVIDER
      */
     public const FAAS_INVOKED_PROVIDER_TENCENT_CLOUD = 'tencent_cloud';
 
     /**
-     * @see TraceAttributes::FAAS_TRIGGER A response to some data source operation such as a database or filesystem read/write
+     * A response to some data source operation such as a database or filesystem read/write
+     *
+     * @see TraceAttributes::FAAS_TRIGGER
      */
     public const FAAS_TRIGGER_DATASOURCE = 'datasource';
 
     /**
-     * @see TraceAttributes::FAAS_TRIGGER To provide an answer to an inbound HTTP request
+     * To provide an answer to an inbound HTTP request
+     *
+     * @see TraceAttributes::FAAS_TRIGGER
      */
     public const FAAS_TRIGGER_HTTP = 'http';
 
     /**
-     * @see TraceAttributes::FAAS_TRIGGER A function is set to be executed when messages are sent to a messaging system
+     * A function is set to be executed when messages are sent to a messaging system
+     *
+     * @see TraceAttributes::FAAS_TRIGGER
      */
     public const FAAS_TRIGGER_PUBSUB = 'pubsub';
 
     /**
-     * @see TraceAttributes::FAAS_TRIGGER A function is scheduled to be executed regularly
+     * A function is scheduled to be executed regularly
+     *
+     * @see TraceAttributes::FAAS_TRIGGER
      */
     public const FAAS_TRIGGER_TIMER = 'timer';
 
     /**
-     * @see TraceAttributes::FAAS_TRIGGER If none of the others apply
+     * If none of the others apply
+     *
+     * @see TraceAttributes::FAAS_TRIGGER
      */
     public const FAAS_TRIGGER_OTHER = 'other';
 
     /**
-     * @see TraceAttributes::GRAPHQL_OPERATION_TYPE GraphQL query
+     * The resolved value is static (no dynamic evaluation).
+     *
+     * @see TraceAttributes::FEATURE_FLAG_EVALUATION_REASON
+     */
+    public const FEATURE_FLAG_EVALUATION_REASON_STATIC = 'static';
+
+    /**
+     * The resolved value fell back to a pre-configured value (no dynamic evaluation occurred or dynamic evaluation yielded no result).
+     *
+     * @see TraceAttributes::FEATURE_FLAG_EVALUATION_REASON
+     */
+    public const FEATURE_FLAG_EVALUATION_REASON_DEFAULT = 'default';
+
+    /**
+     * The resolved value was the result of a dynamic evaluation, such as a rule or specific user-targeting.
+     *
+     * @see TraceAttributes::FEATURE_FLAG_EVALUATION_REASON
+     */
+    public const FEATURE_FLAG_EVALUATION_REASON_TARGETING_MATCH = 'targeting_match';
+
+    /**
+     * The resolved value was the result of pseudorandom assignment.
+     *
+     * @see TraceAttributes::FEATURE_FLAG_EVALUATION_REASON
+     */
+    public const FEATURE_FLAG_EVALUATION_REASON_SPLIT = 'split';
+
+    /**
+     * The resolved value was retrieved from cache.
+     *
+     * @see TraceAttributes::FEATURE_FLAG_EVALUATION_REASON
+     */
+    public const FEATURE_FLAG_EVALUATION_REASON_CACHED = 'cached';
+
+    /**
+     * The resolved value was the result of the flag being disabled in the management system.
+     *
+     * @see TraceAttributes::FEATURE_FLAG_EVALUATION_REASON
+     */
+    public const FEATURE_FLAG_EVALUATION_REASON_DISABLED = 'disabled';
+
+    /**
+     * The reason for the resolved value could not be determined.
+     *
+     * @see TraceAttributes::FEATURE_FLAG_EVALUATION_REASON
+     */
+    public const FEATURE_FLAG_EVALUATION_REASON_UNKNOWN = 'unknown';
+
+    /**
+     * The resolved value is non-authoritative or possibly out of date
+     *
+     * @see TraceAttributes::FEATURE_FLAG_EVALUATION_REASON
+     */
+    public const FEATURE_FLAG_EVALUATION_REASON_STALE = 'stale';
+
+    /**
+     * The resolved value was the result of an error.
+     *
+     * @see TraceAttributes::FEATURE_FLAG_EVALUATION_REASON
+     */
+    public const FEATURE_FLAG_EVALUATION_REASON_ERROR = 'error';
+
+    /**
+     * Text response format
+     *
+     * @see TraceAttributes::GEN_AI_OPENAI_REQUEST_RESPONSE_FORMAT
+     */
+    public const GEN_AI_OPENAI_REQUEST_RESPONSE_FORMAT_TEXT = 'text';
+
+    /**
+     * JSON object response format
+     *
+     * @see TraceAttributes::GEN_AI_OPENAI_REQUEST_RESPONSE_FORMAT
+     */
+    public const GEN_AI_OPENAI_REQUEST_RESPONSE_FORMAT_JSON_OBJECT = 'json_object';
+
+    /**
+     * JSON schema response format
+     *
+     * @see TraceAttributes::GEN_AI_OPENAI_REQUEST_RESPONSE_FORMAT
+     */
+    public const GEN_AI_OPENAI_REQUEST_RESPONSE_FORMAT_JSON_SCHEMA = 'json_schema';
+
+    /**
+     * The system will utilize scale tier credits until they are exhausted.
+     *
+     * @see TraceAttributes::GEN_AI_OPENAI_REQUEST_SERVICE_TIER
+     */
+    public const GEN_AI_OPENAI_REQUEST_SERVICE_TIER_AUTO = 'auto';
+
+    /**
+     * The system will utilize the default scale tier.
+     *
+     * @see TraceAttributes::GEN_AI_OPENAI_REQUEST_SERVICE_TIER
+     */
+    public const GEN_AI_OPENAI_REQUEST_SERVICE_TIER_DEFAULT = 'default';
+
+    /**
+     * Chat completion operation such as [OpenAI Chat API](https://platform.openai.com/docs/api-reference/chat)
+     *
+     * @see TraceAttributes::GEN_AI_OPERATION_NAME
+     */
+    public const GEN_AI_OPERATION_NAME_CHAT = 'chat';
+
+    /**
+     * Text completions operation such as [OpenAI Completions API (Legacy)](https://platform.openai.com/docs/api-reference/completions)
+     *
+     * @see TraceAttributes::GEN_AI_OPERATION_NAME
+     */
+    public const GEN_AI_OPERATION_NAME_TEXT_COMPLETION = 'text_completion';
+
+    /**
+     * Embeddings operation such as [OpenAI Create embeddings API](https://platform.openai.com/docs/api-reference/embeddings/create)
+     *
+     * @see TraceAttributes::GEN_AI_OPERATION_NAME
+     */
+    public const GEN_AI_OPERATION_NAME_EMBEDDINGS = 'embeddings';
+
+    /**
+     * OpenAI
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_OPENAI = 'openai';
+
+    /**
+     * Vertex AI
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_VERTEX_AI = 'vertex_ai';
+
+    /**
+     * Gemini
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_GEMINI = 'gemini';
+
+    /**
+     * Anthropic
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_ANTHROPIC = 'anthropic';
+
+    /**
+     * Cohere
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_COHERE = 'cohere';
+
+    /**
+     * Azure AI Inference
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_AZ_AI_INFERENCE = 'az.ai.inference';
+
+    /**
+     * Azure OpenAI
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_AZ_AI_OPENAI = 'az.ai.openai';
+
+    /**
+     * IBM Watsonx AI
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_IBM_WATSONX_AI = 'ibm.watsonx.ai';
+
+    /**
+     * AWS Bedrock
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_AWS_BEDROCK = 'aws.bedrock';
+
+    /**
+     * Perplexity
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_PERPLEXITY = 'perplexity';
+
+    /**
+     * xAI
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_XAI = 'xai';
+
+    /**
+     * DeepSeek
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_DEEPSEEK = 'deepseek';
+
+    /**
+     * Groq
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_GROQ = 'groq';
+
+    /**
+     * Mistral AI
+     *
+     * @see TraceAttributes::GEN_AI_SYSTEM
+     */
+    public const GEN_AI_SYSTEM_MISTRAL_AI = 'mistral_ai';
+
+    /**
+     * Input tokens (prompt, input, etc.)
+     *
+     * @see TraceAttributes::GEN_AI_TOKEN_TYPE
+     */
+    public const GEN_AI_TOKEN_TYPE_INPUT = 'input';
+
+    /**
+     * Output tokens (completion, response, etc.)
+     *
+     * @see TraceAttributes::GEN_AI_TOKEN_TYPE
+     */
+    public const GEN_AI_TOKEN_TYPE_COMPLETION = 'output';
+
+    /**
+     * Africa
+     *
+     * @see TraceAttributes::GEO_CONTINENT_CODE
+     */
+    public const GEO_CONTINENT_CODE_AF = 'AF';
+
+    /**
+     * Antarctica
+     *
+     * @see TraceAttributes::GEO_CONTINENT_CODE
+     */
+    public const GEO_CONTINENT_CODE_AN = 'AN';
+
+    /**
+     * Asia
+     *
+     * @see TraceAttributes::GEO_CONTINENT_CODE
+     */
+    public const GEO_CONTINENT_CODE_AS = 'AS';
+
+    /**
+     * Europe
+     *
+     * @see TraceAttributes::GEO_CONTINENT_CODE
+     */
+    public const GEO_CONTINENT_CODE_EU = 'EU';
+
+    /**
+     * North America
+     *
+     * @see TraceAttributes::GEO_CONTINENT_CODE
+     */
+    public const GEO_CONTINENT_CODE_NA = 'NA';
+
+    /**
+     * Oceania
+     *
+     * @see TraceAttributes::GEO_CONTINENT_CODE
+     */
+    public const GEO_CONTINENT_CODE_OC = 'OC';
+
+    /**
+     * South America
+     *
+     * @see TraceAttributes::GEO_CONTINENT_CODE
+     */
+    public const GEO_CONTINENT_CODE_SA = 'SA';
+
+    /**
+     * Memory allocated from the heap that is reserved for stack space, whether or not it is currently in-use.
+     *
+     * @see TraceAttributes::GO_MEMORY_TYPE
+     */
+    public const GO_MEMORY_TYPE_STACK = 'stack';
+
+    /**
+     * Memory used by the Go runtime, excluding other categories of memory usage described in this enumeration.
+     *
+     * @see TraceAttributes::GO_MEMORY_TYPE
+     */
+    public const GO_MEMORY_TYPE_OTHER = 'other';
+
+    /**
+     * GraphQL query
+     *
+     * @see TraceAttributes::GRAPHQL_OPERATION_TYPE
      */
     public const GRAPHQL_OPERATION_TYPE_QUERY = 'query';
 
     /**
-     * @see TraceAttributes::GRAPHQL_OPERATION_TYPE GraphQL mutation
+     * GraphQL mutation
+     *
+     * @see TraceAttributes::GRAPHQL_OPERATION_TYPE
      */
     public const GRAPHQL_OPERATION_TYPE_MUTATION = 'mutation';
 
     /**
-     * @see TraceAttributes::GRAPHQL_OPERATION_TYPE GraphQL subscription
+     * GraphQL subscription
+     *
+     * @see TraceAttributes::GRAPHQL_OPERATION_TYPE
      */
     public const GRAPHQL_OPERATION_TYPE_SUBSCRIPTION = 'subscription';
 
     /**
-     * @see TraceAttributes::HOST_ARCH AMD64
+     * AMD64
+     *
+     * @see TraceAttributes::HOST_ARCH
      */
     public const HOST_ARCH_AMD64 = 'amd64';
 
     /**
-     * @see TraceAttributes::HOST_ARCH ARM32
+     * ARM32
+     *
+     * @see TraceAttributes::HOST_ARCH
      */
     public const HOST_ARCH_ARM32 = 'arm32';
 
     /**
-     * @see TraceAttributes::HOST_ARCH ARM64
+     * ARM64
+     *
+     * @see TraceAttributes::HOST_ARCH
      */
     public const HOST_ARCH_ARM64 = 'arm64';
 
     /**
-     * @see TraceAttributes::HOST_ARCH Itanium
+     * Itanium
+     *
+     * @see TraceAttributes::HOST_ARCH
      */
     public const HOST_ARCH_IA64 = 'ia64';
 
     /**
-     * @see TraceAttributes::HOST_ARCH 32-bit PowerPC
+     * 32-bit PowerPC
+     *
+     * @see TraceAttributes::HOST_ARCH
      */
     public const HOST_ARCH_PPC32 = 'ppc32';
 
     /**
-     * @see TraceAttributes::HOST_ARCH 64-bit PowerPC
+     * 64-bit PowerPC
+     *
+     * @see TraceAttributes::HOST_ARCH
      */
     public const HOST_ARCH_PPC64 = 'ppc64';
 
     /**
-     * @see TraceAttributes::HOST_ARCH IBM z/Architecture
+     * IBM z/Architecture
+     *
+     * @see TraceAttributes::HOST_ARCH
      */
     public const HOST_ARCH_S390X = 's390x';
 
     /**
-     * @see TraceAttributes::HOST_ARCH 32-bit x86
+     * 32-bit x86
+     *
+     * @see TraceAttributes::HOST_ARCH
      */
     public const HOST_ARCH_X86 = 'x86';
 
     /**
-     * @see TraceAttributes::HTTP_CONNECTION_STATE active state
+     * active state.
+     *
+     * @see TraceAttributes::HTTP_CONNECTION_STATE
      */
     public const HTTP_CONNECTION_STATE_ACTIVE = 'active';
 
     /**
-     * @see TraceAttributes::HTTP_CONNECTION_STATE idle state
+     * idle state.
+     *
+     * @see TraceAttributes::HTTP_CONNECTION_STATE
      */
     public const HTTP_CONNECTION_STATE_IDLE = 'idle';
 
     /**
-     * @see TraceAttributes::HTTP_FLAVOR HTTP/1.0
+     * HTTP/1.0
+     *
+     * @see TraceAttributes::HTTP_FLAVOR
      */
     public const HTTP_FLAVOR_HTTP_1_0 = '1.0';
 
     /**
-     * @see TraceAttributes::HTTP_FLAVOR HTTP/1.1
+     * HTTP/1.1
+     *
+     * @see TraceAttributes::HTTP_FLAVOR
      */
     public const HTTP_FLAVOR_HTTP_1_1 = '1.1';
 
     /**
-     * @see TraceAttributes::HTTP_FLAVOR HTTP/2
+     * HTTP/2
+     *
+     * @see TraceAttributes::HTTP_FLAVOR
      */
     public const HTTP_FLAVOR_HTTP_2_0 = '2.0';
 
     /**
-     * @see TraceAttributes::HTTP_FLAVOR HTTP/3
+     * HTTP/3
+     *
+     * @see TraceAttributes::HTTP_FLAVOR
      */
     public const HTTP_FLAVOR_HTTP_3_0 = '3.0';
 
     /**
-     * @see TraceAttributes::HTTP_FLAVOR SPDY protocol
+     * SPDY protocol.
+     *
+     * @see TraceAttributes::HTTP_FLAVOR
      */
     public const HTTP_FLAVOR_SPDY = 'SPDY';
 
     /**
-     * @see TraceAttributes::HTTP_FLAVOR QUIC protocol
+     * QUIC protocol.
+     *
+     * @see TraceAttributes::HTTP_FLAVOR
      */
     public const HTTP_FLAVOR_QUIC = 'QUIC';
 
     /**
-     * @see TraceAttributes::HTTP_REQUEST_METHOD CONNECT method
+     * CONNECT method.
+     *
+     * @see TraceAttributes::HTTP_REQUEST_METHOD
      */
     public const HTTP_REQUEST_METHOD_CONNECT = 'CONNECT';
 
     /**
-     * @see TraceAttributes::HTTP_REQUEST_METHOD DELETE method
+     * DELETE method.
+     *
+     * @see TraceAttributes::HTTP_REQUEST_METHOD
      */
     public const HTTP_REQUEST_METHOD_DELETE = 'DELETE';
 
     /**
-     * @see TraceAttributes::HTTP_REQUEST_METHOD GET method
+     * GET method.
+     *
+     * @see TraceAttributes::HTTP_REQUEST_METHOD
      */
     public const HTTP_REQUEST_METHOD_GET = 'GET';
 
     /**
-     * @see TraceAttributes::HTTP_REQUEST_METHOD HEAD method
+     * HEAD method.
+     *
+     * @see TraceAttributes::HTTP_REQUEST_METHOD
      */
     public const HTTP_REQUEST_METHOD_HEAD = 'HEAD';
 
     /**
-     * @see TraceAttributes::HTTP_REQUEST_METHOD OPTIONS method
+     * OPTIONS method.
+     *
+     * @see TraceAttributes::HTTP_REQUEST_METHOD
      */
     public const HTTP_REQUEST_METHOD_OPTIONS = 'OPTIONS';
 
     /**
-     * @see TraceAttributes::HTTP_REQUEST_METHOD PATCH method
+     * PATCH method.
+     *
+     * @see TraceAttributes::HTTP_REQUEST_METHOD
      */
     public const HTTP_REQUEST_METHOD_PATCH = 'PATCH';
 
     /**
-     * @see TraceAttributes::HTTP_REQUEST_METHOD POST method
+     * POST method.
+     *
+     * @see TraceAttributes::HTTP_REQUEST_METHOD
      */
     public const HTTP_REQUEST_METHOD_POST = 'POST';
 
     /**
-     * @see TraceAttributes::HTTP_REQUEST_METHOD PUT method
+     * PUT method.
+     *
+     * @see TraceAttributes::HTTP_REQUEST_METHOD
      */
     public const HTTP_REQUEST_METHOD_PUT = 'PUT';
 
     /**
-     * @see TraceAttributes::HTTP_REQUEST_METHOD TRACE method
+     * TRACE method.
+     *
+     * @see TraceAttributes::HTTP_REQUEST_METHOD
      */
     public const HTTP_REQUEST_METHOD_TRACE = 'TRACE';
 
     /**
-     * @see TraceAttributes::HTTP_REQUEST_METHOD Any HTTP method that the instrumentation has no prior knowledge of
+     * Any HTTP method that the instrumentation has no prior knowledge of.
+     *
+     * @see TraceAttributes::HTTP_REQUEST_METHOD
      */
     public const HTTP_REQUEST_METHOD_OTHER = '_OTHER';
 
     /**
-     * @see TraceAttributes::IOS_STATE The app has become `active`. Associated with UIKit notification `applicationDidBecomeActive`
+     * The app has become `active`. Associated with UIKit notification `applicationDidBecomeActive`.
+     *
+     * @see TraceAttributes::IOS_STATE
      */
     public const IOS_STATE_ACTIVE = 'active';
 
     /**
-     * @see TraceAttributes::IOS_STATE The app is now `inactive`. Associated with UIKit notification `applicationWillResignActive`
+     * The app is now `inactive`. Associated with UIKit notification `applicationWillResignActive`.
+     *
+     * @see TraceAttributes::IOS_STATE
      */
     public const IOS_STATE_INACTIVE = 'inactive';
 
     /**
-     * @see TraceAttributes::IOS_STATE The app is now in the background. This value is associated with UIKit notification `applicationDidEnterBackground`
+     * The app is now in the background. This value is associated with UIKit notification `applicationDidEnterBackground`.
+     *
+     * @see TraceAttributes::IOS_STATE
      */
     public const IOS_STATE_BACKGROUND = 'background';
 
     /**
-     * @see TraceAttributes::IOS_STATE The app is now in the foreground. This value is associated with UIKit notification `applicationWillEnterForeground`
+     * The app is now in the foreground. This value is associated with UIKit notification `applicationWillEnterForeground`.
+     *
+     * @see TraceAttributes::IOS_STATE
      */
     public const IOS_STATE_FOREGROUND = 'foreground';
 
     /**
-     * @see TraceAttributes::IOS_STATE The app is about to terminate. Associated with UIKit notification `applicationWillTerminate`
+     * The app is about to terminate. Associated with UIKit notification `applicationWillTerminate`.
+     *
+     * @see TraceAttributes::IOS_STATE
      */
     public const IOS_STATE_TERMINATE = 'terminate';
 
     /**
-     * @see TraceAttributes::JVM_MEMORY_TYPE Heap memory
+     * Heap memory.
+     *
+     * @see TraceAttributes::JVM_MEMORY_TYPE
      */
     public const JVM_MEMORY_TYPE_HEAP = 'heap';
 
     /**
-     * @see TraceAttributes::JVM_MEMORY_TYPE Non-heap memory
+     * Non-heap memory
+     *
+     * @see TraceAttributes::JVM_MEMORY_TYPE
      */
     public const JVM_MEMORY_TYPE_NON_HEAP = 'non_heap';
 
     /**
-     * @see TraceAttributes::LOG_IOSTREAM Logs from stdout stream
+     * A thread that has not yet started is in this state.
+     *
+     * @see TraceAttributes::JVM_THREAD_STATE
+     */
+    public const JVM_THREAD_STATE_NEW = 'new';
+
+    /**
+     * A thread executing in the Java virtual machine is in this state.
+     *
+     * @see TraceAttributes::JVM_THREAD_STATE
+     */
+    public const JVM_THREAD_STATE_RUNNABLE = 'runnable';
+
+    /**
+     * A thread that is blocked waiting for a monitor lock is in this state.
+     *
+     * @see TraceAttributes::JVM_THREAD_STATE
+     */
+    public const JVM_THREAD_STATE_BLOCKED = 'blocked';
+
+    /**
+     * A thread that is waiting indefinitely for another thread to perform a particular action is in this state.
+     *
+     * @see TraceAttributes::JVM_THREAD_STATE
+     */
+    public const JVM_THREAD_STATE_WAITING = 'waiting';
+
+    /**
+     * A thread that is waiting for another thread to perform an action for up to a specified waiting time is in this state.
+     *
+     * @see TraceAttributes::JVM_THREAD_STATE
+     */
+    public const JVM_THREAD_STATE_TIMED_WAITING = 'timed_waiting';
+
+    /**
+     * A thread that has exited is in this state.
+     *
+     * @see TraceAttributes::JVM_THREAD_STATE
+     */
+    public const JVM_THREAD_STATE_TERMINATED = 'terminated';
+
+    /**
+     * Active namespace phase as described by [K8s API](https://pkg.go.dev/k8s.io/api@v0.31.3/core/v1#NamespacePhase)
+     *
+     * @see TraceAttributes::K8S_NAMESPACE_PHASE
+     */
+    public const K8S_NAMESPACE_PHASE_ACTIVE = 'active';
+
+    /**
+     * Terminating namespace phase as described by [K8s API](https://pkg.go.dev/k8s.io/api@v0.31.3/core/v1#NamespacePhase)
+     *
+     * @see TraceAttributes::K8S_NAMESPACE_PHASE
+     */
+    public const K8S_NAMESPACE_PHASE_TERMINATING = 'terminating';
+
+    /**
+     * A [persistentVolumeClaim](https://v1-30.docs.kubernetes.io/docs/concepts/storage/volumes/#persistentvolumeclaim) volume
+     *
+     * @see TraceAttributes::K8S_VOLUME_TYPE
+     */
+    public const K8S_VOLUME_TYPE_PERSISTENT_VOLUME_CLAIM = 'persistentVolumeClaim';
+
+    /**
+     * A [configMap](https://v1-30.docs.kubernetes.io/docs/concepts/storage/volumes/#configmap) volume
+     *
+     * @see TraceAttributes::K8S_VOLUME_TYPE
+     */
+    public const K8S_VOLUME_TYPE_CONFIG_MAP = 'configMap';
+
+    /**
+     * A [downwardAPI](https://v1-30.docs.kubernetes.io/docs/concepts/storage/volumes/#downwardapi) volume
+     *
+     * @see TraceAttributes::K8S_VOLUME_TYPE
+     */
+    public const K8S_VOLUME_TYPE_DOWNWARD_API = 'downwardAPI';
+
+    /**
+     * An [emptyDir](https://v1-30.docs.kubernetes.io/docs/concepts/storage/volumes/#emptydir) volume
+     *
+     * @see TraceAttributes::K8S_VOLUME_TYPE
+     */
+    public const K8S_VOLUME_TYPE_EMPTY_DIR = 'emptyDir';
+
+    /**
+     * A [secret](https://v1-30.docs.kubernetes.io/docs/concepts/storage/volumes/#secret) volume
+     *
+     * @see TraceAttributes::K8S_VOLUME_TYPE
+     */
+    public const K8S_VOLUME_TYPE_SECRET = 'secret';
+
+    /**
+     * A [local](https://v1-30.docs.kubernetes.io/docs/concepts/storage/volumes/#local) volume
+     *
+     * @see TraceAttributes::K8S_VOLUME_TYPE
+     */
+    public const K8S_VOLUME_TYPE_LOCAL = 'local';
+
+    /**
+     * reclaimable
+     *
+     * @see TraceAttributes::LINUX_MEMORY_SLAB_STATE
+     */
+    public const LINUX_MEMORY_SLAB_STATE_RECLAIMABLE = 'reclaimable';
+
+    /**
+     * unreclaimable
+     *
+     * @see TraceAttributes::LINUX_MEMORY_SLAB_STATE
+     */
+    public const LINUX_MEMORY_SLAB_STATE_UNRECLAIMABLE = 'unreclaimable';
+
+    /**
+     * Logs from stdout stream
+     *
+     * @see TraceAttributes::LOG_IOSTREAM
      */
     public const LOG_IOSTREAM_STDOUT = 'stdout';
 
     /**
-     * @see TraceAttributes::LOG_IOSTREAM Events from stderr stream
+     * Events from stderr stream
+     *
+     * @see TraceAttributes::LOG_IOSTREAM
      */
     public const LOG_IOSTREAM_STDERR = 'stderr';
 
     /**
-     * @see TraceAttributes::MESSAGE_TYPE sent
+     * sent
+     *
+     * @see TraceAttributes::MESSAGE_TYPE
      */
     public const MESSAGE_TYPE_SENT = 'SENT';
 
     /**
-     * @see TraceAttributes::MESSAGE_TYPE received
+     * received
+     *
+     * @see TraceAttributes::MESSAGE_TYPE
      */
     public const MESSAGE_TYPE_RECEIVED = 'RECEIVED';
 
     /**
-     * @see TraceAttributes::MESSAGING_OPERATION One or more messages are provided for publishing to an intermediary. If a single message is published, the context of the &#34;Publish&#34; span can be used as the creation context and no &#34;Create&#34; span needs to be created
+     * A message is created. "Create" spans always refer to a single message and are used to provide a unique creation context for messages in batch sending scenarios.
+     *
+     * @see TraceAttributes::MESSAGING_OPERATION_TYPE
      */
-    public const MESSAGING_OPERATION_PUBLISH = 'publish';
+    public const MESSAGING_OPERATION_TYPE_CREATE = 'create';
 
     /**
-     * @see TraceAttributes::MESSAGING_OPERATION A message is created. &#34;Create&#34; spans always refer to a single message and are used to provide a unique creation context for messages in batch publishing scenarios
+     * One or more messages are provided for sending to an intermediary. If a single message is sent, the context of the "Send" span can be used as the creation context and no "Create" span needs to be created.
+     *
+     * @see TraceAttributes::MESSAGING_OPERATION_TYPE
      */
-    public const MESSAGING_OPERATION_CREATE = 'create';
+    public const MESSAGING_OPERATION_TYPE_SEND = 'send';
 
     /**
-     * @see TraceAttributes::MESSAGING_OPERATION One or more messages are requested by a consumer. This operation refers to pull-based scenarios, where consumers explicitly call methods of messaging SDKs to receive messages
+     * One or more messages are requested by a consumer. This operation refers to pull-based scenarios, where consumers explicitly call methods of messaging SDKs to receive messages.
+     *
+     * @see TraceAttributes::MESSAGING_OPERATION_TYPE
      */
-    public const MESSAGING_OPERATION_RECEIVE = 'receive';
+    public const MESSAGING_OPERATION_TYPE_RECEIVE = 'receive';
 
     /**
-     * @see TraceAttributes::MESSAGING_OPERATION One or more messages are delivered to or processed by a consumer
+     * One or more messages are processed by a consumer.
+     *
+     * @see TraceAttributes::MESSAGING_OPERATION_TYPE
      */
-    public const MESSAGING_OPERATION_DELIVER = 'process';
+    public const MESSAGING_OPERATION_TYPE_PROCESS = 'process';
 
     /**
-     * @see TraceAttributes::MESSAGING_OPERATION One or more messages are settled
+     * One or more messages are settled.
+     *
+     * @see TraceAttributes::MESSAGING_OPERATION_TYPE
      */
-    public const MESSAGING_OPERATION_SETTLE = 'settle';
+    public const MESSAGING_OPERATION_TYPE_SETTLE = 'settle';
 
     /**
-     * @see TraceAttributes::MESSAGING_ROCKETMQ_CONSUMPTION_MODEL Clustering consumption model
+     * Deprecated. Use `process` instead.
+     *
+     * @see TraceAttributes::MESSAGING_OPERATION_TYPE
+     * @deprecated Replaced by `process`.
+     */
+    public const MESSAGING_OPERATION_TYPE_DELIVER = 'deliver';
+
+    /**
+     * Deprecated. Use `send` instead.
+     *
+     * @see TraceAttributes::MESSAGING_OPERATION_TYPE
+     * @deprecated Replaced by `send`.
+     */
+    public const MESSAGING_OPERATION_TYPE_PUBLISH = 'publish';
+
+    /**
+     * Clustering consumption model
+     *
+     * @see TraceAttributes::MESSAGING_ROCKETMQ_CONSUMPTION_MODEL
      */
     public const MESSAGING_ROCKETMQ_CONSUMPTION_MODEL_CLUSTERING = 'clustering';
 
     /**
-     * @see TraceAttributes::MESSAGING_ROCKETMQ_CONSUMPTION_MODEL Broadcasting consumption model
+     * Broadcasting consumption model
+     *
+     * @see TraceAttributes::MESSAGING_ROCKETMQ_CONSUMPTION_MODEL
      */
     public const MESSAGING_ROCKETMQ_CONSUMPTION_MODEL_BROADCASTING = 'broadcasting';
 
     /**
-     * @see TraceAttributes::MESSAGING_ROCKETMQ_MESSAGE_TYPE Normal message
+     * Normal message
+     *
+     * @see TraceAttributes::MESSAGING_ROCKETMQ_MESSAGE_TYPE
      */
     public const MESSAGING_ROCKETMQ_MESSAGE_TYPE_NORMAL = 'normal';
 
     /**
-     * @see TraceAttributes::MESSAGING_ROCKETMQ_MESSAGE_TYPE FIFO message
+     * FIFO message
+     *
+     * @see TraceAttributes::MESSAGING_ROCKETMQ_MESSAGE_TYPE
      */
     public const MESSAGING_ROCKETMQ_MESSAGE_TYPE_FIFO = 'fifo';
 
     /**
-     * @see TraceAttributes::MESSAGING_ROCKETMQ_MESSAGE_TYPE Delay message
+     * Delay message
+     *
+     * @see TraceAttributes::MESSAGING_ROCKETMQ_MESSAGE_TYPE
      */
     public const MESSAGING_ROCKETMQ_MESSAGE_TYPE_DELAY = 'delay';
 
     /**
-     * @see TraceAttributes::MESSAGING_ROCKETMQ_MESSAGE_TYPE Transaction message
+     * Transaction message
+     *
+     * @see TraceAttributes::MESSAGING_ROCKETMQ_MESSAGE_TYPE
      */
     public const MESSAGING_ROCKETMQ_MESSAGE_TYPE_TRANSACTION = 'transaction';
 
     /**
-     * @see TraceAttributes::MESSAGING_SERVICEBUS_DISPOSITION_STATUS Message is completed
+     * Message is completed
+     *
+     * @see TraceAttributes::MESSAGING_SERVICEBUS_DISPOSITION_STATUS
      */
     public const MESSAGING_SERVICEBUS_DISPOSITION_STATUS_COMPLETE = 'complete';
 
     /**
-     * @see TraceAttributes::MESSAGING_SERVICEBUS_DISPOSITION_STATUS Message is abandoned
+     * Message is abandoned
+     *
+     * @see TraceAttributes::MESSAGING_SERVICEBUS_DISPOSITION_STATUS
      */
     public const MESSAGING_SERVICEBUS_DISPOSITION_STATUS_ABANDON = 'abandon';
 
     /**
-     * @see TraceAttributes::MESSAGING_SERVICEBUS_DISPOSITION_STATUS Message is sent to dead letter queue
+     * Message is sent to dead letter queue
+     *
+     * @see TraceAttributes::MESSAGING_SERVICEBUS_DISPOSITION_STATUS
      */
     public const MESSAGING_SERVICEBUS_DISPOSITION_STATUS_DEAD_LETTER = 'dead_letter';
 
     /**
-     * @see TraceAttributes::MESSAGING_SERVICEBUS_DISPOSITION_STATUS Message is deferred
+     * Message is deferred
+     *
+     * @see TraceAttributes::MESSAGING_SERVICEBUS_DISPOSITION_STATUS
      */
     public const MESSAGING_SERVICEBUS_DISPOSITION_STATUS_DEFER = 'defer';
 
     /**
-     * @see TraceAttributes::MESSAGING_SYSTEM Apache ActiveMQ
+     * Apache ActiveMQ
+     *
+     * @see TraceAttributes::MESSAGING_SYSTEM
      */
     public const MESSAGING_SYSTEM_ACTIVEMQ = 'activemq';
 
     /**
-     * @see TraceAttributes::MESSAGING_SYSTEM Amazon Simple Queue Service (SQS)
+     * Amazon Simple Queue Service (SQS)
+     *
+     * @see TraceAttributes::MESSAGING_SYSTEM
      */
     public const MESSAGING_SYSTEM_AWS_SQS = 'aws_sqs';
 
     /**
-     * @see TraceAttributes::MESSAGING_SYSTEM Azure Event Grid
+     * Azure Event Grid
+     *
+     * @see TraceAttributes::MESSAGING_SYSTEM
      */
     public const MESSAGING_SYSTEM_EVENTGRID = 'eventgrid';
 
     /**
-     * @see TraceAttributes::MESSAGING_SYSTEM Azure Event Hubs
+     * Azure Event Hubs
+     *
+     * @see TraceAttributes::MESSAGING_SYSTEM
      */
     public const MESSAGING_SYSTEM_EVENTHUBS = 'eventhubs';
 
     /**
-     * @see TraceAttributes::MESSAGING_SYSTEM Azure Service Bus
+     * Azure Service Bus
+     *
+     * @see TraceAttributes::MESSAGING_SYSTEM
      */
     public const MESSAGING_SYSTEM_SERVICEBUS = 'servicebus';
 
     /**
-     * @see TraceAttributes::MESSAGING_SYSTEM Google Cloud Pub/Sub
+     * Google Cloud Pub/Sub
+     *
+     * @see TraceAttributes::MESSAGING_SYSTEM
      */
     public const MESSAGING_SYSTEM_GCP_PUBSUB = 'gcp_pubsub';
 
     /**
-     * @see TraceAttributes::MESSAGING_SYSTEM Java Message Service
+     * Java Message Service
+     *
+     * @see TraceAttributes::MESSAGING_SYSTEM
      */
     public const MESSAGING_SYSTEM_JMS = 'jms';
 
     /**
-     * @see TraceAttributes::MESSAGING_SYSTEM Apache Kafka
+     * Apache Kafka
+     *
+     * @see TraceAttributes::MESSAGING_SYSTEM
      */
     public const MESSAGING_SYSTEM_KAFKA = 'kafka';
 
     /**
-     * @see TraceAttributes::MESSAGING_SYSTEM RabbitMQ
+     * RabbitMQ
+     *
+     * @see TraceAttributes::MESSAGING_SYSTEM
      */
     public const MESSAGING_SYSTEM_RABBITMQ = 'rabbitmq';
 
     /**
-     * @see TraceAttributes::MESSAGING_SYSTEM Apache RocketMQ
+     * Apache RocketMQ
+     *
+     * @see TraceAttributes::MESSAGING_SYSTEM
      */
     public const MESSAGING_SYSTEM_ROCKETMQ = 'rocketmq';
 
     /**
-     * @see TraceAttributes::NET_SOCK_FAMILY IPv4 address
+     * Apache Pulsar
+     *
+     * @see TraceAttributes::MESSAGING_SYSTEM
+     */
+    public const MESSAGING_SYSTEM_PULSAR = 'pulsar';
+
+    /**
+     * IPv4 address
+     *
+     * @see TraceAttributes::NET_SOCK_FAMILY
      */
     public const NET_SOCK_FAMILY_INET = 'inet';
 
     /**
-     * @see TraceAttributes::NET_SOCK_FAMILY IPv6 address
+     * IPv6 address
+     *
+     * @see TraceAttributes::NET_SOCK_FAMILY
      */
     public const NET_SOCK_FAMILY_INET6 = 'inet6';
 
     /**
-     * @see TraceAttributes::NET_SOCK_FAMILY Unix domain socket path
+     * Unix domain socket path
+     *
+     * @see TraceAttributes::NET_SOCK_FAMILY
      */
     public const NET_SOCK_FAMILY_UNIX = 'unix';
 
     /**
-     * @see TraceAttributes::NET_TRANSPORT ip_tcp
+     * ip_tcp
+     *
+     * @see TraceAttributes::NET_TRANSPORT
      */
     public const NET_TRANSPORT_IP_TCP = 'ip_tcp';
 
     /**
-     * @see TraceAttributes::NET_TRANSPORT ip_udp
+     * ip_udp
+     *
+     * @see TraceAttributes::NET_TRANSPORT
      */
     public const NET_TRANSPORT_IP_UDP = 'ip_udp';
 
     /**
-     * @see TraceAttributes::NET_TRANSPORT Named or anonymous pipe
+     * Named or anonymous pipe.
+     *
+     * @see TraceAttributes::NET_TRANSPORT
      */
     public const NET_TRANSPORT_PIPE = 'pipe';
 
     /**
-     * @see TraceAttributes::NET_TRANSPORT In-process communication
+     * In-process communication.
      *
-     * Signals that there is only in-process communication not using a &quot;real&quot; network protocol in cases where network attributes would normally be expected. Usually all other network attributes can be left out in that case.
+     * @see TraceAttributes::NET_TRANSPORT
      */
     public const NET_TRANSPORT_INPROC = 'inproc';
 
     /**
-     * @see TraceAttributes::NET_TRANSPORT Something else (non IP-based)
+     * Something else (non IP-based).
+     *
+     * @see TraceAttributes::NET_TRANSPORT
      */
     public const NET_TRANSPORT_OTHER = 'other';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE GPRS
+     * closed
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_STATE
+     */
+    public const NETWORK_CONNECTION_STATE_CLOSED = 'closed';
+
+    /**
+     * close_wait
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_STATE
+     */
+    public const NETWORK_CONNECTION_STATE_CLOSE_WAIT = 'close_wait';
+
+    /**
+     * closing
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_STATE
+     */
+    public const NETWORK_CONNECTION_STATE_CLOSING = 'closing';
+
+    /**
+     * established
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_STATE
+     */
+    public const NETWORK_CONNECTION_STATE_ESTABLISHED = 'established';
+
+    /**
+     * fin_wait_1
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_STATE
+     */
+    public const NETWORK_CONNECTION_STATE_FIN_WAIT_1 = 'fin_wait_1';
+
+    /**
+     * fin_wait_2
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_STATE
+     */
+    public const NETWORK_CONNECTION_STATE_FIN_WAIT_2 = 'fin_wait_2';
+
+    /**
+     * last_ack
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_STATE
+     */
+    public const NETWORK_CONNECTION_STATE_LAST_ACK = 'last_ack';
+
+    /**
+     * listen
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_STATE
+     */
+    public const NETWORK_CONNECTION_STATE_LISTEN = 'listen';
+
+    /**
+     * syn_received
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_STATE
+     */
+    public const NETWORK_CONNECTION_STATE_SYN_RECEIVED = 'syn_received';
+
+    /**
+     * syn_sent
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_STATE
+     */
+    public const NETWORK_CONNECTION_STATE_SYN_SENT = 'syn_sent';
+
+    /**
+     * time_wait
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_STATE
+     */
+    public const NETWORK_CONNECTION_STATE_TIME_WAIT = 'time_wait';
+
+    /**
+     * GPRS
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_GPRS = 'gprs';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE EDGE
+     * EDGE
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_EDGE = 'edge';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE UMTS
+     * UMTS
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_UMTS = 'umts';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE CDMA
+     * CDMA
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_CDMA = 'cdma';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE EVDO Rel. 0
+     * EVDO Rel. 0
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_EVDO_0 = 'evdo_0';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE EVDO Rev. A
+     * EVDO Rev. A
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_EVDO_A = 'evdo_a';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE CDMA2000 1XRTT
+     * CDMA2000 1XRTT
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_CDMA2000_1XRTT = 'cdma2000_1xrtt';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE HSDPA
+     * HSDPA
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_HSDPA = 'hsdpa';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE HSUPA
+     * HSUPA
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_HSUPA = 'hsupa';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE HSPA
+     * HSPA
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_HSPA = 'hspa';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE IDEN
+     * IDEN
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_IDEN = 'iden';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE EVDO Rev. B
+     * EVDO Rev. B
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_EVDO_B = 'evdo_b';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE LTE
+     * LTE
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_LTE = 'lte';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE EHRPD
+     * EHRPD
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_EHRPD = 'ehrpd';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE HSPAP
+     * HSPAP
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_HSPAP = 'hspap';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE GSM
+     * GSM
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_GSM = 'gsm';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE TD-SCDMA
+     * TD-SCDMA
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_TD_SCDMA = 'td_scdma';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE IWLAN
+     * IWLAN
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_IWLAN = 'iwlan';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE 5G NR (New Radio)
+     * 5G NR (New Radio)
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_NR = 'nr';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE 5G NRNSA (New Radio Non-Standalone)
+     * 5G NRNSA (New Radio Non-Standalone)
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_NRNSA = 'nrnsa';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE LTE CA
+     * LTE CA
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_SUBTYPE
      */
     public const NETWORK_CONNECTION_SUBTYPE_LTE_CA = 'lte_ca';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_TYPE wifi
+     * wifi
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_TYPE
      */
     public const NETWORK_CONNECTION_TYPE_WIFI = 'wifi';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_TYPE wired
+     * wired
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_TYPE
      */
     public const NETWORK_CONNECTION_TYPE_WIRED = 'wired';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_TYPE cell
+     * cell
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_TYPE
      */
     public const NETWORK_CONNECTION_TYPE_CELL = 'cell';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_TYPE unavailable
+     * unavailable
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_TYPE
      */
     public const NETWORK_CONNECTION_TYPE_UNAVAILABLE = 'unavailable';
 
     /**
-     * @see TraceAttributes::NETWORK_CONNECTION_TYPE unknown
+     * unknown
+     *
+     * @see TraceAttributes::NETWORK_CONNECTION_TYPE
      */
     public const NETWORK_CONNECTION_TYPE_UNKNOWN = 'unknown';
 
     /**
-     * @see TraceAttributes::NETWORK_IO_DIRECTION transmit
+     * transmit
+     *
+     * @see TraceAttributes::NETWORK_IO_DIRECTION
      */
     public const NETWORK_IO_DIRECTION_TRANSMIT = 'transmit';
 
     /**
-     * @see TraceAttributes::NETWORK_IO_DIRECTION receive
+     * receive
+     *
+     * @see TraceAttributes::NETWORK_IO_DIRECTION
      */
     public const NETWORK_IO_DIRECTION_RECEIVE = 'receive';
 
     /**
-     * @see TraceAttributes::NETWORK_TRANSPORT TCP
+     * TCP
+     *
+     * @see TraceAttributes::NETWORK_TRANSPORT
      */
     public const NETWORK_TRANSPORT_TCP = 'tcp';
 
     /**
-     * @see TraceAttributes::NETWORK_TRANSPORT UDP
+     * UDP
+     *
+     * @see TraceAttributes::NETWORK_TRANSPORT
      */
     public const NETWORK_TRANSPORT_UDP = 'udp';
 
     /**
-     * @see TraceAttributes::NETWORK_TRANSPORT Named or anonymous pipe
+     * Named or anonymous pipe.
+     *
+     * @see TraceAttributes::NETWORK_TRANSPORT
      */
     public const NETWORK_TRANSPORT_PIPE = 'pipe';
 
     /**
-     * @see TraceAttributes::NETWORK_TRANSPORT Unix domain socket
+     * Unix domain socket
+     *
+     * @see TraceAttributes::NETWORK_TRANSPORT
      */
     public const NETWORK_TRANSPORT_UNIX = 'unix';
 
     /**
-     * @see TraceAttributes::NETWORK_TYPE IPv4
+     * QUIC
+     *
+     * @see TraceAttributes::NETWORK_TRANSPORT
+     */
+    public const NETWORK_TRANSPORT_QUIC = 'quic';
+
+    /**
+     * IPv4
+     *
+     * @see TraceAttributes::NETWORK_TYPE
      */
     public const NETWORK_TYPE_IPV4 = 'ipv4';
 
     /**
-     * @see TraceAttributes::NETWORK_TYPE IPv6
+     * IPv6
+     *
+     * @see TraceAttributes::NETWORK_TYPE
      */
     public const NETWORK_TYPE_IPV6 = 'ipv6';
 
     /**
-     * @see TraceAttributes::OPENTRACING_REF_TYPE The parent Span depends on the child Span in some capacity
+     * The parent Span depends on the child Span in some capacity
+     *
+     * @see TraceAttributes::OPENTRACING_REF_TYPE
      */
     public const OPENTRACING_REF_TYPE_CHILD_OF = 'child_of';
 
     /**
-     * @see TraceAttributes::OPENTRACING_REF_TYPE The parent Span doesn&#39;t depend in any way on the result of the child Span
+     * The parent Span doesn't depend in any way on the result of the child Span
+     *
+     * @see TraceAttributes::OPENTRACING_REF_TYPE
      */
     public const OPENTRACING_REF_TYPE_FOLLOWS_FROM = 'follows_from';
 
     /**
-     * @see TraceAttributes::OS_TYPE Microsoft Windows
+     * Microsoft Windows
+     *
+     * @see TraceAttributes::OS_TYPE
      */
     public const OS_TYPE_WINDOWS = 'windows';
 
     /**
-     * @see TraceAttributes::OS_TYPE Linux
+     * Linux
+     *
+     * @see TraceAttributes::OS_TYPE
      */
     public const OS_TYPE_LINUX = 'linux';
 
     /**
-     * @see TraceAttributes::OS_TYPE Apple Darwin
+     * Apple Darwin
+     *
+     * @see TraceAttributes::OS_TYPE
      */
     public const OS_TYPE_DARWIN = 'darwin';
 
     /**
-     * @see TraceAttributes::OS_TYPE FreeBSD
+     * FreeBSD
+     *
+     * @see TraceAttributes::OS_TYPE
      */
     public const OS_TYPE_FREEBSD = 'freebsd';
 
     /**
-     * @see TraceAttributes::OS_TYPE NetBSD
+     * NetBSD
+     *
+     * @see TraceAttributes::OS_TYPE
      */
     public const OS_TYPE_NETBSD = 'netbsd';
 
     /**
-     * @see TraceAttributes::OS_TYPE OpenBSD
+     * OpenBSD
+     *
+     * @see TraceAttributes::OS_TYPE
      */
     public const OS_TYPE_OPENBSD = 'openbsd';
 
     /**
-     * @see TraceAttributes::OS_TYPE DragonFly BSD
+     * DragonFly BSD
+     *
+     * @see TraceAttributes::OS_TYPE
      */
     public const OS_TYPE_DRAGONFLYBSD = 'dragonflybsd';
 
     /**
-     * @see TraceAttributes::OS_TYPE HP-UX (Hewlett Packard Unix)
+     * HP-UX (Hewlett Packard Unix)
+     *
+     * @see TraceAttributes::OS_TYPE
      */
     public const OS_TYPE_HPUX = 'hpux';
 
     /**
-     * @see TraceAttributes::OS_TYPE AIX (Advanced Interactive eXecutive)
+     * AIX (Advanced Interactive eXecutive)
+     *
+     * @see TraceAttributes::OS_TYPE
      */
     public const OS_TYPE_AIX = 'aix';
 
     /**
-     * @see TraceAttributes::OS_TYPE SunOS, Oracle Solaris
+     * SunOS, Oracle Solaris
+     *
+     * @see TraceAttributes::OS_TYPE
      */
     public const OS_TYPE_SOLARIS = 'solaris';
 
     /**
-     * @see TraceAttributes::OS_TYPE IBM z/OS
+     * IBM z/OS
+     *
+     * @see TraceAttributes::OS_TYPE
      */
     public const OS_TYPE_Z_OS = 'z_os';
 
     /**
-     * @see TraceAttributes::OTEL_STATUS_CODE The operation has been validated by an Application developer or Operator to have completed successfully
+     * The operation has been validated by an Application developer or Operator to have completed successfully.
+     *
+     * @see TraceAttributes::OTEL_STATUS_CODE
      */
     public const OTEL_STATUS_CODE_OK = 'OK';
 
     /**
-     * @see TraceAttributes::OTEL_STATUS_CODE The operation contains an error
+     * The operation contains an error.
+     *
+     * @see TraceAttributes::OTEL_STATUS_CODE
      */
     public const OTEL_STATUS_CODE_ERROR = 'ERROR';
 
     /**
-     * @see TraceAttributes::PROCESS_CPU_STATE system
-     */
-    public const PROCESS_CPU_STATE_SYSTEM = 'system';
-
-    /**
-     * @see TraceAttributes::PROCESS_CPU_STATE user
-     */
-    public const PROCESS_CPU_STATE_USER = 'user';
-
-    /**
-     * @see TraceAttributes::PROCESS_CPU_STATE wait
-     */
-    public const PROCESS_CPU_STATE_WAIT = 'wait';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE cancelled
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_CANCELLED = 'cancelled';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE unknown
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_UNKNOWN = 'unknown';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE invalid_argument
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_INVALID_ARGUMENT = 'invalid_argument';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE deadline_exceeded
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_DEADLINE_EXCEEDED = 'deadline_exceeded';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE not_found
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_NOT_FOUND = 'not_found';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE already_exists
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_ALREADY_EXISTS = 'already_exists';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE permission_denied
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_PERMISSION_DENIED = 'permission_denied';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE resource_exhausted
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_RESOURCE_EXHAUSTED = 'resource_exhausted';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE failed_precondition
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_FAILED_PRECONDITION = 'failed_precondition';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE aborted
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_ABORTED = 'aborted';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE out_of_range
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_OUT_OF_RANGE = 'out_of_range';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE unimplemented
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_UNIMPLEMENTED = 'unimplemented';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE internal
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_INTERNAL = 'internal';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE unavailable
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_UNAVAILABLE = 'unavailable';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE data_loss
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_DATA_LOSS = 'data_loss';
-
-    /**
-     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE unauthenticated
-     */
-    public const RPC_CONNECT_RPC_ERROR_CODE_UNAUTHENTICATED = 'unauthenticated';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE OK
-     */
-    public const RPC_GRPC_STATUS_CODE_OK = '0';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE CANCELLED
-     */
-    public const RPC_GRPC_STATUS_CODE_CANCELLED = '1';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE UNKNOWN
-     */
-    public const RPC_GRPC_STATUS_CODE_UNKNOWN = '2';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE INVALID_ARGUMENT
-     */
-    public const RPC_GRPC_STATUS_CODE_INVALID_ARGUMENT = '3';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE DEADLINE_EXCEEDED
-     */
-    public const RPC_GRPC_STATUS_CODE_DEADLINE_EXCEEDED = '4';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE NOT_FOUND
-     */
-    public const RPC_GRPC_STATUS_CODE_NOT_FOUND = '5';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE ALREADY_EXISTS
-     */
-    public const RPC_GRPC_STATUS_CODE_ALREADY_EXISTS = '6';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE PERMISSION_DENIED
-     */
-    public const RPC_GRPC_STATUS_CODE_PERMISSION_DENIED = '7';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE RESOURCE_EXHAUSTED
-     */
-    public const RPC_GRPC_STATUS_CODE_RESOURCE_EXHAUSTED = '8';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE FAILED_PRECONDITION
-     */
-    public const RPC_GRPC_STATUS_CODE_FAILED_PRECONDITION = '9';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE ABORTED
-     */
-    public const RPC_GRPC_STATUS_CODE_ABORTED = '10';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE OUT_OF_RANGE
-     */
-    public const RPC_GRPC_STATUS_CODE_OUT_OF_RANGE = '11';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE UNIMPLEMENTED
-     */
-    public const RPC_GRPC_STATUS_CODE_UNIMPLEMENTED = '12';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE INTERNAL
-     */
-    public const RPC_GRPC_STATUS_CODE_INTERNAL = '13';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE UNAVAILABLE
-     */
-    public const RPC_GRPC_STATUS_CODE_UNAVAILABLE = '14';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE DATA_LOSS
-     */
-    public const RPC_GRPC_STATUS_CODE_DATA_LOSS = '15';
-
-    /**
-     * @see TraceAttributes::RPC_GRPC_STATUS_CODE UNAUTHENTICATED
-     */
-    public const RPC_GRPC_STATUS_CODE_UNAUTHENTICATED = '16';
-
-    /**
-     * @see TraceAttributes::RPC_SYSTEM gRPC
-     */
-    public const RPC_SYSTEM_GRPC = 'grpc';
-
-    /**
-     * @see TraceAttributes::RPC_SYSTEM Java RMI
-     */
-    public const RPC_SYSTEM_JAVA_RMI = 'java_rmi';
-
-    /**
-     * @see TraceAttributes::RPC_SYSTEM .NET WCF
-     */
-    public const RPC_SYSTEM_DOTNET_WCF = 'dotnet_wcf';
-
-    /**
-     * @see TraceAttributes::RPC_SYSTEM Apache Dubbo
-     */
-    public const RPC_SYSTEM_APACHE_DUBBO = 'apache_dubbo';
-
-    /**
-     * @see TraceAttributes::RPC_SYSTEM Connect RPC
-     */
-    public const RPC_SYSTEM_CONNECT_RPC = 'connect_rpc';
-
-    /**
-     * @see TraceAttributes::SIGNALR_CONNECTION_STATUS The connection was closed normally
-     */
-    public const SIGNALR_CONNECTION_STATUS_NORMAL_CLOSURE = 'normal_closure';
-
-    /**
-     * @see TraceAttributes::SIGNALR_CONNECTION_STATUS The connection was closed due to a timeout
-     */
-    public const SIGNALR_CONNECTION_STATUS_TIMEOUT = 'timeout';
-
-    /**
-     * @see TraceAttributes::SIGNALR_CONNECTION_STATUS The connection was closed because the app is shutting down
-     */
-    public const SIGNALR_CONNECTION_STATUS_APP_SHUTDOWN = 'app_shutdown';
-
-    /**
-     * @see TraceAttributes::SIGNALR_TRANSPORT ServerSentEvents protocol
-     */
-    public const SIGNALR_TRANSPORT_SERVER_SENT_EVENTS = 'server_sent_events';
-
-    /**
-     * @see TraceAttributes::SIGNALR_TRANSPORT LongPolling protocol
-     */
-    public const SIGNALR_TRANSPORT_LONG_POLLING = 'long_polling';
-
-    /**
-     * @see TraceAttributes::SIGNALR_TRANSPORT WebSockets protocol
-     */
-    public const SIGNALR_TRANSPORT_WEB_SOCKETS = 'web_sockets';
-
-    /**
-     * @see TraceAttributes::STATE idle
+     * idle
+     *
+     * @see TraceAttributes::STATE
      */
     public const STATE_IDLE = 'idle';
 
     /**
-     * @see TraceAttributes::STATE used
+     * used
+     *
+     * @see TraceAttributes::STATE
      */
     public const STATE_USED = 'used';
 
     /**
-     * @see TraceAttributes::SYSTEM_CPU_STATE user
+     * voluntary
+     *
+     * @see TraceAttributes::PROCESS_CONTEXT_SWITCH_TYPE
+     */
+    public const PROCESS_CONTEXT_SWITCH_TYPE_VOLUNTARY = 'voluntary';
+
+    /**
+     * involuntary
+     *
+     * @see TraceAttributes::PROCESS_CONTEXT_SWITCH_TYPE
+     */
+    public const PROCESS_CONTEXT_SWITCH_TYPE_INVOLUNTARY = 'involuntary';
+
+    /**
+     * system
+     *
+     * @see TraceAttributes::PROCESS_CPU_STATE
+     */
+    public const PROCESS_CPU_STATE_SYSTEM = 'system';
+
+    /**
+     * user
+     *
+     * @see TraceAttributes::PROCESS_CPU_STATE
+     */
+    public const PROCESS_CPU_STATE_USER = 'user';
+
+    /**
+     * wait
+     *
+     * @see TraceAttributes::PROCESS_CPU_STATE
+     */
+    public const PROCESS_CPU_STATE_WAIT = 'wait';
+
+    /**
+     * major
+     *
+     * @see TraceAttributes::PROCESS_PAGING_FAULT_TYPE
+     */
+    public const PROCESS_PAGING_FAULT_TYPE_MAJOR = 'major';
+
+    /**
+     * minor
+     *
+     * @see TraceAttributes::PROCESS_PAGING_FAULT_TYPE
+     */
+    public const PROCESS_PAGING_FAULT_TYPE_MINOR = 'minor';
+
+    /**
+     * cancelled
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_CANCELLED = 'cancelled';
+
+    /**
+     * unknown
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_UNKNOWN = 'unknown';
+
+    /**
+     * invalid_argument
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_INVALID_ARGUMENT = 'invalid_argument';
+
+    /**
+     * deadline_exceeded
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_DEADLINE_EXCEEDED = 'deadline_exceeded';
+
+    /**
+     * not_found
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_NOT_FOUND = 'not_found';
+
+    /**
+     * already_exists
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_ALREADY_EXISTS = 'already_exists';
+
+    /**
+     * permission_denied
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_PERMISSION_DENIED = 'permission_denied';
+
+    /**
+     * resource_exhausted
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_RESOURCE_EXHAUSTED = 'resource_exhausted';
+
+    /**
+     * failed_precondition
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_FAILED_PRECONDITION = 'failed_precondition';
+
+    /**
+     * aborted
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_ABORTED = 'aborted';
+
+    /**
+     * out_of_range
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_OUT_OF_RANGE = 'out_of_range';
+
+    /**
+     * unimplemented
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_UNIMPLEMENTED = 'unimplemented';
+
+    /**
+     * internal
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_INTERNAL = 'internal';
+
+    /**
+     * unavailable
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_UNAVAILABLE = 'unavailable';
+
+    /**
+     * data_loss
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_DATA_LOSS = 'data_loss';
+
+    /**
+     * unauthenticated
+     *
+     * @see TraceAttributes::RPC_CONNECT_RPC_ERROR_CODE
+     */
+    public const RPC_CONNECT_RPC_ERROR_CODE_UNAUTHENTICATED = 'unauthenticated';
+
+    /**
+     * OK
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_OK = '0';
+
+    /**
+     * CANCELLED
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_CANCELLED = '1';
+
+    /**
+     * UNKNOWN
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_UNKNOWN = '2';
+
+    /**
+     * INVALID_ARGUMENT
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_INVALID_ARGUMENT = '3';
+
+    /**
+     * DEADLINE_EXCEEDED
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_DEADLINE_EXCEEDED = '4';
+
+    /**
+     * NOT_FOUND
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_NOT_FOUND = '5';
+
+    /**
+     * ALREADY_EXISTS
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_ALREADY_EXISTS = '6';
+
+    /**
+     * PERMISSION_DENIED
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_PERMISSION_DENIED = '7';
+
+    /**
+     * RESOURCE_EXHAUSTED
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_RESOURCE_EXHAUSTED = '8';
+
+    /**
+     * FAILED_PRECONDITION
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_FAILED_PRECONDITION = '9';
+
+    /**
+     * ABORTED
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_ABORTED = '10';
+
+    /**
+     * OUT_OF_RANGE
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_OUT_OF_RANGE = '11';
+
+    /**
+     * UNIMPLEMENTED
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_UNIMPLEMENTED = '12';
+
+    /**
+     * INTERNAL
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_INTERNAL = '13';
+
+    /**
+     * UNAVAILABLE
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_UNAVAILABLE = '14';
+
+    /**
+     * DATA_LOSS
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_DATA_LOSS = '15';
+
+    /**
+     * UNAUTHENTICATED
+     *
+     * @see TraceAttributes::RPC_GRPC_STATUS_CODE
+     */
+    public const RPC_GRPC_STATUS_CODE_UNAUTHENTICATED = '16';
+
+    /**
+     * sent
+     *
+     * @see TraceAttributes::RPC_MESSAGE_TYPE
+     */
+    public const RPC_MESSAGE_TYPE_SENT = 'SENT';
+
+    /**
+     * received
+     *
+     * @see TraceAttributes::RPC_MESSAGE_TYPE
+     */
+    public const RPC_MESSAGE_TYPE_RECEIVED = 'RECEIVED';
+
+    /**
+     * gRPC
+     *
+     * @see TraceAttributes::RPC_SYSTEM
+     */
+    public const RPC_SYSTEM_GRPC = 'grpc';
+
+    /**
+     * Java RMI
+     *
+     * @see TraceAttributes::RPC_SYSTEM
+     */
+    public const RPC_SYSTEM_JAVA_RMI = 'java_rmi';
+
+    /**
+     * .NET WCF
+     *
+     * @see TraceAttributes::RPC_SYSTEM
+     */
+    public const RPC_SYSTEM_DOTNET_WCF = 'dotnet_wcf';
+
+    /**
+     * Apache Dubbo
+     *
+     * @see TraceAttributes::RPC_SYSTEM
+     */
+    public const RPC_SYSTEM_APACHE_DUBBO = 'apache_dubbo';
+
+    /**
+     * Connect RPC
+     *
+     * @see TraceAttributes::RPC_SYSTEM
+     */
+    public const RPC_SYSTEM_CONNECT_RPC = 'connect_rpc';
+
+    /**
+     * The connection was closed normally.
+     *
+     * @see TraceAttributes::SIGNALR_CONNECTION_STATUS
+     */
+    public const SIGNALR_CONNECTION_STATUS_NORMAL_CLOSURE = 'normal_closure';
+
+    /**
+     * The connection was closed due to a timeout.
+     *
+     * @see TraceAttributes::SIGNALR_CONNECTION_STATUS
+     */
+    public const SIGNALR_CONNECTION_STATUS_TIMEOUT = 'timeout';
+
+    /**
+     * The connection was closed because the app is shutting down.
+     *
+     * @see TraceAttributes::SIGNALR_CONNECTION_STATUS
+     */
+    public const SIGNALR_CONNECTION_STATUS_APP_SHUTDOWN = 'app_shutdown';
+
+    /**
+     * ServerSentEvents protocol
+     *
+     * @see TraceAttributes::SIGNALR_TRANSPORT
+     */
+    public const SIGNALR_TRANSPORT_SERVER_SENT_EVENTS = 'server_sent_events';
+
+    /**
+     * LongPolling protocol
+     *
+     * @see TraceAttributes::SIGNALR_TRANSPORT
+     */
+    public const SIGNALR_TRANSPORT_LONG_POLLING = 'long_polling';
+
+    /**
+     * WebSockets protocol
+     *
+     * @see TraceAttributes::SIGNALR_TRANSPORT
+     */
+    public const SIGNALR_TRANSPORT_WEB_SOCKETS = 'web_sockets';
+
+    /**
+     * user
+     *
+     * @see TraceAttributes::SYSTEM_CPU_STATE
      */
     public const SYSTEM_CPU_STATE_USER = 'user';
 
     /**
-     * @see TraceAttributes::SYSTEM_CPU_STATE system
+     * system
+     *
+     * @see TraceAttributes::SYSTEM_CPU_STATE
      */
     public const SYSTEM_CPU_STATE_SYSTEM = 'system';
 
     /**
-     * @see TraceAttributes::SYSTEM_CPU_STATE nice
+     * nice
+     *
+     * @see TraceAttributes::SYSTEM_CPU_STATE
      */
     public const SYSTEM_CPU_STATE_NICE = 'nice';
 
     /**
-     * @see TraceAttributes::SYSTEM_CPU_STATE idle
+     * idle
+     *
+     * @see TraceAttributes::SYSTEM_CPU_STATE
      */
     public const SYSTEM_CPU_STATE_IDLE = 'idle';
 
     /**
-     * @see TraceAttributes::SYSTEM_CPU_STATE iowait
+     * iowait
+     *
+     * @see TraceAttributes::SYSTEM_CPU_STATE
      */
     public const SYSTEM_CPU_STATE_IOWAIT = 'iowait';
 
     /**
-     * @see TraceAttributes::SYSTEM_CPU_STATE interrupt
+     * interrupt
+     *
+     * @see TraceAttributes::SYSTEM_CPU_STATE
      */
     public const SYSTEM_CPU_STATE_INTERRUPT = 'interrupt';
 
     /**
-     * @see TraceAttributes::SYSTEM_CPU_STATE steal
+     * steal
+     *
+     * @see TraceAttributes::SYSTEM_CPU_STATE
      */
     public const SYSTEM_CPU_STATE_STEAL = 'steal';
 
     /**
-     * @see TraceAttributes::SYSTEM_FILESYSTEM_STATE used
+     * used
+     *
+     * @see TraceAttributes::SYSTEM_FILESYSTEM_STATE
      */
     public const SYSTEM_FILESYSTEM_STATE_USED = 'used';
 
     /**
-     * @see TraceAttributes::SYSTEM_FILESYSTEM_STATE free
+     * free
+     *
+     * @see TraceAttributes::SYSTEM_FILESYSTEM_STATE
      */
     public const SYSTEM_FILESYSTEM_STATE_FREE = 'free';
 
     /**
-     * @see TraceAttributes::SYSTEM_FILESYSTEM_STATE reserved
+     * reserved
+     *
+     * @see TraceAttributes::SYSTEM_FILESYSTEM_STATE
      */
     public const SYSTEM_FILESYSTEM_STATE_RESERVED = 'reserved';
 
     /**
-     * @see TraceAttributes::SYSTEM_FILESYSTEM_TYPE fat32
+     * fat32
+     *
+     * @see TraceAttributes::SYSTEM_FILESYSTEM_TYPE
      */
     public const SYSTEM_FILESYSTEM_TYPE_FAT32 = 'fat32';
 
     /**
-     * @see TraceAttributes::SYSTEM_FILESYSTEM_TYPE exfat
+     * exfat
+     *
+     * @see TraceAttributes::SYSTEM_FILESYSTEM_TYPE
      */
     public const SYSTEM_FILESYSTEM_TYPE_EXFAT = 'exfat';
 
     /**
-     * @see TraceAttributes::SYSTEM_FILESYSTEM_TYPE ntfs
+     * ntfs
+     *
+     * @see TraceAttributes::SYSTEM_FILESYSTEM_TYPE
      */
     public const SYSTEM_FILESYSTEM_TYPE_NTFS = 'ntfs';
 
     /**
-     * @see TraceAttributes::SYSTEM_FILESYSTEM_TYPE refs
+     * refs
+     *
+     * @see TraceAttributes::SYSTEM_FILESYSTEM_TYPE
      */
     public const SYSTEM_FILESYSTEM_TYPE_REFS = 'refs';
 
     /**
-     * @see TraceAttributes::SYSTEM_FILESYSTEM_TYPE hfsplus
+     * hfsplus
+     *
+     * @see TraceAttributes::SYSTEM_FILESYSTEM_TYPE
      */
     public const SYSTEM_FILESYSTEM_TYPE_HFSPLUS = 'hfsplus';
 
     /**
-     * @see TraceAttributes::SYSTEM_FILESYSTEM_TYPE ext4
+     * ext4
+     *
+     * @see TraceAttributes::SYSTEM_FILESYSTEM_TYPE
      */
     public const SYSTEM_FILESYSTEM_TYPE_EXT4 = 'ext4';
 
     /**
-     * @see TraceAttributes::SYSTEM_MEMORY_STATE used
+     * used
+     *
+     * @see TraceAttributes::SYSTEM_MEMORY_STATE
      */
     public const SYSTEM_MEMORY_STATE_USED = 'used';
 
     /**
-     * @see TraceAttributes::SYSTEM_MEMORY_STATE free
+     * free
+     *
+     * @see TraceAttributes::SYSTEM_MEMORY_STATE
      */
     public const SYSTEM_MEMORY_STATE_FREE = 'free';
 
     /**
-     * @see TraceAttributes::SYSTEM_MEMORY_STATE shared
+     * shared
+     *
+     * @see TraceAttributes::SYSTEM_MEMORY_STATE
+     * @deprecated Removed, report shared memory usage with `metric.system.memory.shared` metric
      */
     public const SYSTEM_MEMORY_STATE_SHARED = 'shared';
 
     /**
-     * @see TraceAttributes::SYSTEM_MEMORY_STATE buffers
+     * buffers
+     *
+     * @see TraceAttributes::SYSTEM_MEMORY_STATE
      */
     public const SYSTEM_MEMORY_STATE_BUFFERS = 'buffers';
 
     /**
-     * @see TraceAttributes::SYSTEM_MEMORY_STATE cached
+     * cached
+     *
+     * @see TraceAttributes::SYSTEM_MEMORY_STATE
      */
     public const SYSTEM_MEMORY_STATE_CACHED = 'cached';
 
     /**
-     * @see TraceAttributes::SYSTEM_NETWORK_STATE close
+     * close
+     *
+     * @see TraceAttributes::SYSTEM_NETWORK_STATE
      */
     public const SYSTEM_NETWORK_STATE_CLOSE = 'close';
 
     /**
-     * @see TraceAttributes::SYSTEM_NETWORK_STATE close_wait
+     * close_wait
+     *
+     * @see TraceAttributes::SYSTEM_NETWORK_STATE
      */
     public const SYSTEM_NETWORK_STATE_CLOSE_WAIT = 'close_wait';
 
     /**
-     * @see TraceAttributes::SYSTEM_NETWORK_STATE closing
+     * closing
+     *
+     * @see TraceAttributes::SYSTEM_NETWORK_STATE
      */
     public const SYSTEM_NETWORK_STATE_CLOSING = 'closing';
 
     /**
-     * @see TraceAttributes::SYSTEM_NETWORK_STATE delete
+     * delete
+     *
+     * @see TraceAttributes::SYSTEM_NETWORK_STATE
      */
     public const SYSTEM_NETWORK_STATE_DELETE = 'delete';
 
     /**
-     * @see TraceAttributes::SYSTEM_NETWORK_STATE established
+     * established
+     *
+     * @see TraceAttributes::SYSTEM_NETWORK_STATE
      */
     public const SYSTEM_NETWORK_STATE_ESTABLISHED = 'established';
 
     /**
-     * @see TraceAttributes::SYSTEM_NETWORK_STATE fin_wait_1
+     * fin_wait_1
+     *
+     * @see TraceAttributes::SYSTEM_NETWORK_STATE
      */
     public const SYSTEM_NETWORK_STATE_FIN_WAIT_1 = 'fin_wait_1';
 
     /**
-     * @see TraceAttributes::SYSTEM_NETWORK_STATE fin_wait_2
+     * fin_wait_2
+     *
+     * @see TraceAttributes::SYSTEM_NETWORK_STATE
      */
     public const SYSTEM_NETWORK_STATE_FIN_WAIT_2 = 'fin_wait_2';
 
     /**
-     * @see TraceAttributes::SYSTEM_NETWORK_STATE last_ack
+     * last_ack
+     *
+     * @see TraceAttributes::SYSTEM_NETWORK_STATE
      */
     public const SYSTEM_NETWORK_STATE_LAST_ACK = 'last_ack';
 
     /**
-     * @see TraceAttributes::SYSTEM_NETWORK_STATE listen
+     * listen
+     *
+     * @see TraceAttributes::SYSTEM_NETWORK_STATE
      */
     public const SYSTEM_NETWORK_STATE_LISTEN = 'listen';
 
     /**
-     * @see TraceAttributes::SYSTEM_NETWORK_STATE syn_recv
+     * syn_recv
+     *
+     * @see TraceAttributes::SYSTEM_NETWORK_STATE
      */
     public const SYSTEM_NETWORK_STATE_SYN_RECV = 'syn_recv';
 
     /**
-     * @see TraceAttributes::SYSTEM_NETWORK_STATE syn_sent
+     * syn_sent
+     *
+     * @see TraceAttributes::SYSTEM_NETWORK_STATE
      */
     public const SYSTEM_NETWORK_STATE_SYN_SENT = 'syn_sent';
 
     /**
-     * @see TraceAttributes::SYSTEM_NETWORK_STATE time_wait
+     * time_wait
+     *
+     * @see TraceAttributes::SYSTEM_NETWORK_STATE
      */
     public const SYSTEM_NETWORK_STATE_TIME_WAIT = 'time_wait';
 
     /**
-     * @see TraceAttributes::SYSTEM_PAGING_DIRECTION in
+     * in
+     *
+     * @see TraceAttributes::SYSTEM_PAGING_DIRECTION
      */
     public const SYSTEM_PAGING_DIRECTION_IN = 'in';
 
     /**
-     * @see TraceAttributes::SYSTEM_PAGING_DIRECTION out
+     * out
+     *
+     * @see TraceAttributes::SYSTEM_PAGING_DIRECTION
      */
     public const SYSTEM_PAGING_DIRECTION_OUT = 'out';
 
     /**
-     * @see TraceAttributes::SYSTEM_PAGING_STATE used
+     * used
+     *
+     * @see TraceAttributes::SYSTEM_PAGING_STATE
      */
     public const SYSTEM_PAGING_STATE_USED = 'used';
 
     /**
-     * @see TraceAttributes::SYSTEM_PAGING_STATE free
+     * free
+     *
+     * @see TraceAttributes::SYSTEM_PAGING_STATE
      */
     public const SYSTEM_PAGING_STATE_FREE = 'free';
 
     /**
-     * @see TraceAttributes::SYSTEM_PAGING_TYPE major
+     * major
+     *
+     * @see TraceAttributes::SYSTEM_PAGING_TYPE
      */
     public const SYSTEM_PAGING_TYPE_MAJOR = 'major';
 
     /**
-     * @see TraceAttributes::SYSTEM_PAGING_TYPE minor
+     * minor
+     *
+     * @see TraceAttributes::SYSTEM_PAGING_TYPE
      */
     public const SYSTEM_PAGING_TYPE_MINOR = 'minor';
 
     /**
-     * @see TraceAttributes::SYSTEM_PROCESS_STATUS running
+     * running
+     *
+     * @see TraceAttributes::SYSTEM_PROCESS_STATUS
      */
     public const SYSTEM_PROCESS_STATUS_RUNNING = 'running';
 
     /**
-     * @see TraceAttributes::SYSTEM_PROCESS_STATUS sleeping
+     * sleeping
+     *
+     * @see TraceAttributes::SYSTEM_PROCESS_STATUS
      */
     public const SYSTEM_PROCESS_STATUS_SLEEPING = 'sleeping';
 
     /**
-     * @see TraceAttributes::SYSTEM_PROCESS_STATUS stopped
+     * stopped
+     *
+     * @see TraceAttributes::SYSTEM_PROCESS_STATUS
      */
     public const SYSTEM_PROCESS_STATUS_STOPPED = 'stopped';
 
     /**
-     * @see TraceAttributes::SYSTEM_PROCESS_STATUS defunct
+     * defunct
+     *
+     * @see TraceAttributes::SYSTEM_PROCESS_STATUS
      */
     public const SYSTEM_PROCESS_STATUS_DEFUNCT = 'defunct';
 
     /**
-     * @see TraceAttributes::SYSTEM_PROCESSES_STATUS running
+     * running
+     *
+     * @see TraceAttributes::SYSTEM_PROCESSES_STATUS
      */
     public const SYSTEM_PROCESSES_STATUS_RUNNING = 'running';
 
     /**
-     * @see TraceAttributes::SYSTEM_PROCESSES_STATUS sleeping
+     * sleeping
+     *
+     * @see TraceAttributes::SYSTEM_PROCESSES_STATUS
      */
     public const SYSTEM_PROCESSES_STATUS_SLEEPING = 'sleeping';
 
     /**
-     * @see TraceAttributes::SYSTEM_PROCESSES_STATUS stopped
+     * stopped
+     *
+     * @see TraceAttributes::SYSTEM_PROCESSES_STATUS
      */
     public const SYSTEM_PROCESSES_STATUS_STOPPED = 'stopped';
 
     /**
-     * @see TraceAttributes::SYSTEM_PROCESSES_STATUS defunct
+     * defunct
+     *
+     * @see TraceAttributes::SYSTEM_PROCESSES_STATUS
      */
     public const SYSTEM_PROCESSES_STATUS_DEFUNCT = 'defunct';
 
     /**
-     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE cpp
+     * cpp
+     *
+     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE
      */
     public const TELEMETRY_SDK_LANGUAGE_CPP = 'cpp';
 
     /**
-     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE dotnet
+     * dotnet
+     *
+     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE
      */
     public const TELEMETRY_SDK_LANGUAGE_DOTNET = 'dotnet';
 
     /**
-     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE erlang
+     * erlang
+     *
+     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE
      */
     public const TELEMETRY_SDK_LANGUAGE_ERLANG = 'erlang';
 
     /**
-     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE go
+     * go
+     *
+     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE
      */
     public const TELEMETRY_SDK_LANGUAGE_GO = 'go';
 
     /**
-     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE java
+     * java
+     *
+     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE
      */
     public const TELEMETRY_SDK_LANGUAGE_JAVA = 'java';
 
     /**
-     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE nodejs
+     * nodejs
+     *
+     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE
      */
     public const TELEMETRY_SDK_LANGUAGE_NODEJS = 'nodejs';
 
     /**
-     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE php
+     * php
+     *
+     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE
      */
     public const TELEMETRY_SDK_LANGUAGE_PHP = 'php';
 
     /**
-     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE python
+     * python
+     *
+     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE
      */
     public const TELEMETRY_SDK_LANGUAGE_PYTHON = 'python';
 
     /**
-     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE ruby
+     * ruby
+     *
+     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE
      */
     public const TELEMETRY_SDK_LANGUAGE_RUBY = 'ruby';
 
     /**
-     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE rust
+     * rust
+     *
+     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE
      */
     public const TELEMETRY_SDK_LANGUAGE_RUST = 'rust';
 
     /**
-     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE swift
+     * swift
+     *
+     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE
      */
     public const TELEMETRY_SDK_LANGUAGE_SWIFT = 'swift';
 
     /**
-     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE webjs
+     * webjs
+     *
+     * @see TraceAttributes::TELEMETRY_SDK_LANGUAGE
      */
     public const TELEMETRY_SDK_LANGUAGE_WEBJS = 'webjs';
 
     /**
-     * @see TraceAttributes::TLS_PROTOCOL_NAME ssl
+     * pass
+     *
+     * @see TraceAttributes::TEST_CASE_RESULT_STATUS
+     */
+    public const TEST_CASE_RESULT_STATUS_PASS = 'pass';
+
+    /**
+     * fail
+     *
+     * @see TraceAttributes::TEST_CASE_RESULT_STATUS
+     */
+    public const TEST_CASE_RESULT_STATUS_FAIL = 'fail';
+
+    /**
+     * success
+     *
+     * @see TraceAttributes::TEST_SUITE_RUN_STATUS
+     */
+    public const TEST_SUITE_RUN_STATUS_SUCCESS = 'success';
+
+    /**
+     * failure
+     *
+     * @see TraceAttributes::TEST_SUITE_RUN_STATUS
+     */
+    public const TEST_SUITE_RUN_STATUS_FAILURE = 'failure';
+
+    /**
+     * skipped
+     *
+     * @see TraceAttributes::TEST_SUITE_RUN_STATUS
+     */
+    public const TEST_SUITE_RUN_STATUS_SKIPPED = 'skipped';
+
+    /**
+     * aborted
+     *
+     * @see TraceAttributes::TEST_SUITE_RUN_STATUS
+     */
+    public const TEST_SUITE_RUN_STATUS_ABORTED = 'aborted';
+
+    /**
+     * timed_out
+     *
+     * @see TraceAttributes::TEST_SUITE_RUN_STATUS
+     */
+    public const TEST_SUITE_RUN_STATUS_TIMED_OUT = 'timed_out';
+
+    /**
+     * in_progress
+     *
+     * @see TraceAttributes::TEST_SUITE_RUN_STATUS
+     */
+    public const TEST_SUITE_RUN_STATUS_IN_PROGRESS = 'in_progress';
+
+    /**
+     * ssl
+     *
+     * @see TraceAttributes::TLS_PROTOCOL_NAME
      */
     public const TLS_PROTOCOL_NAME_SSL = 'ssl';
 
     /**
-     * @see TraceAttributes::TLS_PROTOCOL_NAME tls
+     * tls
+     *
+     * @see TraceAttributes::TLS_PROTOCOL_NAME
      */
     public const TLS_PROTOCOL_NAME_TLS = 'tls';
+
+    /**
+     * Bot source.
+     *
+     * @see TraceAttributes::USER_AGENT_SYNTHETIC_TYPE
+     */
+    public const USER_AGENT_SYNTHETIC_TYPE_BOT = 'bot';
+
+    /**
+     * Synthetic test source.
+     *
+     * @see TraceAttributes::USER_AGENT_SYNTHETIC_TYPE
+     */
+    public const USER_AGENT_SYNTHETIC_TYPE_TEST = 'test';
+
+    /**
+     * Major (Mark Sweep Compact).
+     *
+     * @see TraceAttributes::V8JS_GC_TYPE
+     */
+    public const V8JS_GC_TYPE_MAJOR = 'major';
+
+    /**
+     * Minor (Scavenge).
+     *
+     * @see TraceAttributes::V8JS_GC_TYPE
+     */
+    public const V8JS_GC_TYPE_MINOR = 'minor';
+
+    /**
+     * Incremental (Incremental Marking).
+     *
+     * @see TraceAttributes::V8JS_GC_TYPE
+     */
+    public const V8JS_GC_TYPE_INCREMENTAL = 'incremental';
+
+    /**
+     * Weak Callbacks (Process Weak Callbacks).
+     *
+     * @see TraceAttributes::V8JS_GC_TYPE
+     */
+    public const V8JS_GC_TYPE_WEAKCB = 'weakcb';
+
+    /**
+     * New memory space.
+     *
+     * @see TraceAttributes::V8JS_HEAP_SPACE_NAME
+     */
+    public const V8JS_HEAP_SPACE_NAME_NEW_SPACE = 'new_space';
+
+    /**
+     * Old memory space.
+     *
+     * @see TraceAttributes::V8JS_HEAP_SPACE_NAME
+     */
+    public const V8JS_HEAP_SPACE_NAME_OLD_SPACE = 'old_space';
+
+    /**
+     * Code memory space.
+     *
+     * @see TraceAttributes::V8JS_HEAP_SPACE_NAME
+     */
+    public const V8JS_HEAP_SPACE_NAME_CODE_SPACE = 'code_space';
+
+    /**
+     * Map memory space.
+     *
+     * @see TraceAttributes::V8JS_HEAP_SPACE_NAME
+     */
+    public const V8JS_HEAP_SPACE_NAME_MAP_SPACE = 'map_space';
+
+    /**
+     * Large object memory space.
+     *
+     * @see TraceAttributes::V8JS_HEAP_SPACE_NAME
+     */
+    public const V8JS_HEAP_SPACE_NAME_LARGE_OBJECT_SPACE = 'large_object_space';
+
+    /**
+     * Open means the change is currently active and under review. It hasn't been merged into the target branch yet, and it's still possible to make changes or add comments.
+     *
+     * @see TraceAttributes::VCS_CHANGE_STATE
+     */
+    public const VCS_CHANGE_STATE_OPEN = 'open';
+
+    /**
+     * WIP (work-in-progress, draft) means the change is still in progress and not yet ready for a full review. It might still undergo significant changes.
+     *
+     * @see TraceAttributes::VCS_CHANGE_STATE
+     */
+    public const VCS_CHANGE_STATE_WIP = 'wip';
+
+    /**
+     * Closed means the merge request has been closed without merging. This can happen for various reasons, such as the changes being deemed unnecessary, the issue being resolved in another way, or the author deciding to withdraw the request.
+     *
+     * @see TraceAttributes::VCS_CHANGE_STATE
+     */
+    public const VCS_CHANGE_STATE_CLOSED = 'closed';
+
+    /**
+     * Merged indicates that the change has been successfully integrated into the target codebase.
+     *
+     * @see TraceAttributes::VCS_CHANGE_STATE
+     */
+    public const VCS_CHANGE_STATE_MERGED = 'merged';
+
+    /**
+     * How many lines were added.
+     *
+     * @see TraceAttributes::VCS_LINE_CHANGE_TYPE
+     */
+    public const VCS_LINE_CHANGE_TYPE_ADDED = 'added';
+
+    /**
+     * How many lines were removed.
+     *
+     * @see TraceAttributes::VCS_LINE_CHANGE_TYPE
+     */
+    public const VCS_LINE_CHANGE_TYPE_REMOVED = 'removed';
+
+    /**
+     * [branch](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefbranchabranch)
+     *
+     * @see TraceAttributes::VCS_REF_BASE_TYPE
+     */
+    public const VCS_REF_BASE_TYPE_BRANCH = 'branch';
+
+    /**
+     * [tag](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddeftagatag)
+     *
+     * @see TraceAttributes::VCS_REF_BASE_TYPE
+     */
+    public const VCS_REF_BASE_TYPE_TAG = 'tag';
+
+    /**
+     * [branch](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefbranchabranch)
+     *
+     * @see TraceAttributes::VCS_REF_HEAD_TYPE
+     */
+    public const VCS_REF_HEAD_TYPE_BRANCH = 'branch';
+
+    /**
+     * [tag](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddeftagatag)
+     *
+     * @see TraceAttributes::VCS_REF_HEAD_TYPE
+     */
+    public const VCS_REF_HEAD_TYPE_TAG = 'tag';
+
+    /**
+     * [branch](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefbranchabranch)
+     *
+     * @see TraceAttributes::VCS_REF_TYPE
+     */
+    public const VCS_REF_TYPE_BRANCH = 'branch';
+
+    /**
+     * [tag](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddeftagatag)
+     *
+     * @see TraceAttributes::VCS_REF_TYPE
+     */
+    public const VCS_REF_TYPE_TAG = 'tag';
+
+    /**
+     * [branch](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefbranchabranch)
+     *
+     * @see TraceAttributes::VCS_REPOSITORY_REF_TYPE
+     */
+    public const VCS_REPOSITORY_REF_TYPE_BRANCH = 'branch';
+
+    /**
+     * [tag](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddeftagatag)
+     *
+     * @see TraceAttributes::VCS_REPOSITORY_REF_TYPE
+     */
+    public const VCS_REPOSITORY_REF_TYPE_TAG = 'tag';
+
+    /**
+     * How many revisions the change is behind the target ref.
+     *
+     * @see TraceAttributes::VCS_REVISION_DELTA_DIRECTION
+     */
+    public const VCS_REVISION_DELTA_DIRECTION_BEHIND = 'behind';
+
+    /**
+     * How many revisions the change is ahead of the target ref.
+     *
+     * @see TraceAttributes::VCS_REVISION_DELTA_DIRECTION
+     */
+    public const VCS_REVISION_DELTA_DIRECTION_AHEAD = 'ahead';
+
 }

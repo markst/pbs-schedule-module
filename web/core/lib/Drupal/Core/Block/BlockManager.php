@@ -71,7 +71,7 @@ class BlockManager extends DefaultPluginManager implements BlockManagerInterface
   /**
    * {@inheritdoc}
    */
-  public function getSortedDefinitions(array $definitions = NULL) {
+  public function getSortedDefinitions(?array $definitions = NULL) {
     // Sort the plugins first by category, then by admin label.
     $definitions = $this->traitGetSortedDefinitions($definitions, 'admin_label');
     // Do not display the 'broken' plugin in the UI.
@@ -90,7 +90,7 @@ class BlockManager extends DefaultPluginManager implements BlockManagerInterface
    * {@inheritdoc}
    */
   protected function handlePluginNotFound($plugin_id, array $configuration) {
-    $this->logger->warning('The "%plugin_id" was not found', ['%plugin_id' => $plugin_id]);
+    $this->logger->warning('The "%plugin_id" block plugin was not found', ['%plugin_id' => $plugin_id]);
     return parent::handlePluginNotFound($plugin_id, $configuration);
   }
 

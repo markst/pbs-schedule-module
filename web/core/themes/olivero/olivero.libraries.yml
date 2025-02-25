@@ -37,6 +37,7 @@ global-styling:
       css/components/header-sticky-toggle.css: {}
       css/components/hero.css: {}
       css/components/links.css: {}
+      css/components/layout-field.css: {}
       css/components/messages.css: {}
       css/components/navigation/nav-button-mobile.css: {}
       css/components/node.css: {}
@@ -47,7 +48,6 @@ global-styling:
       css/components/pager.css: {}
       css/components/table.css: {}
       css/components/text-content.css: {}
-      css/components/tabledrag.css: {}
       css/components/wide-content.css: {}
 
   js:
@@ -289,6 +289,12 @@ tabs:
       css/components/tabs.css: {}
   js:
     js/tabs.js: {}
+
+tabledrag:
+  version: VERSION
+  css:
+    component:
+      css/components/tabledrag.css: {}
 
 tags:
   version: VERSION

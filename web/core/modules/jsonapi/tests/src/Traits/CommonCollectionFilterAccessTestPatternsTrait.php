@@ -105,12 +105,11 @@ trait CommonCollectionFilterAccessTestPatternsTrait {
     $message = "The current user is not authorized to filter by the `spotlight` field, given in the path `spotlight`.";
     $expected_cache_tags = ['4xx-response', 'http_response'];
     $expected_cache_contexts = [
-      'url.query_args:filter',
-      'url.query_args:sort',
+      'url.query_args',
       'url.site',
       'user.permissions',
     ];
-    $this->assertResourceErrorResponse(403, $message, $collection_filter_url, $response, FALSE, $expected_cache_tags, $expected_cache_contexts, FALSE, 'MISS');
+    $this->assertResourceErrorResponse(403, $message, $collection_filter_url, $response, FALSE, $expected_cache_tags, $expected_cache_contexts, NULL, 'MISS');
     // And ensure the it is allowed when the proper permission is granted.
     $this->grantPermissionsToTestedRole(['filter by spotlight field']);
     $response = $this->request('GET', $collection_filter_url, $request_options);

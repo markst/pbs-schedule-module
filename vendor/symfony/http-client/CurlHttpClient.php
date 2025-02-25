@@ -67,7 +67,7 @@ final class CurlHttpClient implements HttpClientInterface, LoggerAwareInterface,
      *
      * @see HttpClientInterface::OPTIONS_DEFAULTS for available options
      */
-    public function __construct(array $defaultOptions = [], int $maxHostConnections = 6, int $maxPendingPushes = 50)
+    public function __construct(array $defaultOptions = [], int $maxHostConnections = 6, int $maxPendingPushes = 0)
     {
         if (!\extension_loaded('curl')) {
             throw new \LogicException('You cannot use the "Symfony\Component\HttpClient\CurlHttpClient" as the "curl" extension is not installed.');
@@ -185,10 +185,10 @@ final class CurlHttpClient implements HttpClientInterface, LoggerAwareInterface,
                 $multi->reset();
             }
 
-            foreach ($options['resolve'] as $host => $ip) {
-                $resolve[] = null === $ip ? "-$host:$port" : "$host:$port:$ip";
-                $multi->dnsCache->hostnames[$host] = $ip;
-                $multi->dnsCache->removals["-$host:$port"] = "-$host:$port";
+            foreach ($options['resolve'] as $resolveHost => $ip) {
+                $resolve[] = null === $ip ? "-$resolveHost:$port" : "$resolveHost:$port:$ip";
+                $multi->dnsCache->hostnames[$resolveHost] = $ip;
+                $multi->dnsCache->removals["-$resolveHost:$port"] = "-$resolveHost:$port";
             }
 
             $curlopts[\CURLOPT_RESOLVE] = $resolve;
@@ -246,8 +246,9 @@ final class CurlHttpClient implements HttpClientInterface, LoggerAwareInterface,
 
             if (isset($options['normalized_headers']['content-length'][0])) {
                 $curlopts[\CURLOPT_INFILESIZE] = (int) substr($options['normalized_headers']['content-length'][0], \strlen('Content-Length: '));
-            } elseif (!isset($options['normalized_headers']['transfer-encoding'])) {
-                $curlopts[\CURLOPT_INFILESIZE] = -1;
+            }
+            if (!isset($options['normalized_headers']['transfer-encoding'])) {
+                $curlopts[\CURLOPT_HTTPHEADER][] = 'Transfer-Encoding:'.(isset($curlopts[\CURLOPT_INFILESIZE]) ? '' : ' chunked');
             }
 
             if ('POST' !== $method) {
@@ -273,7 +274,7 @@ final class CurlHttpClient implements HttpClientInterface, LoggerAwareInterface,
             if (file_exists($options['bindto'])) {
                 $curlopts[\CURLOPT_UNIX_SOCKET_PATH] = $options['bindto'];
             } elseif (!str_starts_with($options['bindto'], 'if!') && preg_match('/^(.*):(\d+)$/', $options['bindto'], $matches)) {
-                $curlopts[\CURLOPT_INTERFACE] = $matches[1];
+                $curlopts[\CURLOPT_INTERFACE] = trim($matches[1], '[]');
                 $curlopts[\CURLOPT_LOCALPORT] = $matches[2];
             } else {
                 $curlopts[\CURLOPT_INTERFACE] = $options['bindto'];
@@ -423,6 +424,8 @@ final class CurlHttpClient implements HttpClientInterface, LoggerAwareInterface,
         return static function ($ch, string $location, bool $noContent) use (&$redirectHeaders, $options) {
             try {
                 $location = self::parseUrl($location);
+                $url = self::parseUrl(curl_getinfo($ch, \CURLINFO_EFFECTIVE_URL));
+                $url = self::resolveUrl($location, $url);
             } catch (InvalidArgumentException $e) {
                 return null;
             }
@@ -435,15 +438,12 @@ final class CurlHttpClient implements HttpClientInterface, LoggerAwareInterface,
                 $redirectHeaders['with_auth'] = array_filter($redirectHeaders['with_auth'], $filterContentHeaders);
             }
 
-            if ($redirectHeaders && $host = parse_url('http:'.$location['authority'], \PHP_URL_HOST)) {
-                $requestHeaders = $redirectHeaders['host'] === $host ? $redirectHeaders['with_auth'] : $redirectHeaders['no_auth'];
+            if ($redirectHeaders && isset($location['authority'])) {
+                $requestHeaders = parse_url($location['authority'], \PHP_URL_HOST) === $redirectHeaders['host'] ? $redirectHeaders['with_auth'] : $redirectHeaders['no_auth'];
                 curl_setopt($ch, \CURLOPT_HTTPHEADER, $requestHeaders);
             } elseif ($noContent && $redirectHeaders) {
                 curl_setopt($ch, \CURLOPT_HTTPHEADER, $redirectHeaders['with_auth']);
             }
-
-            $url = self::parseUrl(curl_getinfo($ch, \CURLINFO_EFFECTIVE_URL));
-            $url = self::resolveUrl($location, $url);
 
             curl_setopt($ch, \CURLOPT_PROXY, self::getProxyUrl($options['proxy'], $url));
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\jsonapi\Functional;
 
 use Drupal\Core\Field\Entity\BaseFieldOverride;
@@ -10,7 +12,6 @@ use Drupal\node\Entity\NodeType;
  * JSON:API integration test for the "BaseFieldOverride" config entity type.
  *
  * @group jsonapi
- * @group #slow
  */
 class BaseFieldOverrideTest extends ConfigEntityResourceTestBase {
 
@@ -131,7 +132,7 @@ class BaseFieldOverrideTest extends ConfigEntityResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function getExpectedUnauthorizedAccessMessage($method) {
+  protected function getExpectedUnauthorizedAccessMessage($method): string {
     return "The 'administer node fields' permission is required.";
   }
 

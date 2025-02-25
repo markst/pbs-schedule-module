@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\link\Functional;
 
 use Drupal\Component\Utility\Html;
@@ -19,15 +21,14 @@ use Drupal\Tests\Traits\Core\PathAliasTestTrait;
  * Tests link field widgets and formatters.
  *
  * @group link
+ * @group #slow
  */
 class LinkFieldTest extends BrowserTestBase {
 
   use PathAliasTestTrait;
 
   /**
-   * Modules to enable.
-   *
-   * @var array
+   * {@inheritdoc}
    */
   protected static $modules = [
     'entity_test',
@@ -73,7 +74,7 @@ class LinkFieldTest extends BrowserTestBase {
    *
    * This is being as one to avoid multiple Drupal install.
    */
-  public function testLinkField() {
+  public function testLinkField(): void {
     $this->doTestURLValidation();
     $this->doTestLinkTitle();
     $this->doTestLinkFormatter();
@@ -960,7 +961,7 @@ class LinkFieldTest extends BrowserTestBase {
   /**
    * Tests <nolink> and <none> as link uri.
    */
-  public function testNoLinkUri() {
+  public function testNoLinkUri(): void {
     $field_name = $this->randomMachineName();
     $this->fieldStorage = FieldStorageConfig::create([
       'field_name' => $field_name,
@@ -1054,7 +1055,7 @@ class LinkFieldTest extends BrowserTestBase {
    * @return string
    *   The rendered HTML output.
    */
-  protected function renderTestEntity($id, $view_mode = 'full', $reset = TRUE) {
+  protected function renderTestEntity($id, $view_mode = 'full', $reset = TRUE): string {
     if ($reset) {
       $this->container->get('entity_type.manager')->getStorage('entity_test')->resetCache([$id]);
     }

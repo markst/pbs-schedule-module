@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\node\Functional;
 
 use Drupal\Core\Entity\EntityInterface;
@@ -20,7 +22,6 @@ use Drupal\user\RoleInterface;
  * Tests the Node Translation UI.
  *
  * @group node
- * @group #slow
  */
 class NodeTranslationUITest extends ContentTranslationUITestBase {
 
@@ -44,9 +45,7 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
   ];
 
   /**
-   * Modules to enable.
-   *
-   * @var array
+   * {@inheritdoc}
    */
   protected static $modules = [
     'block',
@@ -79,7 +78,7 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
   /**
    * Tests the basic translation UI.
    */
-  public function testTranslationUI() {
+  public function testTranslationUI(): void {
     parent::testTranslationUI();
     $this->doUninstallTest();
   }
@@ -87,7 +86,7 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
   /**
    * Tests changing the published status on a node without fields.
    */
-  public function testPublishedStatusNoFields() {
+  public function testPublishedStatusNoFields(): void {
     // Test changing the published status of an article without fields.
     $this->drupalLogin($this->administrator);
     // Delete all fields.
@@ -209,7 +208,7 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
       $user = $this->drupalCreateUser();
       $values[$langcode] = [
         'uid' => $user->id(),
-        'created' => REQUEST_TIME - mt_rand(0, 1000),
+        'created' => \Drupal::time()->getRequestTime() - mt_rand(0, 1000),
         'sticky' => (bool) mt_rand(0, 1),
         'promote' => (bool) mt_rand(0, 1),
       ];
@@ -243,7 +242,7 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
   /**
    * Tests that translation page inherits admin status of edit page.
    */
-  public function testTranslationLinkTheme() {
+  public function testTranslationLinkTheme(): void {
     $this->drupalLogin($this->administrator);
     $article = $this->drupalCreateNode(['type' => 'article', 'langcode' => $this->langcodes[0]]);
 
@@ -273,7 +272,7 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
   /**
    * Tests that no metadata is stored for a disabled bundle.
    */
-  public function testDisabledBundle() {
+  public function testDisabledBundle(): void {
     // Create a bundle that does not have translation enabled.
     $disabledBundle = $this->randomMachineName();
     $this->drupalCreateContentType(['type' => $disabledBundle, 'name' => $disabledBundle]);
@@ -302,7 +301,7 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
   /**
    * Tests that translations are rendered properly.
    */
-  public function testTranslationRendering() {
+  public function testTranslationRendering(): void {
     // Add a comment field to the article content type.
     \Drupal::service('module_installer')->install(['comment']);
     $this->addDefaultCommentField('node', 'article');
@@ -455,7 +454,7 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
   /**
    * {@inheritdoc}
    */
-  protected function getFormSubmitSuffix(EntityInterface $entity, $langcode) {
+  protected function getFormSubmitSuffix(EntityInterface $entity, $langcode): string {
     if (!$entity->isNew() && $entity->isTranslatable()) {
       $translations = $entity->getTranslationLanguages();
       if ((count($translations) > 1 || !isset($translations[$langcode])) && ($field = $entity->getFieldDefinition('status'))) {
@@ -505,7 +504,7 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
   /**
    * Tests that revision translations are rendered properly.
    */
-  public function testRevisionTranslationRendering() {
+  public function testRevisionTranslationRendering(): void {
     $storage = \Drupal::entityTypeManager()->getStorage('node');
 
     // Create a node.
@@ -554,7 +553,7 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
   /**
    * Tests title is not escaped (but XSS-filtered) for details form element.
    */
-  public function testDetailsTitleIsNotEscaped() {
+  public function testDetailsTitleIsNotEscaped(): void {
     // Create an image field.
     \Drupal::service('module_installer')->install(['image']);
     FieldStorageConfig::create([
@@ -599,10 +598,9 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
    * When language neutral content is displayed on interface language, it should
    * consider the interface language for creating the content link.
    */
-  public function testUrlPrefixOnLanguageNeutralContent() {
+  public function testUrlPrefixOnLanguageNeutralContent(): void {
     $this->drupalLogin($this->administrator);
     $neutral_langcodes = [
-      LanguageInterface::LANGCODE_NOT_APPLICABLE,
       LanguageInterface::LANGCODE_NOT_SPECIFIED,
     ];
     foreach ($neutral_langcodes as $langcode) {
@@ -613,6 +611,68 @@ class NodeTranslationUITest extends ContentTranslationUITestBase {
       $this->drupalGet("{$this->langcodes[2]}/admin/content");
       $this->assertSession()->linkByHrefExists("{$this->langcodes[2]}/node/{$article->id()}");
     }
+  }
+
+  /**
+   * Test deletion of translated content from search and index rebuild.
+   */
+  public function testSearchIndexRebuildOnTranslationDeletion(): void {
+    \Drupal::service('module_installer')->install(['search']);
+    $admin_user = $this->drupalCreateUser([
+      'administer site configuration',
+      'access administration pages',
+      'administer content types',
+      'delete content translations',
+      'administer content translation',
+      'translate any entity',
+      'administer search',
+      'search content',
+      'delete any article content',
+    ]);
+    $this->drupalLogin($admin_user);
+
+    // Create a node.
+    $node = $this->drupalCreateNode([
+      'type' => $this->bundle,
+    ]);
+
+    // Add a French translation.
+    $translation = $node->addTranslation('fr');
+    $translation->title = 'First rev fr title';
+    $translation->setNewRevision(FALSE);
+    $translation->save();
+
+    // Check if 1 page is listed for indexing.
+    $this->drupalGet('admin/config/search/pages');
+    $this->assertSession()->pageTextContains('There is 1 item left to index.');
+
+    // Run cron.
+    $this->drupalGet('admin/config/system/cron');
+    $this->getSession()->getPage()->pressButton('Run cron');
+
+    // Assert no items are left for indexing.
+    $this->drupalGet('admin/config/search/pages');
+    $this->assertSession()->pageTextContains('There are 0 items left to index.');
+
+    // Search for French content.
+    $this->drupalGet('search/node', ['query' => ['keys' => urlencode('First rev fr title')]]);
+    $this->assertSession()->pageTextContains('First rev fr title');
+
+    // Delete translation.
+    $this->drupalGet('fr/node/' . $node->id() . '/delete');
+    $this->getSession()->getPage()->pressButton('Delete French translation');
+
+    // Run cron.
+    $this->drupalGet('admin/config/system/cron');
+    $this->getSession()->getPage()->pressButton('Run cron');
+
+    // Assert no items are left for indexing.
+    $this->drupalGet('admin/config/search/pages');
+    $this->assertSession()->pageTextContains('There are 0 items left to index.');
+
+    // Search for French content.
+    $this->drupalGet('search/node', ['query' => ['keys' => urlencode('First rev fr title')]]);
+    $this->assertSession()->pageTextNotContains('First rev fr title');
   }
 
 }

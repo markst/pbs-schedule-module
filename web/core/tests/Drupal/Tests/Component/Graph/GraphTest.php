@@ -16,7 +16,7 @@ class GraphTest extends TestCase {
   /**
    * Tests depth-first-search features.
    */
-  public function testDepthFirstSearch() {
+  public function testDepthFirstSearch(): void {
     // The sample graph used is:
     // @code
     // 1 --> 2 --> 3     5 ---> 6
@@ -191,7 +191,7 @@ class GraphTest extends TestCase {
    * @param $keys
    *   (optional) Whether to output the keys of $paths instead of the values.
    */
-  protected function displayArray($paths, $keys = FALSE) {
+  protected function displayArray($paths, $keys = FALSE): string {
     if (!empty($paths)) {
       return implode(', ', $keys ? array_keys($paths) : $paths);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\jsonapi\Functional;
 
 use Drupal\Core\Entity\Entity\EntityViewMode;
@@ -9,14 +11,13 @@ use Drupal\Core\Url;
  * JSON:API integration test for the "EntityViewMode" config entity type.
  *
  * @group jsonapi
- * @group #slow
  */
 class EntityViewModeTest extends ConfigEntityResourceTestBase {
 
   /**
    * {@inheritdoc}
    *
-   * @todo: Remove 'field_ui' when https://www.drupal.org/node/2867266.
+   * @todo Remove 'field_ui' when https://www.drupal.org/node/2867266.
    */
   protected static $modules = ['user', 'field_ui'];
 

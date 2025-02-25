@@ -56,7 +56,7 @@ class Xss {
    *
    * @ingroup sanitization
    */
-  public static function filter($string, array $allowed_html_tags = NULL) {
+  public static function filter($string, ?array $allowed_html_tags = NULL) {
     if (is_null($allowed_html_tags)) {
       $allowed_html_tags = static::$htmlTags;
     }
@@ -231,7 +231,7 @@ class Xss {
             // to be mangled. We prevent this by skipping protocol filtering on
             // such attributes.
             // @see \Drupal\Component\Utility\UrlHelper::filterBadProtocol()
-            // @see http://www.w3.org/TR/html4/index/attributes.html
+            // @see https://www.w3.org/TR/html4/index/attributes.html
             $skip_protocol_filtering = str_starts_with($attribute_name, 'data-') || in_array($attribute_name, [
               'title',
               'alt',

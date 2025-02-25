@@ -19,7 +19,7 @@ class ToolbarTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['toolbar', 'rebuild_cache_access'];
+  protected static $modules = ['toolbar', 'rebuild_cache_access'];
 
   /**
    * Tests that the toolbar button works.

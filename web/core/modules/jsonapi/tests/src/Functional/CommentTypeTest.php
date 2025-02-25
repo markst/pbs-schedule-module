@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\Tests\jsonapi\Functional;
 
 use Drupal\comment\Entity\CommentType;
@@ -9,7 +11,6 @@ use Drupal\Core\Url;
  * JSON:API integration test for the "CommentType" config entity type.
  *
  * @group jsonapi
- * @group #slow
  */
 class CommentTypeTest extends ConfigEntityResourceTestBase {
 

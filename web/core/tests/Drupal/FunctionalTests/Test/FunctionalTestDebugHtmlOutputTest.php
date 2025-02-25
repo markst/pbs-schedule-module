@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\FunctionalTests\Test;
 
 use Drupal\Tests\BrowserTestBase;
@@ -9,6 +11,7 @@ use Symfony\Component\Process\Process;
  * Test to ensure that functional tests produce debug HTML output when required.
  *
  * @group browsertestbase
+ * @group #slow
  */
 class FunctionalTestDebugHtmlOutputTest extends BrowserTestBase {
 

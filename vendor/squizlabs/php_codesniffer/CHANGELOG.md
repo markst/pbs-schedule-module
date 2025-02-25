@@ -6,6 +6,368 @@ The file documents changes to the PHP_CodeSniffer project.
 
 _Nothing yet._
 
+## [3.11.3] - 2025-01-23
+
+### Changed
+- Generic.ControlStructures.InlineControlStructure no longer unnecessarily listens for T_SWITCH tokens. [#595]
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- Squiz.Functions.FunctionDeclarationArgumentSpacing: improvements to error message for `SpaceBeforeComma` error. [#783]
+- The following sniff(s) have received efficiency improvements:
+    - Squiz.Functions.FunctionDeclarationArgumentSpacing
+    - Thanks to [Dan Wallis][@fredden] and [Juliette Reinders Folmer][@jrfnl] for the patches.
+- Various housekeeping, including improvements to the tests and documentation.
+    - Thanks to [Michał Bundyra][@michalbundyra], [Rodrigo Primo][@rodrigoprimo] and [Juliette Reinders Folmer][@jrfnl] for their contributions.
+
+### Fixed
+- Fixed bug [#620] : Squiz.Functions.FunctionDeclarationArgumentSpacing: newlines after type will now be handled by the fixer. This also prevents a potential fixer conflict.
+    - Thanks to [Dan Wallis][@fredden] for the patch.
+- Fixed bug [#782] : Tokenizer/PHP: prevent an "Undefined array key" notice during live coding for unfinished arrow functions.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Fixed bug [#783] : Squiz.Functions.FunctionDeclarationArgumentSpacing: new line after reference token was not flagged nor fixed.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Fixed bug [#783] : Squiz.Functions.FunctionDeclarationArgumentSpacing: new line after variadic token was not flagged nor fixed.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Fixed bug [#783] : Squiz.Functions.FunctionDeclarationArgumentSpacing: new line before/after the equal sign for default values was not flagged nor fixed when `equalsSpacing` was set to `0`.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Fixed bug [#783] : Squiz.Functions.FunctionDeclarationArgumentSpacing: fixer conflict when a new line is found before/after the equal sign for default values and `equalsSpacing` was set to `1`.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Fixed bug [#783] : Squiz.Functions.FunctionDeclarationArgumentSpacing: fixer for spacing before/after equal sign could inadvertently remove comment.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Fixed bug [#783] : Squiz.Functions.FunctionDeclarationArgumentSpacing: fixer will now handle comments between the end of a parameter and a comma more cleanly.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Fixed bug [#784] : Squiz.WhiteSpace.FunctionSpacing: prevent fixer conflict when a multi-line docblock would start on the same line as the function close curly being examined.
+    - Thanks to [Klaus Purer][@klausi] for the patch
+
+[#595]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/595
+[#620]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/620
+[#782]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/782
+[#783]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/783
+[#784]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/784
+
+## [3.11.2] - 2024-12-11
+
+### Changed
+- Generators/HTML + Markdown: the output will now be empty (no page header/footer) when there are no docs to display. [#687]
+    - This is in line with the Text Generator which already didn't produce output if there are no docs.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Generators/HTML: only display a Table of Contents when there is more than one sniff with documentation. [#697]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Generators/HTML: improved handling of line breaks in `<standard>` blocks. [#723]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Generators/Markdown: improved compatibility with the variety of available markdown parsers. [#722]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Generators/Markdown: improved handling of line breaks in `<standard>` blocks. [#737]
+    - This prevents additional paragraphs from being displayed as code blocks.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Generic.NamingConventions.UpperCaseConstantName: the exact token containing the non-uppercase constant name will now be identified with more accuracy. [#665]
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- Generic.Functions.OpeningFunctionBraceKernighanRitchie: minor improvement to the error message wording. [#736]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Various housekeeping, including improvements to the tests and documentation.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] and [Juliette Reinders Folmer][@jrfnl] for their contributions.
+
+### Fixed
+- Fixed bug [#527] : Squiz.Arrays.ArrayDeclaration: short lists within a foreach condition should be ignored.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- Fixed bug [#665] : Generic.NamingConventions.UpperCaseConstantName: false positives and false negatives when code uses unconventional spacing and comments when calling `define()`.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- Fixed bug [#665] : Generic.NamingConventions.UpperCaseConstantName: false positive when a constant named `DEFINE` is encountered.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- Fixed bug [#665] : Generic.NamingConventions.UpperCaseConstantName: false positive for attribute class called `define`.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- Fixed bug [#665] : Generic.NamingConventions.UpperCaseConstantName: false positive when handling the instantiation of a class named `define`.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- Fixed bug [#688] : Generators/Markdown could leave error_reporting in an incorrect state.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Fixed bug [#698] : Generators/Markdown : link in the documentation footer would not parse as a link.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Fixed bug [#738] : Generators/Text: stray blank lines after code sample titles.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Fixed bug [#739] : Generators/HTML + Markdown: multi-space whitespace within a code sample title was folded into a single space.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+
+[#527]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/527
+[#665]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/665
+[#687]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/687
+[#688]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/688
+[#697]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/697
+[#698]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/698
+[#722]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/722
+[#723]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/723
+[#736]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/736
+[#737]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/737
+[#738]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/738
+[#739]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/739
+
+## [3.11.1] - 2024-11-16
+
+### Changed
+- Output from the `--generator=...` feature will respect the OS-expected EOL char in more places. [#671]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Various housekeeping, including improvements to the tests and documentation.
+    - Thanks to [Bartosz Dziewoński][@MatmaRex] and [Juliette Reinders Folmer][@jrfnl] for their contributions.
+
+### Fixed
+- Fixed bug [#674] : Generic.WhiteSpace.HereNowdocIdentifierSpacing broken XML documentation
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Fixed bug [#675] : InvalidArgumentException when a ruleset includes a sniff by file name and the included sniff does not comply with the PHPCS naming conventions.
+    - Notwithstanding this fix, it is strongly recommended to ensure custom sniff classes comply with the PHPCS naming conventions.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+
+[#671]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/671
+[#674]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/674
+[#675]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/675
+
+## [3.11.0] - 2024-11-12
+
+### Added
+- Runtime support for PHP 8.4. All known PHP 8.4 deprecation notices have been fixed.
+    - Syntax support for new PHP 8.4 features will follow in a future release.
+    - If you find any PHP 8.4 deprecation notices which were missed, please report them.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patches.
+- Tokenizer support for PHP 8.3 "yield from" expressions with a comment between the keywords. [#529], [#647]
+    - Sniffs explicitly handling T_YIELD_FROM tokens may need updating. The PR description contains example code for use by sniff developers.
+    - Additionally, the following sniff has been updated to support "yield from" expressions with comments:
+        - Generic.WhiteSpace.LanguageConstructSpacing
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- New `Generic.WhiteSpace.HereNowdocIdentifierSpacing` sniff. [#586], [#637]
+    - Forbid whitespace between the `<<<` and the identifier string in heredoc/nowdoc start tokens.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- New `Generic.Strings.UnnecessaryHeredoc` sniff. [#633]
+    - Warns about heredocs without interpolation or expressions in the body text and can auto-fix these to nowdocs.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Documentation for the following sniffs:
+    - Generic.Arrays.ArrayIndent
+    - Squiz.PHP.Heredoc
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] and [Juliette Reinders Folmer][@jrfnl] for the patches.
+
+### Changed
+- The Common::getSniffCode() method will now throw an InvalidArgumentException exception if an invalid `$sniffClass` is passed. [#524], [#625]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Documentation generated using the `--generator=...` feature will now always be presented in natural order based on the sniff name(s). [#668]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Minor improvements to the display of runtime information. [#658]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Squiz.Commenting.PostStatementComment: trailing annotations in PHP files will now be reported under a separate, non-auto-fixable error code `AnnotationFound`. [#560], [#627]
+    - This prevents (tooling related) annotations from taking on a different meaning when moved by the fixer.
+    - The separate error code also allows for selectively excluding it to prevent the sniff from triggering on trailing annotations, while still forbidding other trailing comments.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- Squiz.ControlStructures.ForEachLoopDeclaration: the `SpacingAfterOpen` error code has been replaced by the `SpaceAfterOpen` error code. The latter is a pre-existing code. The former appears to have been a typo. [#582]
+    - Thanks to [Dan Wallis][@fredden] for the patch.
+- The following sniff(s) have received efficiency improvements:
+    - Generic.Classes.DuplicateClassName
+    - Generic.NamingConventions.ConstructorName
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] and [Juliette Reinders Folmer][@jrfnl] for the patches.
+- Various housekeeping, including improvements to the tests and documentation.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] and [Juliette Reinders Folmer][@jrfnl] for their contributions.
+
+### Fixed
+- Fixed bug [#3808][sq-3808] : Generic.WhiteSpace.ScopeIndent would throw false positive for tab indented multi-token yield from expression.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#630] : The tokenizer could inadvertently transform "normal" parentheses to DNF parentheses, when a function call was preceded by a switch-case / alternative syntax control structure colon.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#645] : On PHP 5.4, if yield was used as the declaration name for a function declared to return by reference, the function name would incorrectly be tokenized as T_YIELD instead of T_STRING.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#647] : Tokenizer not applying tab replacement in single token "yield from" keywords.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#647] : Generic.WhiteSpace.DisallowSpaceIndent did not flag space indentation in multi-line yield from.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#647] : Generic.WhiteSpace.DisallowTabIndent did not flag tabs inside yield from.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#652] : Generic.NamingConventions.ConstructorName: false positives for PHP-4 style calls to PHP-4 style parent constructor when a method with the same name as the parent class was called on another class.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#652] : Generic.NamingConventions.ConstructorName: false negatives for PHP-4 style calls to parent constructor for function calls with whitespace and comments in unconventional places.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#653] : Generic.Classes.DuplicateClassName : the sniff did not skip namespace keywords used as operators, which could lead to false positives.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#653] : Generic.Classes.DuplicateClassName : sniff going into an infinite loop during live coding.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#653] : Generic.Classes.DuplicateClassName : false positives/negatives when a namespace declaration contained whitespace or comments in unconventional places.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#653] : Generic.Classes.DuplicateClassName : namespace for a file going in/out of PHP was not remembered/applied correctly.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+
+[sq-3808]: https://github.com/squizlabs/PHP_CodeSniffer/issues/3808
+[#524]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/524
+[#529]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/529
+[#560]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/560
+[#582]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/582
+[#586]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/586
+[#625]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/625
+[#627]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/627
+[#630]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/630
+[#633]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/633
+[#637]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/637
+[#645]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/645
+[#647]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/647
+[#652]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/652
+[#653]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/653
+[#658]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/658
+[#668]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/668
+
+## [3.10.3] - 2024-09-18
+
+### Changed
+- Various housekeeping, including improvements to the tests and documentation.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] and [Juliette Reinders Folmer][@jrfnl] for their contributions.
+
+### Fixed
+- Fixed bug [#553] : Squiz.Classes.SelfMemberReference: false negative(s) when namespace operator was encountered between the namespace declaration and the OO declaration.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#579] : AbstractPatternSniff: potential PHP notice during live coding.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#580] : Squiz.Formatting.OperatorBracket: potential PHP notice during live coding.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#581] : PSR12.ControlStructures.ControlStructureSpacing: prevent fixer conflict by correctly handling multiple empty newlines before the first condition in a multi-line control structure.
+    - Thanks to [Dan Wallis][@fredden] for the patch.
+- Fixed bug [#585] : Tokenizer not applying tab replacement in heredoc/nowdoc openers.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#588] : Squiz.PHP.EmbeddedPhp false positive when checking spaces after a PHP short open tag.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- Fixed bug [#597] : Generic.PHP.LowerCaseKeyword did not flag nor fix non-lowercase anonymous class keywords.
+    - Thanks to [Marek Štípek][@maryo] for the patch.
+- Fixed bug [#598] : Squiz.PHP.DisallowMultipleAssignments: false positive on assignments to variable property on object stored in array.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#608] : Squiz.Functions.MultiLineFunctionDeclaration did not take (parameter) attributes into account when checking for one parameter per line.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+
+### Other
+- The provenance of PHAR files associated with a release can now be verified via [GitHub Artifact Attestations][ghattest] using the [GitHub CLI tool][ghcli] with the following command: `gh attestation verify [phpcs|phpcbf].phar -o PHPCSStandards`. [#574]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+
+[#553]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/553
+[#574]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/574
+[#579]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/579
+[#580]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/580
+[#581]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/581
+[#585]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/585
+[#588]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/588
+[#597]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/597
+[#598]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/598
+[#608]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/608
+
+[ghcli]:    https://cli.github.com/
+[ghattest]: https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds
+
+## [3.10.2] - 2024-07-22
+
+### Changed
+- The following sniff(s) have received efficiency improvements:
+    - Generic.Functions.FunctionCallArgumentSpacing
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- The array format of the information passed to the `Reports::generateFileReport()` method is now documented in the Reports interface. [#523]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Various housekeeping, including improvements to the tests and documentation.
+    - Thanks to [Bill Ruddock][@biinari], [Dan Wallis][@fredden], [Klaus Purer][@klausi], [Rodrigo Primo][@rodrigoprimo] and [Juliette Reinders Folmer][@jrfnl] for their contributions.
+
+### Fixed
+- Fixed bug [#513] : Generic.Functions.FunctionCallArgumentSpacing did not ignore the body of a match expressions passed as a function argument, which could lead to false positives.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#533] : Generic.WhiteSpace.DisallowTabIndent: tab indentation for heredoc/nowdoc closers will no longer be auto-fixed to prevent parse errors. The issue will still be reported.
+    - The error code for heredoc/nowdoc indentation using tabs has been made more specific - `TabsUsedHeredocCloser` - to allow for selectively excluding the indentation check for heredoc/nowdoc closers.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#534] : Generic.WhiteSpace.DisallowSpaceIndent did not report on space indentation for PHP 7.3 flexible heredoc/nowdoc closers.
+    - Closers using space indentation will be reported with a dedicated error code: `SpacesUsedHeredocCloser`.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#537] : Squiz.PHP.DisallowMultipleAssignments false positive for list assignments at the start of a new PHP block after an embedded PHP statement.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#551] : Squiz.PHP.DisallowMultipleAssignments prevent false positive for function parameters during live coding.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- Fixed bug [#554] : Generic.CodeAnalysis.UselessOverridingMethod edge case false negative when the call to the parent method would end on a PHP close tag.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#555] : Squiz.Classes.SelfMemberReference edge case false negative when the namespace declaration would end on a PHP close tag.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+
+[#513]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/513
+[#523]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/523
+[#533]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/533
+[#534]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/534
+[#537]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/537
+[#551]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/551
+[#554]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/554
+[#555]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/555
+
+## [3.10.1] - 2024-05-22
+
+### Added
+- Documentation for the following sniffs:
+    - Generic.Commenting.DocComment
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+
+### Changed
+- The following have received efficiency improvements:
+    - Type handling in the PHP Tokenizer
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Various housekeeping, including improvements to the tests and documentation.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for their contributions.
+
+### Fixed
+- Fixed bug [#110], [#437], [#475] : `File::findStartOfStatement()`: the start of statement/expression determination for tokens in parentheses/short array brackets/others scopes, nested within match expressions, was incorrect in most cases.
+    The trickle down effect of the bug fixes made to the `File::findStartOfStatement()` method, is that the Generic.WhiteSpace.ScopeIndent and the PEAR.WhiteSpace.ScopeIndent sniffs should now be able to correctly determine and fix the indent for match expressions containing nested expressions.
+    These fixes also fix an issue with the `Squiz.Arrays.ArrayDeclaration` sniff and possibly other, unreported bugs.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#504] : The tokenizer could inadvertently mistake the last parameter in a function call using named arguments for a DNF type.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#508] : Tokenizer/PHP: extra hardening against handling parse errors in the type handling layer.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+
+[#110]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/110
+[#437]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/437
+[#475]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/475
+[#504]: https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/504
+[#508]: https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/508
+
+## [3.10.0] - 2024-05-20
+
+### Added
+- Tokenizer support for PHP 8.2 Disjunctive Normal Form (DNF) types. [#3731][sq-3731], [#387], [#461]
+    - Includes new `T_TYPE_OPEN_PARENTHESIS` and `T_TYPE_CLOSE_PARENTHESIS` tokens to represent the parentheses in DNF types.
+    - These new tokens, like other parentheses, will have the `parenthesis_opener` and `parenthesis_closer` token array indexes set and the tokens between them will have the `nested_parenthesis` index.
+    - The `File::getMethodProperties()`, `File::getMethodParameters()` and `File::getMemberProperties()` methods now all support DNF types. [#471], [#472], [#473]
+    - Additionally, the following sniff has been updated to support DNF types:
+        - Generic.PHP.LowerCaseType [#478]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patches.
+- Documentation for the following sniffs:
+    - Squiz.WhiteSpace.FunctionClosingBraceSpace
+    - Thanks to [Przemek Hernik][@przemekhernik] for the patch.
+
+### Changed
+- The help screens have received a face-lift for improved usability and readability. [#447]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch and thanks to [Colin Stewart][@costdev], [Gary Jones][@GaryJones] and [@mbomb007] for reviewing.
+- The Squiz.Commenting.ClosingDeclarationComment sniff will now also examine and flag closing comments for traits. [#442]
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- The following sniff(s) have efficiency improvements:
+    - Generic.Arrays.ArrayIndent
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- The autoloader will now always return a boolean value indicating whether it has loaded a class or not. [#479]
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
+- Various housekeeping, including improvements to the tests and documentation.
+    - Thanks to [Dan Wallis][@fredden], [Danny van der Sluijs][@DannyvdSluijs], [Rodrigo Primo][@rodrigoprimo] and [Juliette Reinders Folmer][@jrfnl] for their contributions.
+
+### Fixed
+- Fixed bug [#466] : Generic.Functions.CallTimePassByReference was not flagging call-time pass-by-reference in class instantiations using the self/parent/static keywords.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+- Fixed bug [#494] : edge case bug in tokenization of an empty block comment.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#494] : edge case bug in tokenization of an empty single-line DocBlock.
+    - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
+- Fixed bug [#499] : Generic.ControlStructures.InlineControlStructure now handles statements with a comment between `else` and `if` correctly.
+    - Thanks to [Rodrigo Primo][@rodrigoprimo] for the patch.
+
+[sq-3731]: https://github.com/squizlabs/PHP_CodeSniffer/issues/3731
+[#387]:    https://github.com/PHPCSStandards/PHP_CodeSniffer/issues/387
+[#442]:    https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/442
+[#447]:    https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/447
+[#461]:    https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/461
+[#466]:    https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/466
+[#471]:    https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/471
+[#472]:    https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/472
+[#473]:    https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/473
+[#478]:    https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/478
+[#479]:    https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/479
+[#494]:    https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/494
+[#499]:    https://github.com/PHPCSStandards/PHP_CodeSniffer/pull/499
+
 ## [3.9.2] - 2024-04-24
 
 ### Changed
@@ -68,7 +430,7 @@ _Nothing yet._
     - Squiz.WhiteSpace.MemberVarSpacing
     - Squiz.WhiteSpace.ScopeClosingBrace
     - Squiz.WhiteSpace.SuperfluousWhitespace
-    - Thanks to [Jay McPartland][@jonmcp] and [Rodrigo Primo][@rodrigoprimo] for the patches.
+    - Thanks to [Jay McPartland][@jaymcp] and [Rodrigo Primo][@rodrigoprimo] for the patches.
 
 ### Changed
 - The following sniffs have received performance related improvements:
@@ -81,7 +443,7 @@ _Nothing yet._
     - External standards with sniff tests using the PHP_CodeSniffer native test framework will also benefit from these changes.
     - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch.
 - Various housekeeping, including improvements to the tests and documentation.
-    - Thanks to [Jay McPartland][@jonmcp], [João Pedro Oliveira][@jpoliveira08], [Rodrigo Primo][@rodrigoprimo] and [Juliette Reinders Folmer][@jrfnl] for their contributions.
+    - Thanks to [Jay McPartland][@jaymcp], [João Pedro Oliveira][@jpoliveira08], [Rodrigo Primo][@rodrigoprimo] and [Juliette Reinders Folmer][@jrfnl] for their contributions.
 
 ### Fixed
 - Fixed bug [#289] : Squiz.WhiteSpace.OperatorSpacing and PSR12.Operators.OperatorSpacing : improved fixer conflict protection by more strenuously avoiding handling operators in declare statements.
@@ -277,7 +639,7 @@ _Nothing yet._
         - **_In contrast to earlier information, the `squizlabs/php_codesniffer` package now points to the new repository and everything will continue to work as before._**
     - PHIVE users may need to clear the PHIVE URL cache.
         - PHIVE users who don't use the package alias, but refer to the package URL, will need to update the URL from `https://squizlabs.github.io/PHP_CodeSniffer/phars/` to `https://phars.phpcodesniffer.com/phars/`.
-    - Users who download the PHAR files using curl or wget, will need to update the download URL from `https://squizlabs.github.io/PHP_CodeSniffer/[phpcs|phpcbf].phar` or `https://github.com/squizlabs/PHP_CodeSnifffer/releases/latest/download/[phpcs|phpcbf].phar` to `https://phars.phpcodesniffer.com/[phpcs|phpcbf].phar`.
+    - Users who download the PHAR files using curl or wget, will need to update the download URL from `https://squizlabs.github.io/PHP_CodeSniffer/[phpcs|phpcbf].phar` or `https://github.com/squizlabs/PHP_CodeSniffer/releases/latest/download/[phpcs|phpcbf].phar` to `https://phars.phpcodesniffer.com/[phpcs|phpcbf].phar`.
     - For users who install PHP_CodeSniffer via the [Setup-PHP](https://github.com/shivammathur/setup-php/) action runner for GitHub Actions, nothing changes.
     - Users using a git clone will need to update the clone address from `git@github.com:squizlabs/PHP_CodeSniffer.git` to `git@github.com:PHPCSStandards/PHP_CodeSniffer.git`.
         - Contributors will need to fork the new repo and add both the new fork as well as the new repo as remotes to their local git copy of PHP_CodeSniffer.
@@ -1651,7 +2013,7 @@ Additionally, thanks to [Alexander Turek][@derrabus] for consulting on the repo 
     - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
 - Squiz.WhiteSpace.SuperfluousWhitespace no longer throws errors for spacing between functions and properties in anon classes
     - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
-- Zend.Files.ClosingTag no longer adds a semi-colon during fixing of a file that only contains a comment
+- Zend.Files.ClosingTag no longer adds a semicolon during fixing of a file that only contains a comment
     - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
 - Zend.NamingConventions.ValidVariableName now supports variables inside anonymous classes correctly
     - Thanks to [Juliette Reinders Folmer][@jrfnl] for the patch
@@ -6883,6 +7245,14 @@ Additionally, thanks to [Alexander Turek][@derrabus] for consulting on the repo 
 -->
 
 [Unreleased]: https://github.com/PHPCSStandards/PHP_CodeSniffer/compare/master...HEAD
+[3.11.3]:     https://github.com/PHPCSStandards/PHP_CodeSniffer/compare/3.11.2...3.11.3
+[3.11.2]:     https://github.com/PHPCSStandards/PHP_CodeSniffer/compare/3.11.1...3.11.2
+[3.11.1]:     https://github.com/PHPCSStandards/PHP_CodeSniffer/compare/3.11.0...3.11.1
+[3.11.0]:     https://github.com/PHPCSStandards/PHP_CodeSniffer/compare/3.10.3...3.11.0
+[3.10.3]:     https://github.com/PHPCSStandards/PHP_CodeSniffer/compare/3.10.2...3.10.3
+[3.10.2]:     https://github.com/PHPCSStandards/PHP_CodeSniffer/compare/3.10.1...3.10.2
+[3.10.1]:     https://github.com/PHPCSStandards/PHP_CodeSniffer/compare/3.10.0...3.10.1
+[3.10.0]:     https://github.com/PHPCSStandards/PHP_CodeSniffer/compare/3.9.2...3.10.0
 [3.9.2]:      https://github.com/PHPCSStandards/PHP_CodeSniffer/compare/3.9.1...3.9.2
 [3.9.1]:      https://github.com/PHPCSStandards/PHP_CodeSniffer/compare/3.9.0...3.9.1
 [3.9.0]:      https://github.com/PHPCSStandards/PHP_CodeSniffer/compare/3.8.1...3.9.0
@@ -7006,6 +7376,7 @@ Additionally, thanks to [Alexander Turek][@derrabus] for consulting on the repo 
 [@becoded]:             https://github.com/becoded
 [@Benjamin-Loison]:     https://github.com/Benjamin-Loison
 [@benmatselby]:         https://github.com/benmatselby
+[@biinari]:             https://github.com/biinari
 [@Billz95]:             https://github.com/Billz95
 [@biozshock]:           https://github.com/biozshock
 [@bkdotcom]:            https://github.com/bkdotcom
@@ -7020,6 +7391,7 @@ Additionally, thanks to [Alexander Turek][@derrabus] for consulting on the repo 
 [@cixtor]:              https://github.com/cixtor
 [@claylo]:              https://github.com/claylo
 [@codebymikey]:         https://github.com/codebymikey
+[@costdev]:             https://github.com/costdev
 [@covex-nn]:            https://github.com/covex-nn
 [@cweiske]:             https://github.com/cweiske
 [@Daimona]:             https://github.com/Daimona
@@ -7073,6 +7445,7 @@ Additionally, thanks to [Alexander Turek][@derrabus] for consulting on the repo 
 [@ivuorinen]:           https://github.com/ivuorinen
 [@jasonmccreary]:       https://github.com/jasonmccreary
 [@javer]:               https://github.com/javer
+[@jaymcp]:              https://github.com/jaymcp
 [@JDGrimes]:            https://github.com/JDGrimes
 [@jedgell]:             https://github.com/jedgell
 [@jeffslofish]:         https://github.com/jeffslofish
@@ -7083,7 +7456,6 @@ Additionally, thanks to [Alexander Turek][@derrabus] for consulting on the repo 
 [@johanderuijter]:      https://github.com/johanderuijter
 [@johnmaguire]:         https://github.com/johnmaguire
 [@johnpbloch]:          https://github.com/johnpbloch
-[@jonmcp]:              https://github.com/jonmcp
 [@JorisDebonnet]:       https://github.com/JorisDebonnet
 [@josephzidell]:        https://github.com/josephzidell
 [@joshdavis11]:         https://github.com/joshdavis11
@@ -7110,14 +7482,17 @@ Additionally, thanks to [Alexander Turek][@derrabus] for consulting on the repo 
 [@MarkMaldaba]:         https://github.com/MarkMaldaba
 [@martinssipenko]:      https://github.com/martinssipenko
 [@marvasDE]:            https://github.com/marvasDE
+[@maryo]:               https://github.com/maryo
 [@MasterOdin]:          https://github.com/MasterOdin
 [@mathroc]:             https://github.com/mathroc
+[@MatmaRex]:            https://github.com/MatmaRex
 [@maxgalbu]:            https://github.com/maxgalbu
 [@mcuelenaere]:         https://github.com/mcuelenaere
 [@mhujer]:              https://github.com/mhujer
 [@michaelbutler]:       https://github.com/michaelbutler
 [@michalbundyra]:       https://github.com/michalbundyra
 [@Morerice]:            https://github.com/Morerice
+[@mbomb007]:            https://github.com/mbomb007
 [@morozov]:             https://github.com/morozov
 [@mrkrstphr]:           https://github.com/mrkrstphr
 [@mythril]:             https://github.com/mythril
@@ -7136,6 +7511,7 @@ Additionally, thanks to [Alexander Turek][@derrabus] for consulting on the repo 
 [@pfrenssen]:           https://github.com/pfrenssen
 [@phil-davis]:          https://github.com/phil-davis
 [@photodude]:           https://github.com/photodude
+[@przemekhernik]:       https://github.com/przemekhernik
 [@r3nat]:               https://github.com/r3nat
 [@raul338]:             https://github.com/raul338
 [@realmfoo]:            https://github.com/realmfoo

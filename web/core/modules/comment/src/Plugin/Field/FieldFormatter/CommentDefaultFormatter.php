@@ -7,26 +7,26 @@ use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityFormBuilderInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a default comment formatter.
- *
- * @FieldFormatter(
- *   id = "comment_default",
- *   module = "comment",
- *   label = @Translation("Comment list"),
- *   field_types = {
- *     "comment"
- *   }
- * )
  */
+#[FieldFormatter(
+  id: 'comment_default',
+  label: new TranslatableMarkup('Comment list'),
+  field_types: [
+    'comment',
+  ],
+)]
 class CommentDefaultFormatter extends FormatterBase {
 
   /**
@@ -103,7 +103,7 @@ class CommentDefaultFormatter extends FormatterBase {
    * Constructs a new CommentDefaultFormatter.
    *
    * @param string $plugin_id
-   *   The plugin_id for the formatter.
+   *   The plugin ID for the formatter.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition

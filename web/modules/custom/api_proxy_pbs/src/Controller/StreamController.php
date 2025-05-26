@@ -5,48 +5,12 @@ namespace Drupal\api_proxy_pbs\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Psr\Log\LoggerInterface;
-
-/**
- * Provides a StreamController for handling audio streaming via Omny Studio API.
- */
 class StreamController extends ControllerBase
 {
-    private $baseUrl = 'https://api.omny.fm/';
-    private $logger;
-
-    /**
-     * Constructs a StreamController object.
-     *
-     * @param LoggerInterface $logger
-     *   A logger instance.
-     */
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
-
-    /**
-     * Creates an instance of the StreamController.
-     *
-     * @param ContainerInterface $container
-     *   The service container.
-     *
-     * @return StreamController
-     *   An instance of StreamController.
-     */
-    public static function create(ContainerInterface $container)
-    {
-        return new static(
-            $container->get('logger.channel.default')
-        );
-    }
-
     /**
      * Fetches the audio URL from the API endpoint for the given slug and date,
-     * attempting three different methods to find the correct clip.
+     * constructing the URL with the formatted program name if necessary.
      *
      * @param string $slug
      *   The initial program slug (typically from Airnet).
@@ -59,8 +23,8 @@ class StreamController extends ControllerBase
     public function getAudioUrl($slug, $date)
     {
         try {
-            // Force the time zone to AEST when creating the DateTime object
-            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $date, new \DateTimeZone('Australia/Sydney'));
+            // Attempt to parse the date
+            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $date);
             if (!$dateTime) {
                 throw new \Exception('Invalid date format');
             }
@@ -68,31 +32,27 @@ class StreamController extends ControllerBase
             // Format the date for the URL
             $formattedDate = $dateTime->format('j-F-Y');
 
-            // First attempt: Try fetching the clip with the original slug
-            $apiUrl = $this->baseUrl . "programs/{$slug}/clips/{$slug}-{$formattedDate}";
-            $response = @file_get_contents($apiUrl);
-            $data = $response ? json_decode($response, true) : null;
+            // Generate the initial API URL based on the slug
+            $apiUrl = "https://omny.fm/api/programs/{$slug}/clips/{$slug}-{$formattedDate}";
+
+            // Fetch data from the API endpoint
+            $response = file_get_contents($apiUrl);
+            $data = json_decode($response, true);
 
             if (!$data || !isset($data['PublishState'])) {
-                // Second attempt: Try fetching the clip with the Omny slug
-                $omnySlug = $this->getOmnySlug($slug);
-                if (!$omnySlug) {
-                    throw new \Exception('No matching Omny slug found for the provided Airnet slug.');
+                // Fetch the Omny slug and formatted program name if initial attempt fails
+                $slugInfo = $this->getOmnySlug($slug);
+                if (!$slugInfo) {
+                    throw new \Exception('Failed to fetch the Omny slug and formatted name');
                 }
-                $apiUrl = $this->baseUrl . "programs/{$omnySlug}/clips/{$slug}-{$formattedDate}";
-                $response = @file_get_contents($apiUrl);
-                $data = $response ? json_decode($response, true) : null;
 
-                // Attempt again with omnySlug / omnySlug slugs?
-                // $apiUrl = $this->baseUrl . "programs/{$omnySlug}/clips/{$slug}-{$formattedDate}";
+                // Construct a new API URL using both the slug and the formatted program name
+                $apiUrl = "https://omny.fm/api/programs/{$slugInfo['slug']}/clips/{$slugInfo['formattedName']}-{$formattedDate}";
+                $response = file_get_contents($apiUrl);
+                $data = json_decode($response, true);
 
                 if (!$data || !isset($data['PublishState'])) {
-                    // Third attempt: Use findClipByDate to search through clips by date range
-                    $data = $this->findClipByDate($omnySlug, $dateTime);
-
-                    if (!$data || !isset($data['PublishState'])) {
-                        throw new \Exception("Unable to find a clip for the date {$dateTime->format('Y-m-d')} with slug {$omnySlug} after multiple attempts.");
-                    }
+                    throw new \Exception('Invalid response from API after retry');
                 }
             }
 
@@ -103,152 +63,63 @@ class StreamController extends ControllerBase
             }
 
             // If PublishState is not "Published" or AudioUrl is not available, throw an error
-            throw new \Exception('Audio is not published.');
+            throw new \Exception('Audio is not published');
         } catch (\Exception $e) {
-            // Log the error
-            $this->logger->error('Error in getAudioUrl: @message', ['@message' => $e->getMessage()]);
-
             // Return an error response with the API URL if an exception occurs
-            return new JsonResponse(['error' => $e->getMessage(), 'api_url' => $apiUrl ?? 'N/A'], 400);
+            return new JsonResponse(['error' => $e->getMessage(), 'api_url' => isset($apiUrl) ? $apiUrl : 'N/A'], 400);
         }
     }
 
     /**
-     * Fetches the Omny slug for a given Airnet slug.
+     * Retrieves the Omny slug and formatted program name that match the given initial slug.
+     * This method is used when the initial attempt to fetch program data fails, 
+     * indicating a possible mismatch between the provided slug and the Omny slug naming conventions.
      *
      * @param string $airnetSlug
-     *   The Airnet slug.
+     *   The initial program slug, typically from Airnet.
      *
-     * @return string|null
-     *   The Omny slug, or null if not found.
+     * @return array|false
+     *   Returns an associative array with 'slug' and 'formattedName' if a match is found,
+     *   otherwise false if no match is found.
      */
-    function getOmnySlug($airnetSlug): ?string
+    public function getOmnySlug($airnetSlug)
     {
         try {
-            /*
-            Using localhost doesn't seem to work:
-            $base_url = \Drupal::request()->getSchemeAndHttpHost();
-            */
-            $base_url = 'http://dev.schedule.pbsfm.org.au';
-            $apiUrl = $base_url . '/api/omny-programs';
+            // Fetch all programs from Omny for the organization
+            $apiUrl = "https://api.omny.fm/orgs/1270a58a-2c51-457c-b8c6-aced0086cad6/programs";
             $response = file_get_contents($apiUrl);
+            $omnyPrograms = json_decode($response, true);
 
-            $programMapping = json_decode($response, true);
-
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \Exception('JSON decode error: ' . json_last_error_msg());
+            if (!$omnyPrograms || !isset($omnyPrograms['Programs'])) {
+                \Drupal::logger('api_proxy_pbs')->error('Invalid or no response from Omny API while fetching programs.');
+                throw new \Exception('Invalid response from API');
             }
 
-            if (isset($programMapping[$airnetSlug])) {
-                return $programMapping[$airnetSlug];
-            } else {
-                return null; // Explicitly return null if no matching program is found
+            foreach ($omnyPrograms['Programs'] as $omnyProgram) {
+                $slugPercent = 0;
+                similar_text(strtolower($omnyProgram['Slug']), strtolower($airnetSlug), $slugPercent);
+
+                if ($slugPercent > 80) { // Threshold can be adjusted based on specific needs
+                    // Format the program name according to the specified rules
+                    $formattedName = strtolower($omnyProgram['Name']);
+                    $formattedName = str_replace(' ', '-', $formattedName);
+                    $formattedName = preg_replace('/[^a-z0-9-]/', '', $formattedName);
+
+                    \Drupal::logger('api_proxy_pbs')->info("Matching program found: {$omnyProgram['Slug']} with similarity {$slugPercent}%.");
+
+                    // Return both slug and formatted program name
+                    return [
+                        'slug' => $omnyProgram['Slug'],
+                        'formattedName' => $formattedName
+                    ];
+                }
             }
+
+            \Drupal::logger('api_proxy_pbs')->notice("No matching program found for slug: {$airnetSlug}.");
+            return false;
         } catch (\Exception $e) {
-            $this->logger->error('Error fetching Omny slug: @message', ['@message' => $e->getMessage()]);
-            return null;
+            \Drupal::logger('api_proxy_pbs')->error("Exception encountered while fetching programs: {$e->getMessage()}");
+            return false;
         }
-    }
-
-    /**
-     * Searches for a clip by date within a program's clips using the Omny Studio API.
-     *
-     * This method fetches clips page by page from the Omny Studio API until a clip
-     * with the specified target date is found. It utilizes pagination to efficiently
-     * search through potentially large datasets by adjusting the page size after the
-     * first request.
-     *
-     * @param string $programSlug
-     *   The slug identifier for the program from which clips are fetched.
-     * @param \DateTime $targetDate
-     *   The target date to find the clip for, as a DateTime object.
-     *
-     * @return array|null
-     *   An associative array representing the clip with the matching date if found,
-     *   or null if no matching clip is found.
-     *
-     * @throws \Exception
-     *   Throws an exception if the API call fails or returns an invalid response.
-     */
-    function findClipByDate(string $programSlug, \DateTime $targetDate): ?array
-    {
-        $pageSize = 10; // Fixed page size of 10 items
-        $cursor = null;
-        $foundClip = null;
-
-        // Define a buffer in minutes
-        $bufferInMinutes = 1;
-
-        // Convert targetDate to UTC for comparison
-        $targetDateUtc = clone $targetDate;
-        $targetDateUtc->setTimezone(new \DateTimeZone('UTC'));
-
-        do {
-            $url = $this->buildUrl($programSlug, $pageSize, $cursor);
-            $this->logger->info("Fetching clips with url $url");
-
-            try {
-                $response = file_get_contents($url);
-
-                if ($response === false) {
-                    throw new \Exception('Failed to fetch data from API.');
-                }
-
-                $responseData = json_decode($response, true);
-                $clips = $responseData['Clips'] ?? [];
-                $cursor = $responseData['Cursor'] ?? null;
-
-                foreach ($clips as $clip) {
-                    $recordingMetadata = $clip['RecordingMetadata'] ?? null;
-
-                    if ($recordingMetadata) {
-                        $captureStart = new \DateTime($recordingMetadata['CaptureStartUtc']);
-                        $captureEnd = new \DateTime($recordingMetadata['CaptureEndUtc']);
-
-                        // Apply buffer to the capture start and end times
-                        $captureStart->modify("-{$bufferInMinutes} minutes");
-                        $captureEnd->modify("+{$bufferInMinutes} minutes");
-
-                        // Check if the target date (now in UTC) is within the modified capture start and end
-                        if ($targetDateUtc >= $captureStart && $targetDateUtc <= $captureEnd) {
-                            $foundClip = $clip;
-                            break;
-                        }
-                    }
-                }
-
-                if ($foundClip) {
-                    break;
-                }
-            } catch (\Exception $e) {
-                $this->logger->error('Error in findClipByDate: @message', ['@message' => $e->getMessage()]);
-                return null;
-            }
-        } while ($cursor);  // Continue looping as long as the cursor is not null
-
-        return $foundClip;
-    }
-
-    /**
-     * Constructs a URL for fetching clips with pagination support.
-     *
-     * @param string $programSlug
-     *   The slug identifier for the program.
-     * @param int $pageSize
-     *   The number of clips to retrieve per page.
-     * @param string|null $cursor
-     *   The pagination cursor indicating the position for fetching the next set of results.
-     *
-     * @return string
-     *   The constructed URL with query parameters.
-     */
-    private function buildUrl(string $programSlug, int $pageSize, ?string $cursor): string
-    {
-        $queryParams = http_build_query([
-            'pageSize' => $pageSize,
-            'cursor' => $cursor,
-        ]);
-
-        return $this->baseUrl . "programs/{$programSlug}/clips?" . $queryParams;
     }
 }

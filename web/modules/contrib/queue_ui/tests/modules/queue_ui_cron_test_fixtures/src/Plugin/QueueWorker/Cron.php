@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\queue_ui_cron_test_plugin\Plugin\QueueWorker;
+namespace Drupal\queue_ui_cron_test_fixtures\Plugin\QueueWorker;
 
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\State\StateInterface;

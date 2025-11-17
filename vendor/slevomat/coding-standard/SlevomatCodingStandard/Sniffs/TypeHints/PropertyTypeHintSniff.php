@@ -29,7 +29,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHint;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_map;
-use function array_merge;
+use function array_push;
 use function array_unique;
 use function array_values;
 use function count;
@@ -43,11 +43,11 @@ use const T_COMMA;
 use const T_CONST;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_STAR;
+use const T_FINAL;
 use const T_FUNCTION;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
-use const T_READONLY;
 use const T_SEMICOLON;
 use const T_STATIC;
 use const T_VAR;
@@ -68,8 +68,7 @@ class PropertyTypeHintSniff implements Sniff
 
 	private const NAME = 'SlevomatCodingStandard.TypeHints.PropertyTypeHint';
 
-	/** @deprecated */
-	public bool $enableNativeTypeHint = true;
+	public ?bool $enableNativeTypeHint = null;
 
 	public ?bool $enableMixedTypeHint = null;
 
@@ -90,12 +89,14 @@ class PropertyTypeHintSniff implements Sniff
 	 */
 	public function register(): array
 	{
+		// Other modifiers cannot be used without type hint
 		return [
 			T_VAR,
 			T_PUBLIC,
 			T_PROTECTED,
 			T_PRIVATE,
 			T_STATIC,
+			T_FINAL,
 		];
 	}
 
@@ -105,13 +106,19 @@ class PropertyTypeHintSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $pointer): void
 	{
-		$this->enableMixedTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000);
-		$this->enableUnionTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableUnionTypeHint, 80000);
-		$this->enableIntersectionTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableIntersectionTypeHint, 80100);
-		$this->enableStandaloneNullTrueFalseTypeHints = SniffSettingsHelper::isEnabledByPhpVersion(
-			$this->enableStandaloneNullTrueFalseTypeHints,
-			80200,
-		);
+		$this->enableNativeTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableNativeTypeHint, 70400);
+		$this->enableMixedTypeHint = $this->enableNativeTypeHint
+			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000)
+			: false;
+		$this->enableUnionTypeHint = $this->enableNativeTypeHint
+			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableUnionTypeHint, 80000)
+			: false;
+		$this->enableIntersectionTypeHint = $this->enableNativeTypeHint
+			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableIntersectionTypeHint, 80100)
+			: false;
+		$this->enableStandaloneNullTrueFalseTypeHints = $this->enableNativeTypeHint
+			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableStandaloneNullTrueFalseTypeHints, 80200)
+			: false;
 
 		$tokens = $phpcsFile->getTokens();
 
@@ -121,8 +128,8 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
-		if (in_array($tokens[$nextPointer]['code'], [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC], true)) {
-			// We don't want to report the same property twice
+		if (in_array($tokens[$nextPointer]['code'], TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES, true)) {
+			// We don't want to report the same property multiple times
 			return;
 		}
 
@@ -201,7 +208,9 @@ class PropertyTypeHintSniff implements Sniff
 			if (!$isSuppressedAnyTypeHint) {
 				$phpcsFile->addError(
 					sprintf(
-						'Property %s does not have native type hint nor @var annotation for its value.',
+						$this->enableNativeTypeHint
+							? 'Property %s does not have native type hint nor @var annotation for its value.'
+							: 'Property %s does not have @var annotation for its value.',
 						PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer),
 					),
 					$propertyPointer,
@@ -209,6 +218,10 @@ class PropertyTypeHintSniff implements Sniff
 				);
 			}
 
+			return;
+		}
+
+		if (!$this->enableNativeTypeHint) {
 			return;
 		}
 
@@ -297,10 +310,7 @@ class PropertyTypeHintSniff implements Sniff
 		foreach ($typeHints as $typeHint) {
 			if ($this->enableUnionTypeHint && TypeHintHelper::isUnofficialUnionTypeHint($typeHint)) {
 				$canTryUnionTypeHint = true;
-				$typeHintsWithConvertedUnion = array_merge(
-					$typeHintsWithConvertedUnion,
-					TypeHintHelper::convertUnofficialUnionTypeHintToOfficialTypeHints($typeHint),
-				);
+				array_push($typeHintsWithConvertedUnion, ...TypeHintHelper::convertUnofficialUnionTypeHintToOfficialTypeHints($typeHint));
 			} else {
 				$typeHintsWithConvertedUnion[] = $typeHint;
 			}
@@ -383,12 +393,6 @@ class PropertyTypeHintSniff implements Sniff
 			}
 		}
 
-		$propertyStartPointer = TokenHelper::findPrevious(
-			$phpcsFile,
-			[T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR, T_STATIC, T_READONLY],
-			$propertyPointer - 1,
-		);
-
 		$tokens = $phpcsFile->getTokens();
 
 		$pointerAfterProperty = null;
@@ -397,13 +401,13 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContent($propertyStartPointer, sprintf(' %s', $propertyTypeHint));
+		FixerHelper::addBefore($phpcsFile, $propertyPointer, sprintf('%s ', $propertyTypeHint));
 
 		if (
 			$pointerAfterProperty !== null
 			&& in_array($tokens[$pointerAfterProperty]['code'], [T_SEMICOLON, T_COMMA], true)
 		) {
-			$phpcsFile->fixer->addContent($propertyPointer, ' = null');
+			FixerHelper::add($phpcsFile, $propertyPointer, ' = null');
 		}
 
 		$phpcsFile->fixer->endChangeset();
@@ -600,14 +604,12 @@ class PropertyTypeHintSniff implements Sniff
 	 */
 	private function getTraversableTypeHints(): array
 	{
-		if ($this->normalizedTraversableTypeHints === null) {
-			$this->normalizedTraversableTypeHints = array_map(
-				static fn (string $typeHint): string => NamespaceHelper::isFullyQualifiedName($typeHint)
-						? $typeHint
-						: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint),
-				SniffSettingsHelper::normalizeArray($this->traversableTypeHints),
-			);
-		}
+		$this->normalizedTraversableTypeHints ??= array_map(
+			static fn (string $typeHint): string => NamespaceHelper::isFullyQualifiedName($typeHint)
+					? $typeHint
+					: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint),
+			SniffSettingsHelper::normalizeArray($this->traversableTypeHints),
+		);
 		return $this->normalizedTraversableTypeHints;
 	}
 

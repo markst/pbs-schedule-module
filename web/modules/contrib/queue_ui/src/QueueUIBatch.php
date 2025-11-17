@@ -9,6 +9,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Queue\DelayableQueueInterface;
 use Drupal\Core\Queue\DelayedRequeueException;
+use Drupal\Core\Queue\QueueGarbageCollectionInterface;
 use Drupal\Core\Queue\QueueWorkerManagerInterface;
 use Drupal\Core\Queue\RequeueException;
 use Drupal\Core\Queue\SuspendQueueException;
@@ -63,7 +64,8 @@ class QueueUIBatch implements QueueUIBatchInterface {
   public function batch(array $queues): void {
     $batch = (new BatchBuilder())
       ->setTitle($this->t('Processing queues'))
-      ->setFinishCallback([$this, 'finish']);
+      ->setFinishCallback([$this, 'finish'])
+      ->setProgressMessage('Elapsed time: @elapsed. Estimated time to complete: @estimate.');
     foreach ($queues as $queue_name) {
       $batch->addOperation([$this, 'step'], [$queue_name]);
     }
@@ -80,6 +82,14 @@ class QueueUIBatch implements QueueUIBatchInterface {
     $this->queueFactory->get($queue_name)->createQueue();
     $queue_worker = $this->queueManager->createInstance($queue_name);
     $queue = $this->queueFactory->get($queue_name);
+
+    // Run garbage collection only on the first step.
+    if (!isset($context['sandbox']['queue_ui_gc_done'])) {
+      if ($queue instanceof QueueGarbageCollectionInterface) {
+        $queue->garbageCollection();
+      }
+      $context['sandbox']['queue_ui_gc_done'] = TRUE;
+    }
 
     $num_of_items = $queue->numberOfItems();
     if (!array_key_exists('num_of_total_items', $context['sandbox'])

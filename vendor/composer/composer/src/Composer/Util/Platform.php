@@ -119,6 +119,7 @@ class Platform
                 if ((bool) Platform::getEnv('HOME')) {
                     return Platform::getEnv('HOME') . $matches['path'];
                 }
+
                 return Platform::getEnv('USERPROFILE') . $matches['path'];
             }
 
@@ -167,7 +168,7 @@ class Platform
             if (
                 !(bool) ini_get('open_basedir')
                 && is_readable('/proc/version')
-                && false !== stripos((string)Silencer::call('file_get_contents', '/proc/version'), 'microsoft')
+                && false !== stripos((string) Silencer::call('file_get_contents', '/proc/version'), 'microsoft')
                 && !self::isDocker() // Docker and Podman running inside WSL should not be seen as WSL
             ) {
                 return self::$isWindowsSubsystemForLinux = true;
@@ -217,7 +218,11 @@ class Platform
             } catch (\Throwable $e) {
                 break;
             }
-            if (is_string($data) && str_contains($data, '/var/lib/docker/')) {
+            if (!is_string($data)) {
+                continue;
+            }
+            // detect default mount points created by Docker/containerd
+            if (str_contains($data, '/var/lib/docker/') || str_contains($data, '/io.containerd.snapshotter')) {
                 return self::$isDocker = true;
             }
         }
@@ -275,6 +280,7 @@ class Platform
         if ($stat === false) {
             return false;
         }
+
         // Check if formatted mode is S_IFCHR
         return 0020000 === ($stat['mode'] & 0170000);
     }

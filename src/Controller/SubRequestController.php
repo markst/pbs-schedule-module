@@ -39,23 +39,31 @@ class SubRequestController extends ControllerBase implements ContainerInjectionI
     protected $httpClient;
 
     /**
+     * @var string
+     */
+    protected $baseUrl;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
         HttpKernelInterface $http_kernel,
-        RequestStack $request_stack
+        RequestStack $request_stack,
+        string $base_url
     ) {
         $this->httpKernel = $http_kernel;
         $this->requestStack = $request_stack;
         $this->httpClient = HttpClient::create();
+        $this->baseUrl = $base_url;
     }
 
     public static function create(ContainerInterface $container)
     {
         $httpKernel = \Drupal::service('http_kernel.basic');
         $requestStack = \Drupal::requestStack();
+        $baseUrl = $container->getParameter('airnet.base_url'); // This should be set in the services configuration or settings.
 
-        return new static($httpKernel, $requestStack);
+        return new static($httpKernel, $requestStack, $baseUrl);
     }
 
     /**
@@ -96,7 +104,7 @@ class SubRequestController extends ControllerBase implements ContainerInjectionI
         );
 
         // Confirm necessary `api_proxy`:
-        $sub_request->headers->set('Host', 'airnet.org.au');
+        $sub_request->headers->set('Host', parse_url($this->baseUrl, PHP_URL_HOST));
 
         try {
             $sub_response = $this->httpKernel->handle(
@@ -124,12 +132,9 @@ class SubRequestController extends ControllerBase implements ContainerInjectionI
      */
     public function getJSONSubrequest($uri, $parameters = [])
     {
-        // Base URL for airnet.org.au API.
-        $base_url = 'https://airnet.org.au';
-
         try {
             // Perform the HTTP request using the HttpClient instance created in the constructor.
-            $response = $this->httpClient->request('GET', $base_url . $uri, [
+            $response = $this->httpClient->request('GET', $this->baseUrl . $uri, [
                 'query' => $parameters,
                 'headers' => [
                     'Cache-Control' => 'no-cache, no-store, must-revalidate',

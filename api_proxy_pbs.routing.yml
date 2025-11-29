@@ -13,6 +13,13 @@ api_proxy_pbs.fortnight_schedule:
     _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::index'
   requirements:
     _access: 'TRUE'
+api_proxy_pbs.schedule:
+  path: '/api/schedule'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::index'
+  requirements:
+    _access: 'TRUE'
 
 api_proxy_pbs.insomnia:
   path: '/api/insomnia-lookup'

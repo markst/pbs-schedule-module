@@ -209,11 +209,11 @@ class ScheduleController extends ControllerBase
         // User timezone defined in Regional Settings: `date_default_timezone_get()`
 
         $times = explode(':', $program['start']);
-        $start_time = new DateTime(
+        $now = new DateTime(
             'now',
             new DateTimeZone('Australia/Melbourne')
         );
-        $even_week = $start_time->format('W') % 2 == 0;
+        $even_week = $now->format('W') % 2 == 0;
         $append = $even_week && $program['day'] <= 7 ? 14 : 0;
         /*
         Odd week:
@@ -224,12 +224,35 @@ class ScheduleController extends ControllerBase
         Week 1 = 15 -> 21
         Week 2 = 8 -> 14
         */
-        return $start_time
-            ->setISODate(
-                $start_time->format('Y'),
-                $start_time->format('W') - ($even_week ? 1 : 0),
-                $program['day'] + $append
-            )
+        $current_week = (int)$now->format('W');
+        $target_week = $current_week - ($even_week ? 1 : 0);
+        $target_day = (int)$program['day'] + $append;
+        $current_year = (int)$now->format('Y');
+        
+        // Handle week 0 or negative - setISODate treats week 0 as last week of previous year
+        // For our fortnight schedule showing future dates, we need to adjust
+        if ($target_week <= 0) {
+            $target_week = 1;
+        }
+        
+        // Create a new DateTime object for calculation
+        $start_time = new DateTime('now', new DateTimeZone('Australia/Melbourne'));
+        
+        // Set ISO date with current year
+        $result = $start_time->setISODate($current_year, $target_week, $target_day);
+        
+        // For a fortnight schedule, all dates should be in the future (0-21 days ahead)
+        // If the calculated date is more than 1 day in the past, try next year
+        // This handles year boundary cases where ISO week calculation points to previous year
+        if ($result < $now) {
+            $diff_seconds = $now->getTimestamp() - $result->getTimestamp();
+            // If more than 1 day in the past, it's likely the wrong year
+            if ($diff_seconds > 86400) {
+                $result = $start_time->setISODate($current_year + 1, $target_week, $target_day);
+            }
+        }
+        
+        return $result
             ->setTime($times[0], $times[1])
             ->format('c');
     }

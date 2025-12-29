@@ -1,9 +1,9 @@
 name: Airnet API Proxy
-description: 'A proxy for Airnet.'
+description: "A proxy for Airnet."
 core_version_requirement: ^9 || ^10
 package: "airnet"
 type: module
-version: "1.2.2"
+version: "1.2.3"
 dependencies:
   - api_proxy
   - symfony/http-client

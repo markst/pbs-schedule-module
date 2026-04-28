@@ -60,7 +60,10 @@ class StreamController extends ControllerBase
     {
         try {
             // Force the time zone to AEST when creating the DateTime object
-            $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $date, new \DateTimeZone('Australia/Sydney'));
+            // PHP's space format character matches zero or more whitespace, so 'Y-m-d H:i:s' handles both
+            // '2026-04-28 11:00:00' and '2026-04-2811:00:00'. The hyphen variant needs its own format.
+            $dateTime = \DateTime::createFromFormat('Y-m-d-H:i:s', $date, new \DateTimeZone('Australia/Sydney'))
+                ?? \DateTime::createFromFormat('Y-m-d H:i:s', $date, new \DateTimeZone('Australia/Sydney'));
             if (!$dateTime) {
                 throw new \Exception('Invalid date format');
             }

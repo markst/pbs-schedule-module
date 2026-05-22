@@ -4,8 +4,8 @@
  */
 
 .toolbar .toolbar-tray-vertical .edit-rebuild-cache-access-toolbar {
-  text-align: right; /* LTR */
   padding: 1em;
+  text-align: right; /* LTR */
 }
 
 [dir="rtl"] .toolbar .toolbar-tray-vertical .edit-rebuild-cache-access-toolbar {
@@ -28,12 +28,12 @@
   float: right;
 }
 
-.toolbar .toolbar-bar .toolbar-icon-rebuild-cache-access:before {
+.toolbar .toolbar-bar .toolbar-icon-rebuild-cache-access::before {
   background-image: url(../icons/recycle.svg);
 }
 
-.toolbar-bar .toolbar-icon-rebuild-cache-access:active:before,
-.toolbar-bar .toolbar-icon-rebuild-cache-access.is-active:before {
+.toolbar-bar .toolbar-icon-rebuild-cache-access:active::before,
+.toolbar-bar .toolbar-icon-rebuild-cache-access.is-active::before {
   background-image: url(../icons/recycle.svg);
 }
 

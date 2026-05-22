@@ -45,3 +45,55 @@ function rebuild_cache_access_help($route_name, RouteMatchInterface $route_match
 
   return NULL;
 }
+
+/**
+ * Implements hook_block_alter().
+ */
+function rebuild_cache_access_block_alter(&$definitions) {
+  if (isset($definitions['rebuild_cache_access_navigation'])) {
+
+    // Allow in Core Navigation layout.
+    $definitions['rebuild_cache_access_navigation']['allow_in_navigation'] = TRUE;
+
+    // Prevent use in the generic block UI.
+    $definitions['rebuild_cache_access_navigation']['_block_ui_hidden'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function rebuild_cache_access_modules_installed($modules, $is_syncing) : void {
+
+  // If the module is getting enabled, install the rebuild cache block.
+  if (!$is_syncing && in_array('navigation', $modules)) {
+    _rebuild_cache_access_install_navigation_block();
+  }
+}
+
+/**
+ * Adds the rebuild cache action block to the Navigation layout.
+ */
+function _rebuild_cache_access_install_navigation_block(): void {
+  $data = [
+    'delta' => 3,
+    'configuration' => [
+      'id' => 'rebuild_cache_access_navigation',
+      'label' => t('Rebuild cache'),
+      'provider' => 'rebuild_cache_access',
+      'label_display' => 0,
+      'context_mapping' => [],
+    ],
+  ];
+
+  /** @var \Drupal\Core\Config\Action\ConfigActionManager $manager */
+  $manager = \Drupal::service('plugin.manager.config_action');
+
+  // The 'addNavigationBlock' plugin only exists in Drupal 11+.
+  if (!$manager->hasDefinition('addNavigationBlock')) {
+    return;
+  }
+
+  // Use the action to add a new block to Navigation.
+  $manager->applyAction('addNavigationBlock', 'navigation.block_layout', $data);
+}

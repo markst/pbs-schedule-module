@@ -4,6 +4,7 @@ namespace Drupal\rebuild_cache_access\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -28,11 +29,26 @@ class RebuildCacheAccessController extends ControllerBase {
   protected $moduleHandler;
 
   /**
-   * {@inheritdoc}
+   * The logger channel for rebuild_cache_access.
+   *
+   * @var \Psr\Log\LoggerInterface
    */
-  public function __construct(RequestStack $request_stack, ModuleHandlerInterface $module_handler) {
+  protected $logger;
+
+  /**
+   * Constructs a RebuildCacheAccessController object.
+   *
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   The logger channel for rebuild_cache_access.
+   */
+  public function __construct(RequestStack $request_stack, ModuleHandlerInterface $module_handler, LoggerInterface $logger) {
     $this->requestStack = $request_stack;
     $this->moduleHandler = $module_handler;
+    $this->logger = $logger;
   }
 
   /**
@@ -41,7 +57,8 @@ class RebuildCacheAccessController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('request_stack'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('logger.channel.rebuild_cache_access')
     );
   }
 
@@ -67,6 +84,7 @@ class RebuildCacheAccessController extends ControllerBase {
     }
     drupal_flush_all_caches();
     $this->messenger()->addMessage($this->t('All caches cleared.'));
+    $this->logger->info($this->t('All caches cleared.'));
     return new RedirectResponse($this->reloadPage());
   }
 

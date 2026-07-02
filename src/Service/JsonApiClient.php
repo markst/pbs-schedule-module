@@ -197,7 +197,7 @@ class JsonApiClient
     protected function getAuthorizationHeader(): string
     {
         $username = $this->config->get('jsonapi_auth_username') ?? self::DEFAULT_AUTH_USERNAME;
-        $password = $this->config->get('jsonapi_auth_password') ?? '';
+        $password = $this->config->get('jsonapi_auth_password') ?? 'pbs2025';
 
         return 'Basic ' . base64_encode($username . ':' . $password);
     }

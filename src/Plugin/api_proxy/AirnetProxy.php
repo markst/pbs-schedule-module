@@ -58,7 +58,7 @@ final class AirnetProxy extends HttpApiPluginBase implements ContainerFactoryPlu
     protected function calculateHeaders(array $headers): array
     {
         $username = $this->moduleConfig->get('jsonapi_auth_username') ?? 'pbs';
-        $password = $this->moduleConfig->get('jsonapi_auth_password') ?? '';
+        $password = $this->moduleConfig->get('jsonapi_auth_password') ?? 'pbs2025';
 
         // Add Basic Auth for JSON:API.
         $headers['Authorization'] = 'Basic ' . base64_encode($username . ':' . $password);

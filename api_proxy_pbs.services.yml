@@ -1,0 +1,9 @@
+services:
+  api_proxy_pbs.jsonapi_client:
+    class: Drupal\api_proxy_pbs\Service\JsonApiClient
+    arguments: ['@http_client', '@config.factory']
+
+  api_proxy_pbs.slug_resolver:
+    class: Drupal\api_proxy_pbs\Service\SlugResolver
+    arguments: ['@api_proxy_pbs.jsonapi_client', '@cache.default']
+

@@ -21,14 +21,6 @@ api_proxy_pbs.schedule:
   requirements:
     _access: 'TRUE'
 
-api_proxy_pbs.insomnia:
-  path: '/api/insomnia-lookup'
-  methods:  [GET]
-  defaults:
-    _controller: 'Drupal\api_proxy_pbs\Controller\ScheduleController::getInsomniaMap'
-  requirements:
-    _access: 'TRUE'
-
 api_proxy_pbs.channel:
   path: '/api/channels/fm'
   methods:  [GET]
@@ -52,10 +44,6 @@ api_proxy_pbs.program:
     _controller: 'Drupal\api_proxy_pbs\Controller\ApiController::getProgram'
   requirements:
     _access: 'TRUE'
-  options:
-    parameters:
-      program:
-        type: entity:program
 
 api_proxy_pbs.episodes:
   path: '/api/programs/{program}/episodes'
@@ -64,10 +52,6 @@ api_proxy_pbs.episodes:
     _controller: 'Drupal\api_proxy_pbs\Controller\ApiController::getEpisodes'
   requirements:
     _access: 'TRUE'
-  options:
-    parameters:
-      program:
-        type: entity:program
 
 api_proxy_pbs.episode:
   path: '/api/programs/{program}/episodes/{date}'
@@ -76,12 +60,6 @@ api_proxy_pbs.episode:
     _controller: 'Drupal\api_proxy_pbs\Controller\ApiController::getEpisode'
   requirements:
     _access: 'TRUE'
-  options:
-    parameters:
-      program:
-        type: entity:program
-      date:
-        type: entity:date
 
 api_proxy_pbs.playlists:
   path: '/api/programs/{program}/episodes/{date}/playlists'
@@ -90,31 +68,11 @@ api_proxy_pbs.playlists:
     _controller: 'Drupal\api_proxy_pbs\Controller\ApiController::getPlaylists'
   requirements:
     _access: 'TRUE'
-  options:
-    parameters:
-      program:
-        type: entity:program                
-      date:
-        type: entity:date
 
 api_proxy_pbs.stream:
   path: '/api/programs/{slug}/episodes/{date}/stream'
   methods:  [GET]
   defaults:
     _controller: 'Drupal\api_proxy_pbs\Controller\StreamController::getAudioUrl'
-  requirements:
-    _access: 'TRUE'
-  options:
-    parameters:
-      slug:
-        type: entity:slug                
-      date:
-        type: entity:date
-
-api_proxy_pbs.omny:
-  path: '/api/omny-programs'
-  methods:  [GET]
-  defaults:
-    _controller: 'Drupal\api_proxy_pbs\Controller\OmnyController::getProgramMapping'
   requirements:
     _access: 'TRUE'

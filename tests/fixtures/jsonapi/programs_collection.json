@@ -1,0 +1,25 @@
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": [
+    {
+      "type": "program",
+      "id": "11111111-1111-1111-1111-111111111111",
+      "attributes": {
+        "title": "Lullabies to Anthems",
+        "field_author": "Jane Doe",
+        "field_body": {
+          "processed": "<p>Description</p>"
+        },
+        "field_summary": "Music show",
+        "path": {
+          "alias": "/program/lullabies-to-anthems"
+        },
+        "field_link_x": null,
+        "field_link_facebook": null,
+        "metatag": []
+      }
+    }
+  ]
+}

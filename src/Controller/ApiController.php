@@ -2,37 +2,45 @@
 
 namespace Drupal\api_proxy_pbs\Controller;
 
-use Drupal\api_proxy_pbs\Controller\SubRequestController;
+use Drupal\api_proxy_pbs\Service\JsonApiClient;
+use Drupal\api_proxy_pbs\Service\SlugResolver;
+use Drupal\api_proxy_pbs\Transformer\ProgramTransformer;
+use Drupal\api_proxy_pbs\Transformer\EpisodeTransformer;
+use Drupal\api_proxy_pbs\Transformer\TrackTransformer;
 
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Url;
-
-use Drupal\Component\Utility\UrlHelper;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * Controller for program and episode API endpoints.
+ */
 class ApiController extends ControllerBase
 {
-    protected $subRequestController;
+    protected $jsonApiClient;
+    protected $slugResolver;
 
-    public function __construct(SubRequestController $subRequestController)
+    /**
+     * Constructor.
+     */
+    public function __construct(JsonApiClient $jsonApiClient, SlugResolver $slugResolver)
     {
-        $this->subRequestController = $subRequestController;
+        $this->jsonApiClient = $jsonApiClient;
+        $this->slugResolver = $slugResolver;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function create(ContainerInterface $container)
     {
-        // SubRequestController::create($container);
-        $controller = new SubRequestController(
-            \Drupal::service('http_kernel.basic'),
-            \Drupal::requestStack(),
-            "https://airnet.org.au"
+        return new static(
+            $container->get('api_proxy_pbs.jsonapi_client'),
+            $container->get('api_proxy_pbs.slug_resolver')
         );
-        return new static($controller);
     }
 
     /**
@@ -87,111 +95,211 @@ class ApiController extends ControllerBase
         );
     }
 
-    /**
-     * Airnet vanilla one week schedule
-     * @return json array of scheduled programs
-     */
-    public function getSchedule()
-    {
-        return $this->cachedResponse(
-            $this->subRequestController->getJSONSubrequest(
-                '/rest/stations/3pbs/guides/fm'
-            ),
-            86400
-        );
-    }
 
     /**
-     * Airnet programs
-     * @return json array of programs
+     * Get all programs.
+     *
+     * @return CacheableJsonResponse
      */
     public function getPrograms()
     {
-        return $this->cachedResponse(
-            $this->subRequestController->getJSONSubrequest(
-                '/rest/stations/3pbs/programs'
-            ),
-            86400
-        );
-    }
-
-    /**
-     * Airnet program.
-     * @return json array of programs
-     */
-    public function getProgram($program)
-    {
-        return $this->cachedResponse(
-            $this->subRequestController->getJSONSubrequest(
-                "/rest/stations/3pbs/programs/{$program}"
-            ),
-            86400
-        );
-    }
-
-    /**
-     * Airnet episodes for a program.
-     * @return json
-     */
-    public function getEpisodes($program)
-    {
-        $params = \Drupal::request()->query->all();
-        return $this->cachedResponse(
-            $this->subRequestController->getJSONSubrequest(
-                "/rest/stations/3pbs/programs/{$program}/episodes" .
-                    '?' .
-                    // URL encode params for `api_proxy`
-                    UrlHelper::buildQuery($params),
-                $params
-            ),
-            3600,
-            [
-                'url.path',
-                'url.query_args',
-                'url.query_args:date',
-                'url.query_args:numBefore',
-            ]
-        );
-    }
-
-    /**
-     * Airnet episode for a program.
-     * @return json
-     */
-    public function getEpisode($program, $date)
-    {
         try {
-            $episode = $this->subRequestController->getJSONSubrequest(
-                "/rest/stations/3pbs/programs/{$program}/episodes/{$date}"
-            );
-
-            return $this->cachedResponse($episode, 3600);
-        } catch (\Throwable $t) {
-            \Drupal::logger('api_proxy_pbs')->error('Error fetching episode for program ' . $program . ' on date ' . $date . ': ' . $t->getMessage());
-            return (new JsonResponse([
-                'error' => $t->getMessage(),
-                'status' => 404,
-            ]))->setStatusCode(404);
+            $filters = ['status' => true];
+            $includes = [];
+            
+            $response = $this->jsonApiClient->getPrograms($filters, $includes);
+            $programs = ProgramTransformer::transformCollection($response);
+            
+            return $this->cachedResponse($programs, 86400);
+        } catch (\Exception $e) {
+            \Drupal::logger('api_proxy_pbs')->error('Failed to fetch programs: @message', [
+                '@message' => $e->getMessage(),
+            ]);
+            
+            return new JsonResponse(['error' => 'Failed to fetch programs'], 500);
         }
     }
 
     /**
-     * Airnet playlists for a program.
-     * @return json
+     * Get single program by slug.
+     *
+     * @param string $program
+     *   The program slug.
+     *
+     * @return CacheableJsonResponse|JsonResponse
+     */
+    public function getProgram($program)
+    {
+        try {
+            // Resolve slug to UUID
+            $uuid = $this->slugResolver->resolveProgram($program);
+            
+            if (!$uuid) {
+                return new JsonResponse(['error' => 'Program not found'], 404);
+            }
+            
+            $response = $this->jsonApiClient->getProgramByUuid($uuid, []);
+            $programData = ProgramTransformer::transform($response['data']);
+            
+            return $this->cachedResponse($programData, 86400);
+        } catch (\Exception $e) {
+            \Drupal::logger('api_proxy_pbs')->error('Failed to fetch program @slug: @message', [
+                '@slug' => $program,
+                '@message' => $e->getMessage(),
+            ]);
+            
+            return new JsonResponse(['error' => 'Failed to fetch program'], 500);
+        }
+    }
+
+    /**
+     * Get episodes for a program.
+     *
+     * @param string $program
+     *   The program slug.
+     *
+     * @return CacheableJsonResponse|JsonResponse
+     */
+    public function getEpisodes($program)
+    {
+        try {
+            // Resolve slug to UUID
+            $uuid = $this->slugResolver->resolveProgram($program);
+            
+            if (!$uuid) {
+                return new JsonResponse(['error' => 'Program not found'], 404);
+            }
+            
+            // Get query parameters
+            $params = \Drupal::request()->query->all();
+            
+            // Build filters
+            $filters = [
+                'field_program.id' => $uuid,
+                'status' => true,
+            ];
+            
+            // Add date filter if provided
+            if (!empty($params['date'])) {
+                $filters['field_date_range.value'] = $params['date'];
+            }
+            
+            $includes = ['field_program'];
+            $page = [];
+            
+            if (!empty($params['numBefore'])) {
+                $page['limit'] = (int) $params['numBefore'];
+            }
+            
+            $response = $this->jsonApiClient->getEpisodes($filters, $includes, $page);
+            
+            // Get program data for transformation
+            $programData = null;
+            if (!empty($response['included'])) {
+                foreach ($response['included'] as $included) {
+                    if ($included['type'] === 'program' && $included['id'] === $uuid) {
+                        $programData = $included;
+                        break;
+                    }
+                }
+            }
+            
+            $episodes = EpisodeTransformer::transformCollection($response, $programData);
+            
+            return $this->cachedResponse($episodes, 3600, [
+                'url.path',
+                'url.query_args',
+            ]);
+        } catch (\Exception $e) {
+            \Drupal::logger('api_proxy_pbs')->error('Failed to fetch episodes for @slug: @message', [
+                '@slug' => $program,
+                '@message' => $e->getMessage(),
+            ]);
+            
+            return new JsonResponse(['error' => 'Failed to fetch episodes'], 500);
+        }
+    }
+
+    /**
+     * Get single episode.
+     *
+     * @param string $program
+     *   The program slug.
+     * @param string $date
+     *   The episode date.
+     *
+     * @return CacheableJsonResponse|JsonResponse
+     */
+    public function getEpisode($program, $date)
+    {
+        try {
+            // Resolve to episode UUID
+            $uuid = $this->slugResolver->resolveEpisode($program, $date);
+            
+            if (!$uuid) {
+                return new JsonResponse(['error' => 'Episode not found'], 404);
+            }
+            
+            $response = $this->jsonApiClient->getEpisodeByUuid($uuid, ['field_program']);
+            
+            // Resolve program from included
+            $programData = null;
+            $programId = $response['data']['relationships']['field_program']['data']['id'] ?? null;
+            if ($programId && !empty($response['included'])) {
+                foreach ($response['included'] as $included) {
+                    if ($included['type'] === 'program' && $included['id'] === $programId) {
+                        $programData = $included;
+                        break;
+                    }
+                }
+            }
+            
+            $episode = EpisodeTransformer::transform($response['data'], $programData);
+            
+            return $this->cachedResponse($episode, 3600);
+        } catch (\Exception $e) {
+            \Drupal::logger('api_proxy_pbs')->error('Failed to fetch episode for @slug on @date: @message', [
+                '@slug' => $program,
+                '@date' => $date,
+                '@message' => $e->getMessage(),
+            ]);
+            
+            return new JsonResponse(['error' => 'Episode not found'], 404);
+        }
+    }
+
+    /**
+     * Get playlist for an episode.
+     *
+     * @param string $program
+     *   The program slug.
+     * @param string $date
+     *   The episode date.
+     *
+     * @return CacheableJsonResponse|JsonResponse
      */
     public function getPlaylists($program, $date)
     {
         try {
-            $playlist = $this->subRequestController->getJSONSubrequest(
-                "/rest/stations/3pbs/programs/{$program}/episodes/{$date}/playlists"
-            );
-
-            return $this->cachedResponse($playlist, 10);
-        } catch (\Throwable $t) {
-            return (new JsonResponse([
-                'error' => $t->getMessage(),
-                'status' => 404,
-            ]))->setStatusCode(404);
+            // Resolve to episode UUID
+            $uuid = $this->slugResolver->resolveEpisode($program, $date);
+            
+            if (!$uuid) {
+                return new JsonResponse(['error' => 'Episode not found'], 404);
+            }
+            
+            $response = $this->jsonApiClient->getEpisodeTracks($uuid);
+            $tracks = TrackTransformer::transformCollection($response);
+            
+            return $this->cachedResponse($tracks, 3600);
+        } catch (\Exception $e) {
+            \Drupal::logger('api_proxy_pbs')->error('Failed to fetch playlist for @slug on @date: @message', [
+                '@slug' => $program,
+                '@date' => $date,
+                '@message' => $e->getMessage(),
+            ]);
+            
+            return new JsonResponse(['error' => 'Playlist not found'], 404);
         }
     }
 }

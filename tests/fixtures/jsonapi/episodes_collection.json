@@ -1,0 +1,46 @@
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": [
+    {
+      "type": "episode",
+      "id": "22222222-2222-2222-2222-222222222222",
+      "attributes": {
+        "title": "Episode Title",
+        "field_date_range": {
+          "value": "2025-11-17T02:00:00+11:00",
+          "end_value": "2025-11-17T06:00:00+11:00",
+          "duration": 240
+        },
+        "field_body": {
+          "processed": "<p>Episode HTML description</p>"
+        },
+        "field_audio_url": {
+          "uri": "https://example.com/audio.m4a"
+        },
+        "metatag": []
+      },
+      "relationships": {
+        "field_program": {
+          "data": {
+            "type": "program",
+            "id": "11111111-1111-1111-1111-111111111111"
+          }
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "type": "program",
+      "id": "11111111-1111-1111-1111-111111111111",
+      "attributes": {
+        "title": "Lullabies to Anthems",
+        "path": {
+          "alias": "/program/lullabies-to-anthems"
+        }
+      }
+    }
+  ]
+}

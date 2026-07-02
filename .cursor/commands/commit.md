@@ -1,0 +1,1 @@
+Commit to git incrementally if necessary, using author Cursor and email cursor@users.noreply.github.com

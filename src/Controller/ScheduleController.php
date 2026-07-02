@@ -2,7 +2,8 @@
 
 namespace Drupal\api_proxy_pbs\Controller;
 
-use Drupal\api_proxy_pbs\Controller\SubRequestController;
+use Drupal\api_proxy_pbs\Service\JsonApiClient;
+use Drupal\api_proxy_pbs\Transformer\ScheduleTransformer;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Cache\CacheableJsonResponse;
@@ -14,24 +15,29 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use DateTime;
 use DateTimeZone;
 
+/**
+ * Controller for schedule endpoints.
+ */
 class ScheduleController extends ControllerBase
 {
-    protected $subRequestController;
+    protected $jsonApiClient;
 
-    public function __construct(SubRequestController $sub_request_controller)
+    /**
+     * Constructor.
+     */
+    public function __construct(JsonApiClient $jsonApiClient)
     {
-        $this->subRequestController = $sub_request_controller;
+        $this->jsonApiClient = $jsonApiClient;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function create(ContainerInterface $container)
     {
-        // SubRequestController::create($container);
-        $controller = new SubRequestController(
-            \Drupal::service('http_kernel.basic'),
-            \Drupal::requestStack(),
-            "https://airnet.org.au"
+        return new static(
+            $container->get('api_proxy_pbs.jsonapi_client')
         );
-        return new static($controller);
     }
 
     /**
@@ -78,183 +84,46 @@ class ScheduleController extends ControllerBase
     }
 
     /**
-     * Concatenated schedule with `insomnia_` modifications based on `insomnia-lookup.json`
-     * @return json array of scheduled programs
+     * Get fortnight schedule from JSON:API.
+     *
+     * @return array
+     *   Array of schedule entries.
      */
     public function getFortnightSchedule()
     {
-        // Fetch schedule:
-        $schedule = $this->subRequestController->getJSONSubrequest(
-            '/rest/stations/3pbs/guides/fm'
-        );
-        // Fetch programs:
-        $programs = $this->subRequestController->getJSONSubrequest(
-            '/rest/stations/3pbs/programs'
-        );
-        // Get the insomnia lookup:
-        $insomnia_lookup = $this->insomniaMap();
+        // Calculate date range for next 14 days
+        $now = new DateTime('now', new DateTimeZone('Australia/Melbourne'));
+        $startDate = $now->format('Y-m-d');
+        
+        $endDate = clone $now;
+        $endDate->modify('+14 days');
+        $endDateStr = $endDate->format('Y-m-d');
 
-        // Merge two weeks together:
-        $two_week = array_merge(
-            $schedule,
-            // First append 7 to `day` of second weeks.
-            array_map(function ($program) {
-                $program['day'] = strval(((int) $program['day']) + 7);
-                return $program;
-            }, $schedule)
-        );
+        // Query episodes for the next 14 days
+        $filters = [
+            'field_date_range.value' => [
+                'operator' => '>=',
+                'value' => $startDate,
+            ],
+            'status' => true,
+        ];
 
-        if ($two_week === null) {
-            // if (count($programs) > 0) {
-            // Fallback on original $schedule?
-            return $schedule;
+        $includes = ['field_program'];
+        $page = ['limit' => 500]; // Fetch enough for fortnight
+
+        try {
+            $response = $this->jsonApiClient->getEpisodes($filters, $includes, $page);
+            
+            // Transform to legacy schedule format
+            return ScheduleTransformer::transformToSchedule($response);
+        } catch (\Exception $e) {
+            \Drupal::logger('api_proxy_pbs')->error('Failed to fetch fortnight schedule: @message', [
+                '@message' => $e->getMessage(),
+            ]);
+            
+            // Return empty schedule on error
+            return [];
         }
-
-        // Loop through the entire fortnight schedule:
-        return array_map(
-            function ($og_program) use (
-                $programs,
-                $insomnia_lookup
-            ) {
-                // global $insomnia_lookup, $programs;
-
-                // Week 0 or 1:
-                $week = ((int) $og_program['day']) > 7;
-
-                // For each insomnia program:
-                switch ($og_program['slug']) {
-                    case 'insomnia_monday':
-                    case 'insomnia_tuesday':
-                    case 'insomnia_wednesday':
-                    case 'insomnia_thursday':
-                    case 'insomnia_friday':
-                    case 'insomnia_sunday':
-                        // do lookup on insomnialookup for correct slug:
-                        $old_slug = $og_program['slug'];
-                        $new_slug_info = $insomnia_lookup[$old_slug][$week];
-
-                        $i = array_search(
-                            $new_slug_info['slug'],
-                            array_column($programs, 'slug')
-                        );
-
-                        if ($i == false) {
-                            return $og_program;
-                        }
-
-                        $new_program = $programs[$i];
-
-                        // Carry existing attributes:
-                        $new_program['day'] = strval($og_program['day']);
-                        $new_program['start'] = $og_program['start'];
-                        $new_program['duration'] =
-                            $og_program['duration'] != null
-                            ? $og_program['duration']
-                            : 14400;
-                        $new_program['profileImage'] =
-                            $new_slug_info['profileImage'];
-
-                        // Remove stale `onairnow`:
-                        unset($new_program['onairnow']);
-                        // Set the ISO 8601 date;
-                        $new_program['startTime'] = $this->startDate($og_program);
-
-                        return $new_program;
-                        break;
-                    default:
-                        // Remove unused attributes:
-                        unset($og_program['onairnow']);
-                        unset($og_program['bannerImageSmall']);
-                        unset($og_program['profileImageSmall']);
-                        unset($og_program['url']);
-                        // Set the ISO 8601 date;
-                        $og_program['startTime'] = $this->startDate($og_program);
-                        // Replace the 'day' attribute with a string day:
-                        $og_program['day'] = strval($og_program['day']);
-
-                        return $og_program;
-                        break;
-                }
-            },
-            $two_week
-        );
-    }
-
-    /**
-     * Insomnia lookup
-     * @return json lookup table
-     */
-    public function getInsomniaMap()
-    {
-        return new JsonResponse($this->insomniaMap());
-    }
-
-    protected function insomniaMap()
-    {
-        $config = \Drupal::config('api_proxy_pbs.settings');
-        $body = $config->get('insomnia_lookup');
-
-        return json_decode(
-            $body ?: file_get_contents(__DIR__ . '/../insomnia-lookup.json'),
-            true
-        );
-    }
-
-    /**
-     * Format date from components
-     * @return string ISO 8601 date string.
-     */
-    protected function startDate($program)
-    {
-        // User timezone defined in Regional Settings: `date_default_timezone_get()`
-
-        $times = explode(':', $program['start']);
-        $now = new DateTime(
-            'now',
-            new DateTimeZone('Australia/Melbourne')
-        );
-        $even_week = $now->format('W') % 2 == 0;
-        $append = $even_week && $program['day'] <= 7 ? 14 : 0;
-        /*
-        Odd week:
-        Week 1 = 1 -> 7
-        Week 2 = 8 -> 14
-
-        Even week: (Week 2)
-        Week 1 = 15 -> 21
-        Week 2 = 8 -> 14
-        */
-        $current_week = (int)$now->format('W');
-        $target_week = $current_week - ($even_week ? 1 : 0);
-        $target_day = (int)$program['day'] + $append;
-        $current_year = (int)$now->format('Y');
-        
-        // Handle week 0 or negative - setISODate treats week 0 as last week of previous year
-        // For our fortnight schedule showing future dates, we need to adjust
-        if ($target_week <= 0) {
-            $target_week = 1;
-        }
-        
-        // Create a new DateTime object for calculation
-        $start_time = new DateTime('now', new DateTimeZone('Australia/Melbourne'));
-        
-        // Set ISO date with current year
-        $result = $start_time->setISODate($current_year, $target_week, $target_day);
-        
-        // For a fortnight schedule, all dates should be in the future (0-21 days ahead)
-        // If the calculated date is more than 1 day in the past, try next year
-        // This handles year boundary cases where ISO week calculation points to previous year
-        if ($result < $now) {
-            $diff_seconds = $now->getTimestamp() - $result->getTimestamp();
-            // If more than 1 day in the past, it's likely the wrong year
-            if ($diff_seconds > 86400) {
-                $result = $start_time->setISODate($current_year + 1, $target_week, $target_day);
-            }
-        }
-        
-        return $result
-            ->setTime($times[0], $times[1])
-            ->format('c');
     }
 
     /**

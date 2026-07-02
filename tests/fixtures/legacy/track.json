@@ -1,0 +1,23 @@
+{
+  "type": "track",
+  "id": "track-uuid-1",
+  "artist": "Artist Name",
+  "title": "Track Title",
+  "track": "Track Title",
+  "release": "Album Name",
+  "time": "02:00:00",
+  "notes": "Track notes",
+  "contentDescriptors": {
+    "isAustralian": true,
+    "isLocal": null,
+    "isFemale": true,
+    "isGenderNonConforming": null,
+    "isIndigenous": null,
+    "isNew": null
+  },
+  "wikipedia": null,
+  "image": null,
+  "video": null,
+  "url": null,
+  "approximateTime": "02:00:00"
+}

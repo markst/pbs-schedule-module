@@ -1,0 +1,40 @@
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": [
+    {
+      "type": "track",
+      "id": "track-uuid-1",
+      "attributes": {
+        "field_title": "Track Title",
+        "field_album": "Album Name",
+        "field_track_marker": 7200,
+        "field_body": {
+          "processed": "Track notes"
+        },
+        "field_descriptors": [
+          "is_australian",
+          "is_woman"
+        ]
+      },
+      "relationships": {
+        "field_artist": {
+          "data": {
+            "type": "artist",
+            "id": "artist-uuid-1"
+          }
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "type": "artist",
+      "id": "artist-uuid-1",
+      "attributes": {
+        "name": "Artist Name"
+      }
+    }
+  ]
+}

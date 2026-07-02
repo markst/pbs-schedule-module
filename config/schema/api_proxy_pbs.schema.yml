@@ -1,0 +1,20 @@
+api_proxy_pbs.settings:
+  type: config_object
+  label: 'PBS API Proxy settings'
+  mapping:
+    jsonapi_base_url:
+      type: string
+      label: 'JSON:API base URL'
+    jsonapi_auth_username:
+      type: string
+      label: 'JSON:API username'
+    jsonapi_auth_password:
+      type: string
+      label: 'JSON:API password'
+    slug_cache_ttl:
+      type: integer
+      label: 'Slug cache TTL'
+    config:
+      type: string
+      label: 'Channel configuration JSON override'
+      nullable: true

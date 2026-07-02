@@ -1,0 +1,5 @@
+api_proxy_pbs.settings:
+  title: 'PBS Proxy Settings'
+  description: 'Manage fortnightly schedule settings.'
+  parent: system.admin_config_services
+  route_name: api_proxy_pbs.settings

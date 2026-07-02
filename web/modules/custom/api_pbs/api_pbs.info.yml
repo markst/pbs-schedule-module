@@ -1,6 +1,0 @@
-name: Airnet API Proxy Old
-description: 'A proxy for Airnet.'
-core_version_requirement: ^9 || ^10
-package: "api_pbs"
-type: module
-version: "1.1.1"

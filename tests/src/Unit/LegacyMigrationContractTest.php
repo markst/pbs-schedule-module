@@ -43,7 +43,7 @@ class LegacyMigrationContractTest extends UnitTestCase {
         break;
 
       case ScheduleTransformer::class:
-        $output = ScheduleTransformer::transformToSchedule($input)[0];
+        $output = ScheduleTransformer::transformToSchedule($input, 'https://example.com')[0];
         break;
 
       case TrackTransformer::class:
@@ -69,7 +69,7 @@ class LegacyMigrationContractTest extends UnitTestCase {
       'program' => [ProgramTransformer::class, 'jsonapi/program.json', 'programContractKeys'],
       'programs collection' => [ProgramTransformer::class, 'jsonapi/programs_collection.json', 'programContractKeys', TRUE],
       'episode' => [EpisodeTransformer::class, 'jsonapi/episodes_collection.json', 'episodeContractKeys', TRUE],
-      'schedule' => [ScheduleTransformer::class, 'jsonapi/schedule_episodes.json', 'scheduleEntryContractKeys'],
+      'schedule' => [ScheduleTransformer::class, 'jsonapi/schedule_slots.json', 'scheduleEntryContractKeys'],
       'playlist' => [TrackTransformer::class, 'jsonapi/tracks_collection.json', 'trackContractKeys'],
     ];
   }
@@ -93,7 +93,10 @@ class LegacyMigrationContractTest extends UnitTestCase {
       $episode['episodeRestUrl']
     );
 
-    $schedule = ScheduleTransformer::transformToSchedule($this->loadFixture('jsonapi/schedule_episodes.json'));
+    $schedule = ScheduleTransformer::transformToSchedule(
+      $this->loadFixture('jsonapi/schedule_slots.json'),
+      'https://example.com'
+    );
     $this->assertSame(
       'https://airnet.org.au/rest/stations/3pbs/programs/lullabies-to-anthems',
       $schedule[0]['programRestUrl']

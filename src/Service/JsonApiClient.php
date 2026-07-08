@@ -129,6 +129,33 @@ class JsonApiClient
     }
 
     /**
+     * Get schedule slots, optionally expanded for a fortnight.
+     *
+     * @param string|null $scheduleFortnight
+     *   Anchor date (Y-m-d) for a 14-day fortnight expansion.
+     *
+     * @return array
+     *   JSON:API response decoded as array.
+     */
+    public function getSchedule(?string $scheduleFortnight = null): array
+    {
+        $url = $this->baseUrl . '/api/v1/schedule';
+        if ($scheduleFortnight !== null) {
+            $url .= '?' . http_build_query(['scheduleFortnight' => $scheduleFortnight]);
+        }
+
+        return $this->request($url);
+    }
+
+    /**
+     * Get the configured JSON:API base URL.
+     */
+    public function getBaseUrl(): string
+    {
+        return $this->baseUrl;
+    }
+
+    /**
      * Resolve included relationship data.
      *
      * @param array $responseData

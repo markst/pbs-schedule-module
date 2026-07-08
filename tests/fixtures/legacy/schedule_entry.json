@@ -8,8 +8,8 @@
   "gridDescription": "Music genre/style",
   "slug": "lullabies-to-anthems",
   "startTime": "2025-12-01T06:00:00+11:00",
-  "profileImage": "https://example.com/program.jpg",
-  "bannerImage": "https://example.com/program.jpg",
+  "profileImage": "https://example.com/sites/default/files/profile.jpg",
+  "bannerImage": "https://example.com/sites/default/files/banner.jpg",
   "programRestUrl": "https://airnet.org.au/rest/stations/3pbs/programs/lullabies-to-anthems",
   "archived": false
 }

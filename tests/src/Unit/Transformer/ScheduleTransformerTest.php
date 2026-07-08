@@ -16,12 +16,17 @@ class ScheduleTransformerTest extends UnitTestCase {
   use LegacyContractTestTrait;
 
   /**
+   * Base URL used to absolutize schedule slot image paths in tests.
+   */
+  protected const TEST_BASE_URL = 'https://example.com';
+
+  /**
    * Tests schedule entries match the legacy fortnight contract.
    */
   public function testTransformToScheduleMatchesLegacyContract(): void {
-    $response = $this->loadFixture('jsonapi/schedule_episodes.json');
+    $response = $this->loadFixture('jsonapi/schedule_slots.json');
     $expected = $this->loadFixture('legacy/schedule_entry.json');
-    $schedule = ScheduleTransformer::transformToSchedule($response);
+    $schedule = ScheduleTransformer::transformToSchedule($response, self::TEST_BASE_URL);
 
     $this->assertNotEmpty($schedule);
     $entry = $schedule[0];
@@ -46,29 +51,45 @@ class ScheduleTransformerTest extends UnitTestCase {
    * Tests schedule entries are sorted by day then start time.
    */
   public function testScheduleIsSortedByDayAndStart(): void {
-    $response = $this->loadFixture('jsonapi/schedule_episodes.json');
+    $response = $this->loadFixture('jsonapi/schedule_slots.json');
     $response['data'][] = [
-      'type' => 'episode',
-      'id' => '44444444-4444-4444-4444-444444444444',
+      'type' => 'schedule_slot',
+      'id' => '2-2025-12-01-480',
       'attributes' => [
-        'title' => 'Later Show',
-        'field_date_range' => [
-          'value' => '2025-12-01T08:00:00+11:00',
-          'end_value' => '2025-12-01T10:00:00+11:00',
-          'duration' => 120,
-        ],
+        'day' => 'MO',
+        'start_time' => 480,
+        'end_time' => 600,
+        'program_id' => 2,
+        'program_title' => 'Later Show',
+        'program_author' => 'Jane Doe',
+        'program_url' => '/program/later-show',
+        'program_image_uri' => '/sites/default/files/profile.jpg',
+        'program_tagline' => 'Evening music',
+        'program_featured_image_uri' => '/sites/default/files/banner.jpg',
+        'timezone' => 'Australia/Melbourne',
+        'date' => '2025-12-01',
       ],
-      'relationships' => [
-        'field_program' => [
-          'data' => [
-            'type' => 'program',
-            'id' => '11111111-1111-1111-1111-111111111111',
-          ],
-        ],
+    ];
+    $response['data'][] = [
+      'type' => 'schedule_slot',
+      'id' => '3-2025-12-02-360',
+      'attributes' => [
+        'day' => 'TU',
+        'start_time' => 360,
+        'end_time' => 480,
+        'program_id' => 3,
+        'program_title' => 'Tuesday Show',
+        'program_author' => 'Jane Doe',
+        'program_url' => '/program/tuesday-show',
+        'program_image_uri' => '/sites/default/files/profile.jpg',
+        'program_tagline' => 'Tuesday music',
+        'program_featured_image_uri' => '/sites/default/files/banner.jpg',
+        'timezone' => 'Australia/Melbourne',
+        'date' => '2025-12-02',
       ],
     ];
 
-    $schedule = ScheduleTransformer::transformToSchedule($response);
+    $schedule = ScheduleTransformer::transformToSchedule($response, self::TEST_BASE_URL);
     $this->assertGreaterThanOrEqual(2, count($schedule));
 
     for ($i = 1; $i < count($schedule); $i++) {

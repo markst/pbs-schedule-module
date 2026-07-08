@@ -320,6 +320,46 @@ class FieldMap
     }
 
     /**
+     * Format minutes from midnight as HH:MM:SS.
+     */
+    public static function formatMinutesAsTime(int $minutes): string
+    {
+        $hours = intdiv($minutes, 60);
+        $mins = $minutes % 60;
+
+        return sprintf('%02d:%02d:00', $hours, $mins);
+    }
+
+    /**
+     * Calculate day number (1-14) from a slot date within a fortnight.
+     */
+    public static function calculateFortnightDayFromDate(string $date, \DateTimeInterface $fortnightStart): int
+    {
+        $slotDate = new \DateTime($date, $fortnightStart->getTimezone());
+        $start = \DateTime::createFromInterface($fortnightStart);
+        $start->setTime(0, 0, 0);
+        $slotDate->setTime(0, 0, 0);
+
+        return (int) $start->diff($slotDate)->days + 1;
+    }
+
+    /**
+     * Convert a relative URI to an absolute URL using the JSON:API base.
+     */
+    public static function makeAbsoluteUrl(string $baseUrl, ?string $uri): ?string
+    {
+        if ($uri === null || $uri === '') {
+            return null;
+        }
+
+        if (preg_match('#^https?://#i', $uri)) {
+            return $uri;
+        }
+
+        return rtrim($baseUrl, '/') . '/' . ltrim($uri, '/');
+    }
+
+    /**
      * Calculate day number (1-14) for fortnight schedule.
      */
     public static function calculateFortnightDay(\DateTime $episodeDate): int

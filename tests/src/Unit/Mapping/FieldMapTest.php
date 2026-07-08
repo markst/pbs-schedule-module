@@ -150,6 +150,40 @@ class FieldMapTest extends UnitTestCase {
   }
 
   /**
+   * Tests minutes-from-midnight conversion to HH:MM:SS.
+   */
+  public function testFormatMinutesAsTime(): void {
+    $this->assertSame('06:00:00', FieldMap::formatMinutesAsTime(360));
+    $this->assertSame('08:15:00', FieldMap::formatMinutesAsTime(495));
+    $this->assertSame('00:00:00', FieldMap::formatMinutesAsTime(0));
+  }
+
+  /**
+   * Tests fortnight day calculation from a slot date.
+   */
+  public function testCalculateFortnightDayFromDate(): void {
+    $fortnightStart = new \DateTime('2025-12-01', new \DateTimeZone('Australia/Melbourne'));
+    $this->assertSame(1, FieldMap::calculateFortnightDayFromDate('2025-12-01', $fortnightStart));
+    $this->assertSame(2, FieldMap::calculateFortnightDayFromDate('2025-12-02', $fortnightStart));
+    $this->assertSame(8, FieldMap::calculateFortnightDayFromDate('2025-12-08', $fortnightStart));
+  }
+
+  /**
+   * Tests relative URI absolutization.
+   */
+  public function testMakeAbsoluteUrl(): void {
+    $this->assertSame(
+      'https://example.com/sites/default/files/profile.jpg',
+      FieldMap::makeAbsoluteUrl('https://example.com', '/sites/default/files/profile.jpg')
+    );
+    $this->assertSame(
+      'https://cdn.example.com/image.jpg',
+      FieldMap::makeAbsoluteUrl('https://example.com', 'https://cdn.example.com/image.jpg')
+    );
+    $this->assertNull(FieldMap::makeAbsoluteUrl('https://example.com', NULL));
+  }
+
+  /**
    * Loads attributes from a program fixture.
    */
   protected function fixtureAttributes(string $path): array {

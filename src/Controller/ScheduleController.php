@@ -78,7 +78,7 @@ class ScheduleController extends ControllerBase
             );
 
             return $response;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->handleException($e);
         }
     }
@@ -91,63 +91,35 @@ class ScheduleController extends ControllerBase
      */
     public function getFortnightSchedule()
     {
-        // Calculate date range for next 14 days
         $now = new DateTime('now', new DateTimeZone('Australia/Melbourne'));
-        $startDate = $now->format('Y-m-d');
-        
-        $endDate = clone $now;
-        $endDate->modify('+14 days');
-        $endDateStr = $endDate->format('Y-m-d');
-
-        // Query episodes for the next 14 days
-        $filters = [
-            'field_date_range.value' => [
-                'operator' => '>=',
-                'value' => $startDate,
-            ],
-            'status' => true,
-        ];
-
-        $includes = ['field_program'];
-        $page = ['limit' => 500]; // Fetch enough for fortnight
 
         try {
-            $response = $this->jsonApiClient->getEpisodes($filters, $includes, $page);
-            
-            // Transform to legacy schedule format
-            return ScheduleTransformer::transformToSchedule($response);
+            $response = $this->jsonApiClient->getSchedule($now->format('Y-m-d'));
+
+            return ScheduleTransformer::transformToSchedule(
+                $response,
+                $this->jsonApiClient->getBaseUrl(),
+                $now
+            );
         } catch (\Exception $e) {
             \Drupal::logger('api_proxy_pbs')->error('Failed to fetch fortnight schedule: @message', [
                 '@message' => $e->getMessage(),
             ]);
-            
-            // Return empty schedule on error
-            return [];
+
+            throw new \RuntimeException('Failed to fetch fortnight schedule from backend.', 0, $e);
         }
     }
 
     /**
      * Handle Exceptions
-     * @param  Exception $e the exception
+     * @param \Exception $e
      * @return CacheableJsonResponse
      */
-    protected function handleException(Exception $e)
+    protected function handleException(\Exception $e)
     {
-        if ($e instanceof Rest404Exception) {
-            return new JsonResponse(
-                ['error' => $e->getMessage()],
-                404
-            );
-        } elseif ($e instanceof Rest403Exception) {
-            return new JsonResponse(
-                ['error' => $e->getMessage()],
-                403
-            );
-        }
-
         return new JsonResponse(
-            ['error' => 'Internal server error.'],
-            500
+            ['error' => $e->getMessage()],
+            502
         );
     }
 }

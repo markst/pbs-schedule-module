@@ -5,12 +5,15 @@ namespace Drupal\api_proxy_pbs\Transformer;
 use Drupal\api_proxy_pbs\Mapping\FieldMap;
 
 /**
- * Transforms JSON:API schedule slots to legacy fortnight schedule format.
+ * Transforms JSON:API schedule templates to legacy fortnight schedule format.
+ *
+ * Backend slots are undated weekday templates (day + times). This BFF expands
+ * each template onto both weeks of the 14-day fortnight grid.
  */
 class ScheduleTransformer
 {
     /**
-     * Transform schedule slots to fortnight schedule entries.
+     * Transform schedule templates to fortnight schedule entries.
      *
      * @param array $jsonApiResponse
      *   Full JSON:API response with schedule_slot resources.
@@ -28,7 +31,7 @@ class ScheduleTransformer
         ?\DateTimeInterface $fortnightAnchor = null
     ): array {
         $slots = $jsonApiResponse['data'] ?? [];
-        $fortnightStart = self::resolveFortnightStart($slots, $fortnightAnchor);
+        $fortnightStart = self::resolveFortnightStart($fortnightAnchor);
         if ($fortnightStart === null) {
             return [];
         }
@@ -39,8 +42,7 @@ class ScheduleTransformer
                 continue;
             }
 
-            $entry = self::buildScheduleEntry($slot['attributes'] ?? [], $baseUrl, $fortnightStart);
-            if ($entry) {
+            foreach (self::buildScheduleEntries($slot['attributes'] ?? [], $baseUrl, $fortnightStart) as $entry) {
                 $schedule[] = $entry;
             }
         }
@@ -60,33 +62,14 @@ class ScheduleTransformer
     /**
      * Resolve the Monday that starts the fortnight window.
      */
-    protected static function resolveFortnightStart(array $slots, ?\DateTimeInterface $fortnightAnchor): ?\DateTime
+    protected static function resolveFortnightStart(?\DateTimeInterface $fortnightAnchor): ?\DateTime
     {
-        $timezone = new \DateTimeZone('Australia/Melbourne');
-        $earliestDate = null;
-
-        foreach ($slots as $slot) {
-            $date = $slot['attributes']['date'] ?? null;
-            if ($date === null) {
-                continue;
-            }
-            if ($earliestDate === null || $date < $earliestDate) {
-                $earliestDate = $date;
-            }
-        }
-
-        if ($earliestDate !== null) {
-            $fortnightStart = new \DateTime($earliestDate, $timezone);
-            $fortnightStart->setTime(0, 0, 0);
-            return $fortnightStart;
-        }
-
         if ($fortnightAnchor === null) {
             return null;
         }
 
         $fortnightStart = \DateTime::createFromInterface($fortnightAnchor);
-        $fortnightStart->setTimezone($timezone);
+        $fortnightStart->setTimezone(new \DateTimeZone('Australia/Melbourne'));
         $fortnightStart->modify('monday this week');
         $fortnightStart->setTime(0, 0, 0);
 
@@ -94,58 +77,70 @@ class ScheduleTransformer
     }
 
     /**
-     * Build a single schedule entry from a schedule_slot.
+     * Expand a template slot onto both fortnight weeks (days 1-7 and 8-14).
+     *
+     * @return list<array>
+     *   Zero, one, or two legacy schedule entries.
      */
-    protected static function buildScheduleEntry(
+    protected static function buildScheduleEntries(
         array $attributes,
         string $baseUrl,
         \DateTimeInterface $fortnightStart
-    ): ?array {
-        $date = $attributes['date'] ?? null;
+    ): array {
+        $dayCode = $attributes['day'] ?? null;
         $startMinutes = $attributes['start_time'] ?? null;
         $endMinutes = $attributes['end_time'] ?? null;
 
-        if ($date === null || $startMinutes === null || $endMinutes === null) {
-            return null;
+        if ($dayCode === null || $startMinutes === null || $endMinutes === null) {
+            return [];
+        }
+
+        $weekday = FieldMap::weekdayCodeToIsoDay((string) $dayCode);
+        if ($weekday === null) {
+            return [];
         }
 
         $timezoneName = $attributes['timezone'] ?? 'Australia/Melbourne';
-
         try {
             $timezone = new \DateTimeZone($timezoneName);
-            $startDateTime = new \DateTime($date, $timezone);
-            $startDateTime->modify('+' . (int) $startMinutes . ' minutes');
         } catch (\Exception $e) {
-            return null;
-        }
-
-        $day = FieldMap::calculateFortnightDayFromDate($date, $fortnightStart);
-        if ($day < 1 || $day > 14) {
-            return null;
+            return [];
         }
 
         $programUrl = $attributes['program_url'] ?? null;
         $slug = FieldMap::extractSlugFromPath($programUrl !== null ? urldecode($programUrl) : null);
 
-        $entry = [
-            FieldMap::SCHEDULE_GUIDE_ID => FieldMap::GUIDE_FM,
-            FieldMap::SCHEDULE_DAY => (string) $day,
-            FieldMap::SCHEDULE_START => FieldMap::formatMinutesAsTime((int) $startMinutes),
-            FieldMap::EPISODE_DURATION => ((int) $endMinutes - (int) $startMinutes) * FieldMap::MINUTES_TO_SECONDS,
-            FieldMap::PROGRAM_NAME => $attributes['program_title'] ?? '',
-            FieldMap::PROGRAM_BROADCASTERS => $attributes['program_author'] ?? '',
-            FieldMap::PROGRAM_GRID_DESCRIPTION => $attributes['program_tagline'] ?? '',
-            FieldMap::PROGRAM_SLUG => $slug,
-            FieldMap::SCHEDULE_START_TIME => $startDateTime->format(FieldMap::DATE_FORMAT_ISO8601),
-            'profileImage' => FieldMap::makeAbsoluteUrl($baseUrl, $attributes['program_image_uri'] ?? null),
-            'bannerImage' => FieldMap::makeAbsoluteUrl($baseUrl, $attributes['program_featured_image_uri'] ?? null),
-            'archived' => false,
-        ];
+        $entries = [];
+        foreach ([0, 7] as $weekOffset) {
+            $day = $weekday + $weekOffset;
+            $slotDate = \DateTime::createFromInterface($fortnightStart);
+            $slotDate->setTimezone($timezone);
+            $slotDate->modify('+' . ($day - 1) . ' days');
+            $slotDate->setTime(0, 0, 0);
+            $slotDate->modify('+' . (int) $startMinutes . ' minutes');
 
-        if ($slug) {
-            $entry['programRestUrl'] = 'https://airnet.org.au/rest/stations/3pbs/programs/' . $slug;
+            $entry = [
+                FieldMap::SCHEDULE_GUIDE_ID => FieldMap::GUIDE_FM,
+                FieldMap::SCHEDULE_DAY => (string) $day,
+                FieldMap::SCHEDULE_START => FieldMap::formatMinutesAsTime((int) $startMinutes),
+                FieldMap::EPISODE_DURATION => ((int) $endMinutes - (int) $startMinutes) * FieldMap::MINUTES_TO_SECONDS,
+                FieldMap::PROGRAM_NAME => $attributes['program_title'] ?? '',
+                FieldMap::PROGRAM_BROADCASTERS => $attributes['program_author'] ?? '',
+                FieldMap::PROGRAM_GRID_DESCRIPTION => $attributes['program_tagline'] ?? '',
+                FieldMap::PROGRAM_SLUG => $slug,
+                FieldMap::SCHEDULE_START_TIME => $slotDate->format(FieldMap::DATE_FORMAT_ISO8601),
+                'profileImage' => FieldMap::makeAbsoluteUrl($baseUrl, $attributes['program_image_uri'] ?? null),
+                'bannerImage' => FieldMap::makeAbsoluteUrl($baseUrl, $attributes['program_featured_image_uri'] ?? null),
+                'archived' => false,
+            ];
+
+            if ($slug) {
+                $entry['programRestUrl'] = 'https://airnet.org.au/rest/stations/3pbs/programs/' . $slug;
+            }
+
+            $entries[] = $entry;
         }
 
-        return $entry;
+        return $entries;
     }
 }

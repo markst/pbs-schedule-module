@@ -94,7 +94,7 @@ class ScheduleController extends ControllerBase
         $now = new DateTime('now', new DateTimeZone('Australia/Melbourne'));
 
         try {
-            $response = $this->jsonApiClient->getSchedule($now->format('Y-m-d'));
+            $response = $this->jsonApiClient->getSchedule();
 
             return ScheduleTransformer::transformToSchedule(
                 $response,

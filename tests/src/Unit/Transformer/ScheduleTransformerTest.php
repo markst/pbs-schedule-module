@@ -21,18 +21,30 @@ class ScheduleTransformerTest extends UnitTestCase {
   protected const TEST_BASE_URL = 'https://example.com';
 
   /**
+   * Monday fortnight anchor used by schedule fixtures (AEDT).
+   */
+  protected function fortnightAnchor(): \DateTimeImmutable {
+    return new \DateTimeImmutable('2025-12-01', new \DateTimeZone('Australia/Melbourne'));
+  }
+
+  /**
    * Tests schedule entries match the legacy fortnight contract.
    */
   public function testTransformToScheduleMatchesLegacyContract(): void {
     $response = $this->loadFixture('jsonapi/schedule_slots.json');
     $expected = $this->loadFixture('legacy/schedule_entry.json');
-    $schedule = ScheduleTransformer::transformToSchedule($response, self::TEST_BASE_URL);
+    $schedule = ScheduleTransformer::transformToSchedule(
+      $response,
+      self::TEST_BASE_URL,
+      $this->fortnightAnchor()
+    );
 
-    $this->assertNotEmpty($schedule);
+    $this->assertCount(2, $schedule);
     $entry = $schedule[0];
 
     $this->assertLegacyContract($entry, $this->scheduleEntryContractKeys());
     $this->assertSame('fm', $entry['guideId']);
+    $this->assertSame('1', $entry['day']);
     $this->assertSame('06:00:00', $entry['start']);
     $this->assertSame(7200, $entry['duration']);
     $this->assertSame('Lullabies to Anthems', $entry['name']);
@@ -44,7 +56,9 @@ class ScheduleTransformerTest extends UnitTestCase {
     $this->assertSame($expected['bannerImage'], $entry['bannerImage']);
     $this->assertSame($expected['programRestUrl'], $entry['programRestUrl']);
     $this->assertFalse($entry['archived']);
-    $this->assertMatchesRegularExpression('/^[1-9]$|^1[0-4]$/', $entry['day']);
+
+    $this->assertSame('8', $schedule[1]['day']);
+    $this->assertSame('2025-12-08T06:00:00+11:00', $schedule[1]['startTime']);
   }
 
   /**
@@ -54,7 +68,7 @@ class ScheduleTransformerTest extends UnitTestCase {
     $response = $this->loadFixture('jsonapi/schedule_slots.json');
     $response['data'][] = [
       'type' => 'schedule_slot',
-      'id' => '2-2025-12-01-480',
+      'id' => '2-MO-480',
       'attributes' => [
         'day' => 'MO',
         'start_time' => 480,
@@ -67,12 +81,11 @@ class ScheduleTransformerTest extends UnitTestCase {
         'program_tagline' => 'Evening music',
         'program_featured_image_uri' => '/sites/default/files/banner.jpg',
         'timezone' => 'Australia/Melbourne',
-        'date' => '2025-12-01',
       ],
     ];
     $response['data'][] = [
       'type' => 'schedule_slot',
-      'id' => '3-2025-12-02-360',
+      'id' => '3-TU-360',
       'attributes' => [
         'day' => 'TU',
         'start_time' => 360,
@@ -85,12 +98,15 @@ class ScheduleTransformerTest extends UnitTestCase {
         'program_tagline' => 'Tuesday music',
         'program_featured_image_uri' => '/sites/default/files/banner.jpg',
         'timezone' => 'Australia/Melbourne',
-        'date' => '2025-12-02',
       ],
     ];
 
-    $schedule = ScheduleTransformer::transformToSchedule($response, self::TEST_BASE_URL);
-    $this->assertGreaterThanOrEqual(2, count($schedule));
+    $schedule = ScheduleTransformer::transformToSchedule(
+      $response,
+      self::TEST_BASE_URL,
+      $this->fortnightAnchor()
+    );
+    $this->assertGreaterThanOrEqual(4, count($schedule));
 
     for ($i = 1; $i < count($schedule); $i++) {
       $prevDay = (int) $schedule[$i - 1]['day'];
@@ -99,6 +115,34 @@ class ScheduleTransformerTest extends UnitTestCase {
         $day > $prevDay || ($day === $prevDay && $schedule[$i]['start'] >= $schedule[$i - 1]['start'])
       );
     }
+  }
+
+  /**
+   * Tests missing weekday codes produce no entries.
+   */
+  public function testInvalidDayCodeIsSkipped(): void {
+    $response = [
+      'data' => [
+        [
+          'type' => 'schedule_slot',
+          'id' => 'bad',
+          'attributes' => [
+            'day' => 'XX',
+            'start_time' => 360,
+            'end_time' => 480,
+            'program_title' => 'Bad',
+            'timezone' => 'Australia/Melbourne',
+          ],
+        ],
+      ],
+    ];
+
+    $schedule = ScheduleTransformer::transformToSchedule(
+      $response,
+      self::TEST_BASE_URL,
+      $this->fortnightAnchor()
+    );
+    $this->assertSame([], $schedule);
   }
 
 }

@@ -331,6 +331,24 @@ class FieldMap
     }
 
     /**
+     * Map a schedule template weekday code to ISO-8601 day-of-week (1=Mon..7=Sun).
+     */
+    public static function weekdayCodeToIsoDay(string $dayCode): ?int
+    {
+        $map = [
+            'MO' => 1,
+            'TU' => 2,
+            'WE' => 3,
+            'TH' => 4,
+            'FR' => 5,
+            'SA' => 6,
+            'SU' => 7,
+        ];
+
+        return $map[strtoupper($dayCode)] ?? null;
+    }
+
+    /**
      * Calculate day number (1-14) from a slot date within a fortnight.
      */
     public static function calculateFortnightDayFromDate(string $date, \DateTimeInterface $fortnightStart): int

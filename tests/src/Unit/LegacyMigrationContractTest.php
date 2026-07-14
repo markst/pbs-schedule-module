@@ -43,7 +43,11 @@ class LegacyMigrationContractTest extends UnitTestCase {
         break;
 
       case ScheduleTransformer::class:
-        $output = ScheduleTransformer::transformToSchedule($input, 'https://example.com')[0];
+        $output = ScheduleTransformer::transformToSchedule(
+          $input,
+          'https://example.com',
+          new \DateTimeImmutable('2025-12-01', new \DateTimeZone('Australia/Melbourne'))
+        )[0];
         break;
 
       case TrackTransformer::class:
@@ -95,7 +99,8 @@ class LegacyMigrationContractTest extends UnitTestCase {
 
     $schedule = ScheduleTransformer::transformToSchedule(
       $this->loadFixture('jsonapi/schedule_slots.json'),
-      'https://example.com'
+      'https://example.com',
+      new \DateTimeImmutable('2025-12-01', new \DateTimeZone('Australia/Melbourne'))
     );
     $this->assertSame(
       'https://airnet.org.au/rest/stations/3pbs/programs/lullabies-to-anthems',

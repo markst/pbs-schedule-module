@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  *   id = "pbs_jsonapi",
  *   label = @Translation("PBS JSON:API fetcher"),
  *   description = @Translation("Proxies requests to PBS Drupal JSON:API backend."),
- *   serviceUrl = "https://nginx-php.project-migration.pbsfm.au2.amazee.io",
+ *   serviceUrl = "https://nginx-php.pr-331.pbsfm.au2.amazee.io",
  * )
  */
 final class AirnetProxy extends HttpApiPluginBase implements ContainerFactoryPluginInterface

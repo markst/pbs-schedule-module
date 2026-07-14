@@ -43,7 +43,7 @@ class ScheduleSettingsForm extends ConfigFormBase
         $form['jsonapi_base_url'] = [
             '#type' => 'textfield',
             '#title' => $this->t('JSON:API Base URL'),
-            '#default_value' => $config->get('jsonapi_base_url') ?? 'https://nginx-php.project-migration.pbsfm.au2.amazee.io',
+            '#default_value' => $config->get('jsonapi_base_url') ?? 'https://nginx-php.pr-331.pbsfm.au2.amazee.io',
             '#description' => $this->t('The base URL for the PBS Drupal JSON:API backend.'),
             '#required' => TRUE,
         ];

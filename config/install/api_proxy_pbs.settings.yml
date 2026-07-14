@@ -1,4 +1,4 @@
-jsonapi_base_url: 'https://nginx-php.project-migration.pbsfm.au2.amazee.io'
+jsonapi_base_url: 'https://nginx-php.pr-331.pbsfm.au2.amazee.io'
 jsonapi_auth_username: 'pbs'
 jsonapi_auth_password: ''
 slug_cache_ttl: 86400

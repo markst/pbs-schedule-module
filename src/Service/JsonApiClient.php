@@ -11,7 +11,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
  */
 class JsonApiClient
 {
-    const DEFAULT_BASE_URL = 'https://nginx-php.project-migration.pbsfm.au2.amazee.io';
+    const DEFAULT_BASE_URL = 'https://nginx-php.pr-331.pbsfm.au2.amazee.io';
     const DEFAULT_AUTH_USERNAME = 'pbs';
 
     protected $httpClient;
@@ -129,22 +129,16 @@ class JsonApiClient
     }
 
     /**
-     * Get schedule slots, optionally expanded for a fortnight.
+     * Get undated weekday schedule templates.
      *
-     * @param string|null $scheduleFortnight
-     *   Anchor date (Y-m-d) for a 14-day fortnight expansion.
+     * Fortnight expansion onto days 1-14 is done by ScheduleTransformer.
      *
      * @return array
      *   JSON:API response decoded as array.
      */
-    public function getSchedule(?string $scheduleFortnight = null): array
+    public function getSchedule(): array
     {
-        $url = $this->baseUrl . '/api/v1/schedule';
-        if ($scheduleFortnight !== null) {
-            $url .= '?' . http_build_query(['scheduleFortnight' => $scheduleFortnight]);
-        }
-
-        return $this->request($url);
+        return $this->request($this->baseUrl . '/api/v1/schedule');
     }
 
     /**

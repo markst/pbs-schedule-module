@@ -1,0 +1,14 @@
+{
+  "name": "Lullabies to Anthems",
+  "broadcasters": "Jane Doe, John Smith",
+  "description": "<p>Full HTML description</p>",
+  "gridDescription": "Music genre/style",
+  "slug": "lullabies-to-anthems",
+  "url": "/program/lullabies-to-anthems",
+  "profileImageUrl": "https://example.com/program.jpg",
+  "bannerImageUrl": "https://example.com/program.jpg",
+  "twitterHandle": "pbsfm",
+  "facebookPage": "pbsfm",
+  "defaultFirstAiredGuide": "fm",
+  "episodesRestUrl": "https://airnet.org.au/rest/stations/3pbs/programs/lullabies-to-anthems/episodes"
+}

@@ -1,0 +1,49 @@
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": [
+    {
+      "type": "episode",
+      "id": "33333333-3333-3333-3333-333333333333",
+      "attributes": {
+        "title": "Morning Show",
+        "field_date_range": {
+          "value": "2025-12-01T06:00:00+11:00",
+          "end_value": "2025-12-01T08:00:00+11:00",
+          "duration": 120
+        }
+      },
+      "relationships": {
+        "field_program": {
+          "data": {
+            "type": "program",
+            "id": "11111111-1111-1111-1111-111111111111"
+          }
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "type": "program",
+      "id": "11111111-1111-1111-1111-111111111111",
+      "attributes": {
+        "title": "Lullabies to Anthems",
+        "field_author": "Jane Doe",
+        "field_summary": "Music genre/style",
+        "path": {
+          "alias": "/program/lullabies-to-anthems"
+        },
+        "metatag": [
+          {
+            "attributes": {
+              "property": "og:image",
+              "content": "https://example.com/program.jpg"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

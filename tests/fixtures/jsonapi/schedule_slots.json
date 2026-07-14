@@ -1,0 +1,29 @@
+{
+  "jsonapi": {
+    "version": "1.1"
+  },
+  "data": [
+    {
+      "type": "schedule_slot",
+      "id": "1-MO-360",
+      "attributes": {
+        "day": "MO",
+        "start_time": 360,
+        "end_time": 480,
+        "program_id": 1,
+        "program_title": "Lullabies to Anthems",
+        "program_author": "Jane Doe",
+        "program_url": "/program/lullabies-to-anthems",
+        "program_image_uri": "/sites/default/files/profile.jpg",
+        "program_tagline": "Music genre/style",
+        "program_featured_image_uri": "/sites/default/files/banner.jpg",
+        "program_genres": [],
+        "frequency": "WEEKLY",
+        "interval": 1,
+        "rrule": "FREQ=WEEKLY;BYDAY=MO",
+        "start_date": "2024-01-01",
+        "timezone": "Australia/Melbourne"
+      }
+    }
+  ]
+}

@@ -224,34 +224,15 @@ class ScheduleController extends ControllerBase
         Week 1 = 15 -> 21
         Week 2 = 8 -> 14
         */
-        $current_week = (int)$now->format('W');
+        $current_week = (int) $now->format('W');
         $target_week = $current_week - ($even_week ? 1 : 0);
-        $target_day = (int)$program['day'] + $append;
-        $current_year = (int)$now->format('Y');
-        
-        // Handle week 0 or negative - setISODate treats week 0 as last week of previous year
-        // For our fortnight schedule showing future dates, we need to adjust
-        if ($target_week <= 0) {
-            $target_week = 1;
-        }
-        
-        // Create a new DateTime object for calculation
+        $target_day = (int) $program['day'] + $append;
+        // ISO week-year (o), not calendar year (Y) — Dec/Jan weeks can belong to the adjacent year.
+        $iso_year = (int) $now->format('o');
+
         $start_time = new DateTime('now', new DateTimeZone('Australia/Melbourne'));
-        
-        // Set ISO date with current year
-        $result = $start_time->setISODate($current_year, $target_week, $target_day);
-        
-        // For a fortnight schedule, all dates should be in the future (0-21 days ahead)
-        // If the calculated date is more than 1 day in the past, try next year
-        // This handles year boundary cases where ISO week calculation points to previous year
-        if ($result < $now) {
-            $diff_seconds = $now->getTimestamp() - $result->getTimestamp();
-            // If more than 1 day in the past, it's likely the wrong year
-            if ($diff_seconds > 86400) {
-                $result = $start_time->setISODate($current_year + 1, $target_week, $target_day);
-            }
-        }
-        
+        $result = $start_time->setISODate($iso_year, $target_week, $target_day);
+
         return $result
             ->setTime($times[0], $times[1])
             ->format('c');

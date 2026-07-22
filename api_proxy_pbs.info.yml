@@ -6,5 +6,4 @@ type: module
 version: "1.2.3"
 dependencies:
   - api_proxy
-  - symfony/http-client
 configure: api_proxy_pbs.settings

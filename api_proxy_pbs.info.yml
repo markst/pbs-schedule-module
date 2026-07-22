@@ -3,7 +3,7 @@ description: "A proxy for Airnet."
 core_version_requirement: ^9 || ^10
 package: "airnet"
 type: module
-version: "1.2.3"
+version: "1.2.4"
 dependencies:
   - api_proxy
 configure: api_proxy_pbs.settings

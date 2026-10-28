@@ -1,0 +1,15 @@
+{
+  "guideId": "fm",
+  "day": "1",
+  "start": "06:00:00",
+  "duration": 10800,
+  "name": "TEST | The Breakfast Spread",
+  "broadcasters": "Claire Dickson and Milo Eastwood",
+  "gridDescription": "Your musical alternative",
+  "slug": "test-the-breakfast-spread",
+  "startTime": "2026-11-02T06:00:00+11:00",
+  "profileImage": "https://example.com/sites/default/files/styles/thumbnail/public/2026-10/7021_0.jpg.webp?itok=qZ4yM8UH",
+  "bannerImage": "https://example.com/sites/default/files/2026-10/7021_1.jpg",
+  "programRestUrl": "https://airnet.org.au/rest/stations/3pbs/programs/test-the-breakfast-spread",
+  "archived": false
+}

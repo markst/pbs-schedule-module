@@ -1,0 +1,47 @@
+{
+  "type": "program",
+  "id": "a9b8a842-4add-49ae-bc9e-c16b690689c4",
+  "attributes": {
+    "title": "Black Wax",
+    "status": true,
+    "path": {
+      "alias": "/program/black-wax"
+    },
+    "field_api_aod_slug": "black-wax",
+    "field_author": "Adam Rudegeair",
+    "field_body": {
+      "value": "<p>Jazz and funk with jazz influence, and spacier stuff that has psychedelic, avant garde or science fiction influences.</p>",
+      "format": "full_html",
+      "processed": "<p>Jazz and funk with jazz influence, and spacier stuff that has psychedelic, avant garde or science fiction influences.</p>"
+    },
+    "field_summary": null,
+    "field_tagline": "Groovin' jazz",
+    "field_link_x": {
+      "uri": "https://x.com/adamrudegeair",
+      "resolvable_uri": "https://x.com/adamrudegeair",
+      "title": null,
+      "options": []
+    },
+    "field_link_facebook": {
+      "uri": "https://www.facebook.com/Black-Wax-on-PBS-FM-115780531226",
+      "resolvable_uri": "https://www.facebook.com/Black-Wax-on-PBS-FM-115780531226",
+      "title": null,
+      "options": []
+    },
+    "field_link_instagram": {
+      "uri": "https://www.instagram.com/neonbogart",
+      "resolvable_uri": "https://www.instagram.com/neonbogart",
+      "title": null,
+      "options": []
+    },
+    "metatag": [
+      {
+        "tag": "meta",
+        "attributes": {
+          "property": "og:image",
+          "content": "https://nginx-php.project-migration.pbsfm.au2.amazee.io/sites/default/files/styles/open_graph/public/background/6886.jpg?h=1883e6cd&itok=Hc1JOZ5l"
+        }
+      }
+    ]
+  }
+}

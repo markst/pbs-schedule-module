@@ -1,0 +1,13 @@
+{
+  "start": "2026-10-28 11:00:00",
+  "end": "2026-10-28 11:30:00",
+  "duration": 1800,
+  "title": "Integration testing program 1 - 28 October 2026 #2",
+  "description": "Integration testing program 1 - 28 October 2026",
+  "imageUrl": null,
+  "smallImageUrl": null,
+  "currentEpisode": false,
+  "multipleEpsOnDay": false,
+  "episodeRestUrl": "https://airnet.org.au/rest/stations/3pbs/programs/integration-testing-program-1/episodes/2026-10-28+11%3A00%3A00",
+  "url": "https://traffic.omny.fm/d/clips/1270a58a-2c51-457c-b8c6-aced0086cad6/ac18f73d-c33e-4950-a7bb-b27900b5c209/a22fff52-91ad-417d-ae4e-b4f1000bbefd/audio.mp3"
+}

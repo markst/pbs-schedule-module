@@ -1,0 +1,14 @@
+{
+  "name": "Black Wax",
+  "broadcasters": "Adam Rudegeair",
+  "description": "<p>Jazz and funk with jazz influence, and spacier stuff that has psychedelic, avant garde or science fiction influences.</p>",
+  "gridDescription": "Groovin' jazz",
+  "slug": "black-wax",
+  "url": "/program/black-wax",
+  "profileImageUrl": "https://nginx-php.project-migration.pbsfm.au2.amazee.io/sites/default/files/styles/open_graph/public/background/6886.jpg?h=1883e6cd&itok=Hc1JOZ5l",
+  "bannerImageUrl": "https://nginx-php.project-migration.pbsfm.au2.amazee.io/sites/default/files/styles/open_graph/public/background/6886.jpg?h=1883e6cd&itok=Hc1JOZ5l",
+  "twitterHandle": "adamrudegeair",
+  "facebookPage": "Black-Wax-on-PBS-FM-115780531226",
+  "defaultFirstAiredGuide": "fm",
+  "episodesRestUrl": "https://airnet.org.au/rest/stations/3pbs/programs/black-wax/episodes"
+}

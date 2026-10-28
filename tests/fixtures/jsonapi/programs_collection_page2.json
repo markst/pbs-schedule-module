@@ -1,0 +1,41 @@
+{
+  "data": [
+    {
+      "type": "program",
+      "id": "3af92851-aa8b-4e42-9cfe-98821776695e",
+      "attributes": {
+        "title": "Down By The River",
+        "status": true,
+        "path": {
+          "alias": "/program/down-by-the-river"
+        },
+        "field_api_aod_slug": "down-by-the-river",
+        "field_author": "Lauren Plant",
+        "field_body": {
+          "value": "<p><em>Down by the River</em> is a two-hour journey through the rich and diverse world of folk music. While rooted in tradition, the show blends folk, indie, and acoustic sounds to create a unique listening experience. <em>Down by the River</em> spotlights artists who may not be considered \"classic\" folk musicians but have delved into the genre in their work, pushing its boundaries and expanding its scope.</p><p>From the deep roots of traditional folk to the evolving sounds of today, this show brings together a wide array of cultural influences, exploring folk music as a dynamic and evolving art form. <em>Down by the River</em> offers listeners a rich tapestry of sounds that span continents and generations. Across the two hours you’ll hear music that reflects the ever-changing spirit of folk, all the while honoring its timeless art of storytelling through song.</p><p>Email:&nbsp;downbytheriver.pbs@gmail.com</p>",
+          "format": "full_html",
+          "processed": "<p><em>Down by the River</em> is a two-hour journey through the rich and diverse world of folk music. While rooted in tradition, the show blends folk, indie, and acoustic sounds to create a unique listening experience. <em>Down by the River</em> spotlights artists who may not be considered \"classic\" folk musicians but have delved into the genre in their work, pushing its boundaries and expanding its scope.</p><p>From the deep roots of traditional folk to the evolving sounds of today, this show brings together a wide array of cultural influences, exploring folk music as a dynamic and evolving art form. <em>Down by the River</em> offers listeners a rich tapestry of sounds that span continents and generations. Across the two hours you’ll hear music that reflects the ever-changing spirit of folk, all the while honoring its timeless art of storytelling through song.</p><p>Email:&nbsp;downbytheriver.pbs@gmail.com</p>"
+        },
+        "field_summary": null,
+        "field_tagline": "Folk & global",
+        "field_link_x": null,
+        "field_link_facebook": null,
+        "field_link_instagram": null,
+        "metatag": [
+          {
+            "tag": "meta",
+            "attributes": {
+              "property": "og:image",
+              "content": "https://nginx-php.project-migration.pbsfm.au2.amazee.io/sites/default/files/styles/open_graph/public/news/pbs_at_collingwood_yards_fb.jpg?h=3a3df0c5&itok=hOBxcOjq"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "links": {
+    "self": {
+      "href": "https://nginx-php.project-migration.pbsfm.au2.amazee.io/api/v1/program?filter%5Bstatus%5D=1&page%5Boffset%5D=50&page%5Blimit%5D=50"
+    }
+  }
+}

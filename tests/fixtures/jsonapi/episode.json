@@ -1,0 +1,78 @@
+{
+  "data": {
+    "type": "episode",
+    "id": "17a5ed31-f9fe-4392-bafc-2604a1a9a1dc",
+    "attributes": {
+      "title": "Integration testing program 1 - 28 October 2026 #2",
+      "status": true,
+      "path": {
+        "alias": "/program/integration-testing-program-1/2026-10-28/11-00-00"
+      },
+      "field_api_aod_audio_url": {
+        "uri": "https://traffic.omny.fm/d/clips/1270a58a-2c51-457c-b8c6-aced0086cad6/ac18f73d-c33e-4950-a7bb-b27900b5c209/a22fff52-91ad-417d-ae4e-b4f1000bbefd/audio.mp3",
+        "resolvable_uri": "https://traffic.omny.fm/d/clips/1270a58a-2c51-457c-b8c6-aced0086cad6/ac18f73d-c33e-4950-a7bb-b27900b5c209/a22fff52-91ad-417d-ae4e-b4f1000bbefd/audio.mp3",
+        "title": null,
+        "options": []
+      },
+      "field_api_podcast_audio_url": null,
+      "field_body": {
+        "value": "Integration testing program 1 - 28 October 2026",
+        "format": "full_html",
+        "processed": "Integration testing program 1 - 28 October 2026"
+      },
+      "field_date_range": {
+        "value": "2026-10-28T00:00:00+00:00",
+        "end_value": "2026-10-28T00:30:00+00:00",
+        "duration": 30,
+        "rrule": null,
+        "rrule_index": null,
+        "timezone": null
+      },
+      "field_summary": null,
+      "metatag": []
+    },
+    "relationships": {
+      "field_program": {
+        "data": {
+          "type": "program",
+          "id": "117abcfb-9b61-403f-a7f1-fbce3f6e0fed",
+          "meta": {
+            "drupal_internal__target_id": 24
+          }
+        }
+      },
+      "field_aod_tracks": {
+        "data": []
+      },
+      "field_podcast_tracks": {
+        "data": []
+      }
+    }
+  },
+  "included": [
+    {
+      "type": "program",
+      "id": "117abcfb-9b61-403f-a7f1-fbce3f6e0fed",
+      "attributes": {
+        "title": "Integration testing program 1",
+        "status": true,
+        "path": {
+          "alias": "/program/integration-testing-program-1"
+        },
+        "field_api_aod_slug": "integration-testing-program-1",
+        "field_author": "alex@drevops.com",
+        "field_body": {
+          "value": "<p>Integration testing program 1 description</p>",
+          "format": "full_html",
+          "processed": "<p>Integration testing program 1 description</p>"
+        },
+        "field_summary": null,
+        "field_tagline": null,
+        "field_link_x": null,
+        "field_link_facebook": null,
+        "field_link_instagram": null,
+        "metatag": []
+      }
+    }
+  ]
+}

@@ -4,22 +4,43 @@ namespace Drupal\api_proxy_pbs\Plugin\api_proxy;
 
 use Drupal\api_proxy\Plugin\api_proxy\HttpApiCommonConfigs;
 use Drupal\api_proxy\Plugin\HttpApiPluginBase;
+use Drupal\api_proxy_pbs\Service\JsonApiClient;
 use Drupal\Core\Form\SubformStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * The Example API.
+ * PBS JSON:API Proxy.
  *
  * @HttpApi(
- *   id = "airnet",
- *   label = @Translation("airnet.org.au fetcher"),
- *   description = @Translation("Proxies requests airnet.org.au."),
- *   serviceUrl = "https://airnet.org.au",
+ *   id = "pbs_jsonapi",
+ *   label = @Translation("PBS JSON:API fetcher"),
+ *   description = @Translation("Proxies requests to PBS Drupal JSON:API backend."),
+ *   serviceUrl = "https://nginx-php.project-migration.pbsfm.au2.amazee.io",
  * )
  */
-final class AirnetProxy extends HttpApiPluginBase
+final class AirnetProxy extends HttpApiPluginBase implements ContainerFactoryPluginInterface
 {
     use HttpApiCommonConfigs;
+
+    /**
+     * JSON:API client; owns backend credential handling.
+     *
+     * @var \Drupal\api_proxy_pbs\Service\JsonApiClient
+     */
+    protected JsonApiClient $jsonApiClient;
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition)
+    {
+        $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+        $instance->jsonApiClient = $container->get('api_proxy_pbs.jsonapi_client');
+
+        return $instance;
+    }
 
     /**
      * {@inheritdoc}
@@ -36,6 +57,9 @@ final class AirnetProxy extends HttpApiPluginBase
      */
     protected function calculateHeaders(array $headers): array
     {
+        $headers['Authorization'] = $this->jsonApiClient->getAuthorizationHeader();
+        $headers['Accept'] = 'application/vnd.api+json';
+
         return $headers;
     }
 
@@ -52,8 +76,6 @@ final class AirnetProxy extends HttpApiPluginBase
      */
     public function postprocessOutgoing(Response $response): Response
     {
-        // TODO: Check if we're fetching schedule `rest/stations/3pbs/guides/fm`
-        // $response->$request->getBasePath()
         return $response;
     }
 }

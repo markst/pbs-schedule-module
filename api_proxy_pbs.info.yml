@@ -1,9 +1,10 @@
-name: Airnet API Proxy
-description: "A proxy for Airnet."
-core_version_requirement: ^9 || ^10
-package: "airnet"
+name: PBS Schedule API Proxy
+description: 'Proxy module providing legacy API compatibility for PBS mobile apps using Drupal JSON:API backend.'
+core_version_requirement: ^9 || ^10 || ^11
+package: "PBS"
 type: module
-version: "1.2.5"
+version: "2.0.0"
 dependencies:
-  - api_proxy
+  - drupal:system
+  - api_proxy:api_proxy
 configure: api_proxy_pbs.settings

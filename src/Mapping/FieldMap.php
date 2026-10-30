@@ -23,7 +23,6 @@ class FieldMap
     const PROGRAM_TAGLINE = 'field_tagline';
     const PROGRAM_TWITTER = 'field_link_x';
     const PROGRAM_FACEBOOK = 'field_link_facebook';
-    const PROGRAM_INSTAGRAM = 'field_link_instagram';
 
     // Episode field mappings
     const EPISODE_DATE_RANGE = 'field_date_range';
@@ -33,7 +32,6 @@ class FieldMap
     const EPISODE_TITLE = 'title';
     const EPISODE_BODY = 'field_body';
     const EPISODE_NOTES = 'notes';
-    const EPISODE_SUMMARY = 'field_summary';
     // Link fields; AOD is the broadcast recording, podcast the edited release.
     const EPISODE_AOD_AUDIO_URL = 'field_api_aod_audio_url';
     const EPISODE_PODCAST_AUDIO_URL = 'field_api_podcast_audio_url';
@@ -44,7 +42,6 @@ class FieldMap
     const TRACK_RELEASE = 'release';
     const TRACK_MARKER = 'field_track_marker';
     const TRACK_TIME = 'time';
-    const TRACK_ARTIST = 'field_artist';
     const TRACK_DESCRIPTORS = 'field_descriptors';
     const TRACK_BODY = 'field_body';
 
@@ -67,7 +64,6 @@ class FieldMap
     // Image field mappings
     const IMAGE_METATAG = 'metatag';
     const IMAGE_OG_IMAGE = 'og:image';
-    const IMAGE_TWITTER_IMAGE = 'twitter:image';
     const IMAGE_PROFILE = 'profileImageUrl';
     const IMAGE_PROFILE_SMALL = 'profileImageSmall';
     const IMAGE_BANNER = 'bannerImageUrl';
@@ -81,12 +77,10 @@ class FieldMap
 
     // Time constants
     const MINUTES_TO_SECONDS = 60;
-    const SECONDS_TO_MINUTES = 60;
 
     // Date format constants
     const DATE_FORMAT_LEGACY = 'Y-m-d H:i:s';
     const DATE_FORMAT_ISO8601 = 'c';
-    const TIME_FORMAT_LEGACY = 'H:i:s';
 
     // Guide constants
     const GUIDE_FM = 'fm';
@@ -337,23 +331,6 @@ class FieldMap
             $date = new \DateTime($isoDate);
             $date->setTimezone(new \DateTimeZone('Australia/Melbourne'));
             return $date->format(self::DATE_FORMAT_LEGACY);
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    /**
-     * Format time in HH:mm:ss from ISO datetime.
-     */
-    public static function formatTimeLegacy(?string $isoDate): ?string
-    {
-        if (empty($isoDate)) {
-            return null;
-        }
-
-        try {
-            $date = new \DateTime($isoDate);
-            return $date->format(self::TIME_FORMAT_LEGACY);
         } catch (\Exception $e) {
             return null;
         }

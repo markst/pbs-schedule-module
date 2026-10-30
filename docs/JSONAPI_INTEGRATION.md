@@ -26,7 +26,6 @@ HTTP client wrapper for JSON:API requests.
 - `getProgramByUuid($uuid, $includes)` - Single program
 - `getEpisodeByUuid($uuid, $includes)` - Single episode
 - `getEpisodeTracks($uuid)` - Episode tracks/playlist
-- `resolveIncluded($data, $type, $id)` - Resolve relationships
 
 #### SlugResolver
 Maps legacy slugs to UUIDs with caching.

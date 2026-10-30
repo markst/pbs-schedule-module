@@ -210,34 +210,6 @@ class JsonApiClient
     }
 
     /**
-     * Resolve included relationship data.
-     *
-     * @param array $responseData
-     *   The full JSON:API response data.
-     * @param string $type
-     *   The resource type to find (e.g., 'program').
-     * @param string $id
-     *   The UUID of the resource.
-     *
-     * @return array|null
-     *   The included resource data or null if not found.
-     */
-    public function resolveIncluded(array $responseData, string $type, string $id): ?array
-    {
-        if (empty($responseData['included'])) {
-            return null;
-        }
-
-        foreach ($responseData['included'] as $included) {
-            if ($included['type'] === $type && $included['id'] === $id) {
-                return $included;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Build query string from filters, includes, pagination and sort.
      *
      * Filters may be nested arrays (operators, condition groups); they are

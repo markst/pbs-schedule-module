@@ -85,6 +85,14 @@ api_proxy_pbs.showname:
   requirements:
     _access: 'TRUE'
 
+api_proxy_pbs.now:
+  path: '/api/now'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\LookupController::now'
+  requirements:
+    _access: 'TRUE'
+
 api_proxy_pbs.schedule_lookup:
   path: '/api/schedule/{date}'
   methods:  [GET]

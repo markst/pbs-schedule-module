@@ -1,0 +1,68 @@
+{
+  "data": [
+    {
+      "type": "schedule_slot",
+      "id": "17729-primary-MO-360-540-weekly-9b9c3c68e000",
+      "attributes": {
+        "day": "MO",
+        "start_time": 360,
+        "end_time": 540,
+        "program_id": 17729,
+        "program_title": "TEST | The Breakfast Spread",
+        "program_author": "Claire Dickson and Milo Eastwood",
+        "program_url": "/program/test-the-breakfast-spread",
+        "program_image_uri": "/sites/default/files/styles/thumbnail/public/2026-10/7021_0.jpg.webp?itok=qZ4yM8UH",
+        "program_tagline": "Your musical alternative",
+        "program_featured_image_uri": "/sites/default/files/2026-10/7021_1.jpg",
+        "program_genres": [],
+        "program_slug": "test-the-breakfast-spread",
+        "is_repeat": false,
+        "frequency": "WEEKLY",
+        "interval": 1,
+        "rrule": "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR",
+        "start_date": "2026-10-27",
+        "timezone": "Australia/Melbourne"
+      },
+      "relationships": {
+        "program": {
+          "data": {
+            "type": "program",
+            "id": "854a51ad-6faf-4f98-9810-53d6e73b86c5"
+          }
+        }
+      }
+    },
+    {
+      "type": "schedule_slot",
+      "id": "17711-primary-SU-780-900-weekly-a88734d77d45",
+      "attributes": {
+        "day": "SU",
+        "start_time": 780,
+        "end_time": 900,
+        "program_id": 17711,
+        "program_title": "TEST | Radio City",
+        "program_author": "Crispi",
+        "program_url": "/program/test-radio-city",
+        "program_image_uri": "/sites/default/files/styles/thumbnail/public/2026-10/crispi_20062019.jpg.webp?itok=AOvIYCwv",
+        "program_tagline": "Rock & roots",
+        "program_featured_image_uri": "/sites/default/files/2026-10/fitzroy_street_studio_1_1992.jpg",
+        "program_genres": [],
+        "program_slug": "test-radio-city",
+        "is_repeat": false,
+        "frequency": "WEEKLY",
+        "interval": 1,
+        "rrule": "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA,SU",
+        "start_date": "2026-10-27",
+        "timezone": "Australia/Melbourne"
+      },
+      "relationships": {
+        "program": {
+          "data": {
+            "type": "program",
+            "id": "88e7fe53-373a-41b0-a615-94eeb7cd64bb"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "data": [
+    {
+      "type": "track",
+      "id": "0d3384fe-96de-4c09-8c04-0c15eb0b563e",
+      "attributes": {
+        "field_title": "Transfiguration",
+        "field_album": "Even If & Especially When",
+        "field_body": null,
+        "field_descriptors": [],
+        "field_track_marker": "0"
+      },
+      "relationships": {
+        "field_artist": {
+          "data": {
+            "type": "artist",
+            "id": "9dfc4dce-5b0c-4b14-8d87-dccdf57e94f3",
+            "meta": {
+              "drupal_internal__target_id": 5775
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "track",
+      "id": "37d053f1-89b2-48c5-84da-1c72f260dbc5",
+      "attributes": {
+        "field_title": "A Hard Road",
+        "field_album": "A Hard Road",
+        "field_body": null,
+        "field_descriptors": [],
+        "field_track_marker": null
+      },
+      "relationships": {
+        "field_artist": {
+          "data": {
+            "type": "artist",
+            "id": "d2cd9d87-5619-4018-9b52-66bbcdb40288",
+            "meta": {
+              "drupal_internal__target_id": 5628
+            }
+          }
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "type": "artist",
+      "id": "9dfc4dce-5b0c-4b14-8d87-dccdf57e94f3",
+      "attributes": {
+        "name": "Screaming Trees"
+      }
+    },
+    {
+      "type": "artist",
+      "id": "d2cd9d87-5619-4018-9b52-66bbcdb40288",
+      "attributes": {
+        "name": "John Mayall & The Bluesbreakers"
+      }
+    }
+  ]
+}

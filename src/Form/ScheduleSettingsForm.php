@@ -6,7 +6,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Configure Airnet Proxy Schedule settings for this site.
+ * Configure PBS API Proxy settings for this site.
  */
 class ScheduleSettingsForm extends ConfigFormBase
 {
@@ -40,14 +40,34 @@ class ScheduleSettingsForm extends ConfigFormBase
     {
         $config = $this->config(static::SETTINGS);
 
-        $form['insomnia_lookup'] = [
-            '#type' => 'textarea',
-            '#rows' => 20,
-            '#title' => $this->t('Insomnia lookup dictionary:'),
-            '#default_value' => $config->get('insomnia_lookup'),
-            '#description' => $this->t(
-                'Enter valid JSON dictionary with insomnia lookups'
-            ),
+        $form['jsonapi_base_url'] = [
+            '#type' => 'textfield',
+            '#title' => $this->t('JSON:API Base URL'),
+            '#default_value' => $config->get('jsonapi_base_url') ?? 'https://nginx-php.project-migration.pbsfm.au2.amazee.io',
+            '#description' => $this->t('The base URL for the PBS Drupal JSON:API backend.'),
+            '#required' => TRUE,
+        ];
+
+        $form['jsonapi_auth_username'] = [
+            '#type' => 'textfield',
+            '#title' => $this->t('JSON:API Username'),
+            '#default_value' => $config->get('jsonapi_auth_username') ?? 'pbs',
+            '#description' => $this->t('Basic auth username for JSON:API.'),
+        ];
+
+        $form['jsonapi_auth_password'] = [
+            '#type' => 'password',
+            '#title' => $this->t('JSON:API Password'),
+            '#default_value' => $config->get('jsonapi_auth_password') ?? '',
+            '#description' => $this->t('Basic auth password for JSON:API. Leave empty to keep existing password.'),
+        ];
+
+        $form['slug_cache_ttl'] = [
+            '#type' => 'number',
+            '#title' => $this->t('Slug Cache TTL'),
+            '#default_value' => $config->get('slug_cache_ttl') ?? 86400,
+            '#description' => $this->t('Cache time-to-live for slug resolution in seconds (default: 86400 = 24 hours).'),
+            '#min' => 0,
         ];
 
         return parent::buildForm($form, $form_state);
@@ -58,13 +78,12 @@ class ScheduleSettingsForm extends ConfigFormBase
      */
     public function validateForm(array &$form, FormStateInterface $form_state)
     {
-        $body = $form_state->getValue('insomnia_lookup');
-        $insomnia_lookup = json_decode($body, true);
-
-        if ($insomnia_lookup == null) {
+        $url = $form_state->getValue('jsonapi_base_url');
+        
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
             $form_state->setErrorByName(
-                'insomnia_lookup',
-                $this->t('The source test is not valid JSON.')
+                'jsonapi_base_url',
+                $this->t('Please enter a valid URL.')
             );
         }
     }
@@ -74,11 +93,19 @@ class ScheduleSettingsForm extends ConfigFormBase
      */
     public function submitForm(array &$form, FormStateInterface $form_state)
     {
-        // Retrieve the configuration.
-        $this->configFactory
-            ->getEditable(static::SETTINGS)
-            ->set('insomnia_lookup', $form_state->getValue('insomnia_lookup'))
-            ->save();
+        $config = $this->configFactory->getEditable(static::SETTINGS);
+        
+        $config->set('jsonapi_base_url', $form_state->getValue('jsonapi_base_url'));
+        $config->set('jsonapi_auth_username', $form_state->getValue('jsonapi_auth_username'));
+        $config->set('slug_cache_ttl', $form_state->getValue('slug_cache_ttl'));
+        
+        // Only update password if a new one was provided
+        $password = $form_state->getValue('jsonapi_auth_password');
+        if (!empty($password)) {
+            $config->set('jsonapi_auth_password', $password);
+        }
+        
+        $config->save();
 
         parent::submitForm($form, $form_state);
     }

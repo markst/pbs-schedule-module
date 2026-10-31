@@ -1,0 +1,219 @@
+{
+  "data": [
+    {
+      "type": "episode",
+      "id": "9ce4b137-91ad-40bf-89ee-40cc149d0085",
+      "attributes": {
+        "title": "Black Wax",
+        "status": true,
+        "path": {
+          "alias": "/program/black-wax/2026-07-27/11-00-00"
+        },
+        "field_api_aod_audio_url": null,
+        "field_api_podcast_audio_url": null,
+        "field_body": null,
+        "field_date_range": {
+          "value": "2026-07-27T01:00:00+00:00",
+          "end_value": "2026-07-27T03:00:00+00:00",
+          "duration": null,
+          "rrule": null,
+          "rrule_index": null,
+          "timezone": null
+        },
+        "field_summary": null,
+        "metatag": []
+      },
+      "relationships": {
+        "field_program": {
+          "data": {
+            "type": "program",
+            "id": "a9b8a842-4add-49ae-bc9e-c16b690689c4",
+            "meta": {
+              "drupal_internal__target_id": 12100
+            }
+          }
+        },
+        "field_aod_tracks": {
+          "data": [
+            {
+              "type": "track",
+              "id": "57ce1df8-a7ac-442f-b103-937477057a20",
+              "meta": {
+                "target_revision_id": 2657,
+                "drupal_internal__target_id": 2417
+              }
+            },
+            {
+              "type": "track",
+              "id": "123f2d7d-5d5b-4861-9ebc-9499ca68bfb9",
+              "meta": {
+                "target_revision_id": 2658,
+                "drupal_internal__target_id": 2418
+              }
+            }
+          ]
+        },
+        "field_podcast_tracks": {
+          "data": []
+        }
+      }
+    },
+    {
+      "type": "episode",
+      "id": "4b2d3db6-5023-4ee6-b8eb-e2b5f2804aec",
+      "attributes": {
+        "title": "Minneapolis Music Special feat BZ3 Organ Trio and L.A. Buckner",
+        "status": true,
+        "path": {
+          "alias": "/program/black-wax/2026-08-03/11-00-00"
+        },
+        "field_api_aod_audio_url": null,
+        "field_api_podcast_audio_url": null,
+        "field_body": null,
+        "field_date_range": {
+          "value": "2026-08-03T01:00:00+00:00",
+          "end_value": "2026-08-03T03:00:00+00:00",
+          "duration": null,
+          "rrule": null,
+          "rrule_index": null,
+          "timezone": null
+        },
+        "field_summary": null,
+        "metatag": []
+      },
+      "relationships": {
+        "field_program": {
+          "data": {
+            "type": "program",
+            "id": "a9b8a842-4add-49ae-bc9e-c16b690689c4",
+            "meta": {
+              "drupal_internal__target_id": 12100
+            }
+          }
+        },
+        "field_aod_tracks": {
+          "data": [
+            {
+              "type": "track",
+              "id": "3d292045-ba02-44a3-a6b3-3f3fb78280ca",
+              "meta": {
+                "target_revision_id": 2675,
+                "drupal_internal__target_id": 2435
+              }
+            },
+            {
+              "type": "track",
+              "id": "4c0e9b6a-bba5-40e1-8f1a-513ebb6cf90c",
+              "meta": {
+                "target_revision_id": 2676,
+                "drupal_internal__target_id": 2436
+              }
+            }
+          ]
+        },
+        "field_podcast_tracks": {
+          "data": []
+        }
+      }
+    },
+    {
+      "type": "episode",
+      "id": "96b75f92-5c1c-4ff2-9c8f-3db8d251f81b",
+      "attributes": {
+        "title": "Interview and Performance from Melody Kin",
+        "status": true,
+        "path": {
+          "alias": "/program/black-wax/2026-08-10/11-00-00"
+        },
+        "field_api_aod_audio_url": null,
+        "field_api_podcast_audio_url": null,
+        "field_body": null,
+        "field_date_range": {
+          "value": "2026-08-10T01:00:00+00:00",
+          "end_value": "2026-08-10T03:00:00+00:00",
+          "duration": null,
+          "rrule": null,
+          "rrule_index": null,
+          "timezone": null
+        },
+        "field_summary": null,
+        "metatag": []
+      },
+      "relationships": {
+        "field_program": {
+          "data": {
+            "type": "program",
+            "id": "a9b8a842-4add-49ae-bc9e-c16b690689c4",
+            "meta": {
+              "drupal_internal__target_id": 12100
+            }
+          }
+        },
+        "field_aod_tracks": {
+          "data": [
+            {
+              "type": "track",
+              "id": "e21bb645-dcef-4eeb-b98b-3b7834859fa3",
+              "meta": {
+                "target_revision_id": 2697,
+                "drupal_internal__target_id": 2457
+              }
+            }
+          ]
+        },
+        "field_podcast_tracks": {
+          "data": []
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "type": "program",
+      "id": "a9b8a842-4add-49ae-bc9e-c16b690689c4",
+      "attributes": {
+        "title": "Black Wax",
+        "status": true,
+        "path": {
+          "alias": "/program/black-wax"
+        },
+        "field_api_aod_slug": "black-wax",
+        "field_author": "Adam Rudegeair",
+        "field_body": {
+          "value": "<p>Jazz and funk with jazz influence, and spacier stuff that has psychedelic, avant garde or science fiction influences.</p>",
+          "format": "full_html",
+          "processed": "<p>Jazz and funk with jazz influence, and spacier stuff that has psychedelic, avant garde or science fiction influences.</p>"
+        },
+        "field_summary": null,
+        "field_tagline": "Groovin' jazz",
+        "field_link_x": {
+          "uri": "https://x.com/adamrudegeair",
+          "resolvable_uri": "https://x.com/adamrudegeair",
+          "title": null,
+          "options": []
+        },
+        "field_link_facebook": {
+          "uri": "https://www.facebook.com/Black-Wax-on-PBS-FM-115780531226",
+          "resolvable_uri": "https://www.facebook.com/Black-Wax-on-PBS-FM-115780531226",
+          "title": null,
+          "options": []
+        },
+        "field_link_instagram": {
+          "uri": "https://www.instagram.com/neonbogart",
+          "resolvable_uri": "https://www.instagram.com/neonbogart",
+          "title": null,
+          "options": []
+        },
+        "metatag": [
+          {
+            "tag": "meta",
+            "attributes": {
+              "property": "og:image",
+              "content": "https://nginx-php.project-migration.pbsfm.au2.amazee.io/sites/default/files/styles/open_graph/public/background/6886.jpg?h=1883e6cd&itok=Hc1JOZ5l"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

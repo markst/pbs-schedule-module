@@ -1,0 +1,106 @@
+{
+  "data": [
+    {
+      "type": "program",
+      "id": "a9b8a842-4add-49ae-bc9e-c16b690689c4",
+      "attributes": {
+        "title": "Black Wax",
+        "status": true,
+        "path": {
+          "alias": "/program/black-wax"
+        },
+        "field_api_aod_slug": "black-wax",
+        "field_author": "Adam Rudegeair",
+        "field_body": {
+          "value": "<p>Jazz and funk with jazz influence, and spacier stuff that has psychedelic, avant garde or science fiction influences.</p>",
+          "format": "full_html",
+          "processed": "<p>Jazz and funk with jazz influence, and spacier stuff that has psychedelic, avant garde or science fiction influences.</p>"
+        },
+        "field_summary": null,
+        "field_tagline": "Groovin' jazz",
+        "field_link_x": {
+          "uri": "https://x.com/adamrudegeair",
+          "resolvable_uri": "https://x.com/adamrudegeair",
+          "title": null,
+          "options": []
+        },
+        "field_link_facebook": {
+          "uri": "https://www.facebook.com/Black-Wax-on-PBS-FM-115780531226",
+          "resolvable_uri": "https://www.facebook.com/Black-Wax-on-PBS-FM-115780531226",
+          "title": null,
+          "options": []
+        },
+        "field_link_instagram": {
+          "uri": "https://www.instagram.com/neonbogart",
+          "resolvable_uri": "https://www.instagram.com/neonbogart",
+          "title": null,
+          "options": []
+        },
+        "metatag": [
+          {
+            "tag": "meta",
+            "attributes": {
+              "property": "og:image",
+              "content": "https://nginx-php.project-migration.pbsfm.au2.amazee.io/sites/default/files/styles/open_graph/public/background/6886.jpg?h=1883e6cd&itok=Hc1JOZ5l"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "program",
+      "id": "cb5aee7f-8f5a-410e-a96c-1a960a949af9",
+      "attributes": {
+        "title": "The Blend",
+        "status": true,
+        "path": {
+          "alias": "/program/the-blend"
+        },
+        "field_api_aod_slug": "the-blend",
+        "field_author": "Bevin Campbell and Emelyne",
+        "field_body": {
+          "value": "<p>Hip hop, beats, bass, dubstep, garage, grime, dancehall, drum'n'bass, jungle, footwork, downtempo and experimental electronica... plus the odd bit of house and techno.</p><p>Audio:<br><a href=\"https://www.mixcloud.com/blendcorp/\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">Mixcloud</a>&nbsp;//&nbsp;<a href=\"https://www.soundcloud.com/blendcorp/\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">Soundcloud</a></p><p>Socials:<br><a href=\"http://www.twitter.com/blendcorp\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">twitter</a>&nbsp;//&nbsp;<a href=\"http://www.facebook.com/pages/blend-corp/19717130773\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">facebook</a>&nbsp;//&nbsp;<a href=\"http://www.blendcorp.tumblr.com/\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">blog</a></p><p>Emelyne&nbsp;<a href=\"mailto:emelyne.s.khor@gmail.com\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">emelyne.s.khor@gmail.com</a>&nbsp;// Bevin&nbsp;<a href=\"mailto:theblendonpbs@yahoo.com.au\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">theblendonpbs@yahoo.com.au</a></p><p>Sign up -&nbsp;<a href=\"http://eepurl.com/14lPT\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">MAILING LIST</a></p>",
+          "format": "full_html",
+          "processed": "<p>Hip hop, beats, bass, dubstep, garage, grime, dancehall, drum'n'bass, jungle, footwork, downtempo and experimental electronica... plus the odd bit of house and techno.</p><p>Audio:<br><a href=\"https://www.mixcloud.com/blendcorp/\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">Mixcloud</a>&nbsp;//&nbsp;<a href=\"https://www.soundcloud.com/blendcorp/\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">Soundcloud</a></p><p>Socials:<br><a href=\"http://www.twitter.com/blendcorp\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">twitter</a>&nbsp;//&nbsp;<a href=\"http://www.facebook.com/pages/blend-corp/19717130773\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">facebook</a>&nbsp;//&nbsp;<a href=\"http://www.blendcorp.tumblr.com/\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">blog</a></p><p>Emelyne&nbsp;<a href=\"mailto:emelyne.s.khor@gmail.com\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">emelyne.s.khor@gmail.com</a>&nbsp;// Bevin&nbsp;<a href=\"mailto:theblendonpbs@yahoo.com.au\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">theblendonpbs@yahoo.com.au</a></p><p>Sign up -&nbsp;<a href=\"http://eepurl.com/14lPT\" rel=\"nofollow\" style=\"color: rgb(204, 34, 41); text-decoration-line: none; font-weight: bold;\" target=\"_blank\">MAILING LIST</a></p>"
+        },
+        "field_summary": null,
+        "field_tagline": "Hip Hop, Beats, Bass & Experimental",
+        "field_link_x": {
+          "uri": "https://x.com/blendcorp",
+          "resolvable_uri": "https://x.com/blendcorp",
+          "title": null,
+          "options": []
+        },
+        "field_link_facebook": {
+          "uri": "https://www.facebook.com/blendcorp",
+          "resolvable_uri": "https://www.facebook.com/blendcorp",
+          "title": null,
+          "options": []
+        },
+        "field_link_instagram": {
+          "uri": "https://www.instagram.com/blendcorp",
+          "resolvable_uri": "https://www.instagram.com/blendcorp",
+          "title": null,
+          "options": []
+        },
+        "metatag": [
+          {
+            "tag": "meta",
+            "attributes": {
+              "property": "og:image",
+              "content": "https://nginx-php.project-migration.pbsfm.au2.amazee.io/sites/default/files/styles/open_graph/public/background/7019.jpg?h=a041b38e&itok=_Zdkd8bJ"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "links": {
+    "self": {
+      "href": "https://nginx-php.project-migration.pbsfm.au2.amazee.io/api/v1/program?filter%5Bstatus%5D=1"
+    },
+    "next": {
+      "href": "https://nginx-php.project-migration.pbsfm.au2.amazee.io/api/v1/program?filter%5Bstatus%5D=1&page%5Boffset%5D=50&page%5Blimit%5D=50"
+    }
+  }
+}

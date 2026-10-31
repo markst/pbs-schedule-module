@@ -12,7 +12,6 @@ use Drupal\api_proxy_pbs\Transformer\TrackTransformer;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Cache\CacheableJsonResponse;
-use Drupal\Core\Cache\CacheableMetadata;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,6 +21,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class ApiController extends ControllerBase
 {
+    use CachedJsonResponseTrait;
+
     // Default numBefore/numAfter when omitted, and the cap (one JSON:API page).
     const EPISODE_WINDOW_DEFAULT = 10;
     const EPISODE_WINDOW_MAX = 50;
@@ -48,36 +49,6 @@ class ApiController extends ControllerBase
             $container->get('api_proxy_pbs.jsonapi_client'),
             $container->get('api_proxy_pbs.slug_resolver')
         );
-    }
-
-    /**
-     * Return `CacheableJsonResponse` with time to live value headers.
-     * @param  Object $data json object
-     * @param  Int $ttl time to live in seconds.
-     * @param  Array $cache_contexts array cache contexts.
-     * @return CacheableJsonResponse
-     */
-    protected function cachedResponse(
-        $data,
-        $ttl = 3600,
-        $cache_contexts = ['url']
-    ) {
-        $response = new CacheableJsonResponse($data);
-        $response
-            ->setPublic()
-            ->setMaxAge($ttl)
-            ->setExpires(new \DateTime('@' . (\Drupal::time()->getRequestTime() + $ttl)))
-            ->headers->set('Content-Type', 'application/json; charset=utf-8');
-
-        $cacheMetadata = CacheableMetadata::createFromRenderArray([
-            '#cache' => [
-                'max-age' => $ttl,
-                'contexts' => $cache_contexts,
-            ],
-        ]);
-        $response->addCacheableDependency($cacheMetadata);
-
-        return $response;
     }
 
     /**

@@ -76,3 +76,19 @@ api_proxy_pbs.stream:
     _controller: 'Drupal\api_proxy_pbs\Controller\StreamController::getAudioUrl'
   requirements:
     _access: 'TRUE'
+
+api_proxy_pbs.showname:
+  path: '/api/showname/{date}'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\LookupController::showname'
+  requirements:
+    _access: 'TRUE'
+
+api_proxy_pbs.schedule_lookup:
+  path: '/api/schedule/{date}'
+  methods:  [GET]
+  defaults:
+    _controller: 'Drupal\api_proxy_pbs\Controller\LookupController::schedule'
+  requirements:
+    _access: 'TRUE'

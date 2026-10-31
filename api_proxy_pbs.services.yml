@@ -7,3 +7,6 @@ services:
     class: Drupal\api_proxy_pbs\Service\SlugResolver
     arguments: ['@api_proxy_pbs.jsonapi_client', '@cache.default', '@config.factory']
 
+  api_proxy_pbs.program_lookup:
+    class: Drupal\api_proxy_pbs\Service\ProgramLookup
+    arguments: ['@api_proxy_pbs.jsonapi_client', '@cache.default', '@cache_tags.invalidator']

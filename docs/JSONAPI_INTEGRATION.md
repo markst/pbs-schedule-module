@@ -27,6 +27,19 @@ HTTP client wrapper for JSON:API requests.
 - `getEpisodeByUuid($uuid, $includes)` - Single episode
 - `getEpisodeTracks($uuid)` - Episode tracks/playlist
 
+#### ProgramLookup
+Answers "which program is on at this instant?" for `/api/showname/{date}` and
+`/api/schedule/{date}` (the former `pbs_airnet_api` module).
+
+**Location:** `src/Service/ProgramLookup.php`
+
+**Methods:**
+- `programOnAir($when)` - One episode query: `field_date_range.value <= t` and `field_date_range.end_value > t`, newest start first. The program title comes from the included `field_program`
+- `programScheduled($when)` - Weekday + wall-clock match against the undated schedule templates, in each slot's own timezone, so DST needs no special casing
+- `clear()` - Invalidates the `api_proxy_pbs:lookup` cache tag
+
+**Cache Strategy:** reduced schedule slots are cached in `cache.default` for 1 hour under the `api_proxy_pbs:lookup` tag, because every distinct `{date}` URL is a separate response. Lookup responses carry the same tag, so `GET /api/showname/clear` and `GET /api/schedule/clear` drop both.
+
 #### SlugResolver
 Maps legacy slugs to UUIDs with caching.
 
@@ -157,6 +170,8 @@ entries:
 - `slug`: `program_slug` (falls back to the `program_url` alias)
 - `guideId`: Always "fm"
 
+**Known limitation:** `/api/v1/schedule` returns one template row per weekday even for fortnightly and monthly programs, and this module does not filter them: such a program appears in both fortnight weeks and every week. The backend fix (PBS-260, `filter[date]` / `filter[from]` / `filter[to]` with an `occurrences` list per row) is pending; once deployed, `ScheduleTransformer` and `ProgramLookup` should request those filters instead of parsing `rrule` here.
+
 ## Transformation Flow
 
 ### 1. Fortnight Schedule
@@ -169,6 +184,7 @@ Request → JsonApiClient.getSchedule()
 ```
 
 ### 2. Program by Slug
+
 ```
 Request → SlugResolver.resolveProgram(slug)
        → Check cache
@@ -188,6 +204,16 @@ Request → SlugResolver.resolveEpisode(slug, date)
        → Resolve artists from included
        → Map content descriptors
        → Response
+```
+
+### 4. What's On (showname / schedule lookup)
+```
+/api/showname/{date}  → LegacyDate::parse(date)
+                      → JsonApiClient.getEpisodes(start <= t < end, newest start first, limit 1, include field_program)
+                      → included program title
+/api/schedule/{date}  → LegacyDate::parse(date)
+                      → cached, reduced JsonApiClient.getSchedule() slots
+                      → first slot (by start) whose weekday + wall-clock minutes contain t
 ```
 
 ## Performance Considerations

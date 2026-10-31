@@ -56,6 +56,27 @@ class LookupController extends ControllerBase
     }
 
     /**
+     * Program and presenters on air right now.
+     *
+     * @return \Drupal\Core\Cache\CacheableJsonResponse|\Symfony\Component\HttpFoundation\JsonResponse
+     *   `{"name": ..., "broadcasters": ...}`, or `[]` when nothing is on air.
+     */
+    public function now()
+    {
+        try {
+            $program = $this->programLookup->onAirProgram(new \DateTimeImmutable('now'));
+
+            return $this->cachedResponse($program ?? [], 60, ['url.path'], [ProgramLookup::CACHE_TAG]);
+        } catch (\Exception $e) {
+            \Drupal::logger('api_proxy_pbs')->error('Failed to look up current program: @message', [
+                '@message' => $e->getMessage(),
+            ]);
+
+            return new JsonResponse(['error' => 'Failed to look up program'], 500);
+        }
+    }
+
+    /**
      * Program in the weekly schedule grid at the given time.
      *
      * @param string $date

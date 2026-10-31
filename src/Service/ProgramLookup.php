@@ -57,6 +57,22 @@ class ProgramLookup
      */
     public function programOnAir(\DateTimeInterface $when): ?string
     {
+        return $this->onAirProgram($when)['name'] ?? null;
+    }
+
+    /**
+     * Name and presenters of the program broadcasting at an instant.
+     *
+     * Same selection rule as programOnAir().
+     *
+     * @return array{name: string, broadcasters: string}|null
+     *   NULL when no published episode is on air or its program is unnamed.
+     *
+     * @throws \Exception
+     *   When the backend request fails.
+     */
+    public function onAirProgram(\DateTimeInterface $when): ?array
+    {
         $timestamp = $when->getTimestamp();
         $response = $this->jsonApiClient->getEpisodes(
             [
@@ -73,7 +89,15 @@ class ProgramLookup
         $programId = $episode['relationships']['field_program']['data']['id'] ?? null;
         foreach ($response['included'] ?? [] as $included) {
             if ($included['type'] === 'program' && $included['id'] === $programId) {
-                return ($included['attributes'][FieldMap::PROGRAM_TITLE] ?? '') ?: null;
+                $program = FieldMap::mapProgramAttributes($included['attributes'] ?? []);
+                if ($program[FieldMap::PROGRAM_NAME] === '') {
+                    return null;
+                }
+
+                return [
+                    FieldMap::PROGRAM_NAME => $program[FieldMap::PROGRAM_NAME],
+                    FieldMap::PROGRAM_BROADCASTERS => $program[FieldMap::PROGRAM_BROADCASTERS],
+                ];
             }
         }
 

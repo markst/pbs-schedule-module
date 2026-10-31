@@ -223,6 +223,14 @@ routes playback through the backend's audio fields; see MIGRATION.md.
 
 ---
 
+### GET /api/now
+
+Returns the program on air at the current instant, with its presenters (the program's `field_author`, as `broadcasters` elsewhere). Selection matches `/api/showname/{date}`.
+
+**Response:** `{"name": "Black Wax", "broadcasters": "Adam Rudegeair"}`; `[]` when nothing is on air. Cached 60 seconds; dropped by `/api/showname/clear`.
+
+---
+
 ### GET /api/showname/{date}
 
 Returns the name of the program whose episode is on air at `date`. Replaces the

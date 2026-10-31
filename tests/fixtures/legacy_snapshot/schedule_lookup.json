@@ -1,0 +1,679 @@
+{
+ "_comment": "Snapshot of https://schedule.pbsfm.org.au (legacy pbs_airnet_api) captured 2026-10-30. slots are the weekly-stable entries of /api/fortnight (weekday ISO 1-7, minutes from midnight Melbourne); the Mon-Fri 02:00-06:00 rotation differs between the two weeks and its timestamps are left out. answers maps a YYYYMMDDHHMMSS query to the legacy /api/schedule/{date} body ({} = no match). lastSecondAnswers holds, for queries at hh:mm:59 where legacy answered {} (it ends slots one second early), the legacy answer for hh:mm:00 of the same minute.",
+ "slots": [
+  {
+   "weekday": 6,
+   "start": 0,
+   "end": 120,
+   "name": "Android Discotheque"
+  },
+  {
+   "weekday": 7,
+   "start": 0,
+   "end": 120,
+   "name": "BPM "
+  },
+  {
+   "weekday": 1,
+   "start": 0,
+   "end": 120,
+   "name": "Dry Run"
+  },
+  {
+   "weekday": 2,
+   "start": 0,
+   "end": 120,
+   "name": "Ear Of The Behearer"
+  },
+  {
+   "weekday": 3,
+   "start": 0,
+   "end": 120,
+   "name": "No Barriers"
+  },
+  {
+   "weekday": 4,
+   "start": 0,
+   "end": 120,
+   "name": "Synthesize Me"
+  },
+  {
+   "weekday": 5,
+   "start": 0,
+   "end": 120,
+   "name": "The Doom Saloon"
+  },
+  {
+   "weekday": 6,
+   "start": 120,
+   "end": 360,
+   "name": "IrvineJUMP!"
+  },
+  {
+   "weekday": 7,
+   "start": 120,
+   "end": 360,
+   "name": "New Noise"
+  },
+  {
+   "weekday": 6,
+   "start": 360,
+   "end": 540,
+   "name": "5ft High & Rising"
+  },
+  {
+   "weekday": 7,
+   "start": 360,
+   "end": 540,
+   "name": "Storytellers"
+  },
+  {
+   "weekday": 1,
+   "start": 360,
+   "end": 540,
+   "name": "The Breakfast Spread"
+  },
+  {
+   "weekday": 2,
+   "start": 360,
+   "end": 540,
+   "name": "The Breakfast Spread"
+  },
+  {
+   "weekday": 3,
+   "start": 360,
+   "end": 540,
+   "name": "The Breakfast Spread"
+  },
+  {
+   "weekday": 4,
+   "start": 360,
+   "end": 540,
+   "name": "The Breakfast Spread"
+  },
+  {
+   "weekday": 5,
+   "start": 360,
+   "end": 540,
+   "name": "The Breakfast Spread"
+  },
+  {
+   "weekday": 1,
+   "start": 540,
+   "end": 660,
+   "name": "Deeep Space"
+  },
+  {
+   "weekday": 4,
+   "start": 540,
+   "end": 660,
+   "name": "Down By The River"
+  },
+  {
+   "weekday": 6,
+   "start": 540,
+   "end": 660,
+   "name": "Jazz On Saturday"
+  },
+  {
+   "weekday": 2,
+   "start": 540,
+   "end": 660,
+   "name": "Mystic Brew"
+  },
+  {
+   "weekday": 5,
+   "start": 540,
+   "end": 660,
+   "name": "Ports Of Paradise"
+  },
+  {
+   "weekday": 3,
+   "start": 540,
+   "end": 660,
+   "name": "Roots Of Rhythm"
+  },
+  {
+   "weekday": 7,
+   "start": 540,
+   "end": 660,
+   "name": "The Gospel Show"
+  },
+  {
+   "weekday": 1,
+   "start": 660,
+   "end": 780,
+   "name": "Black Wax"
+  },
+  {
+   "weekday": 7,
+   "start": 660,
+   "end": 780,
+   "name": "Blue Juice"
+  },
+  {
+   "weekday": 2,
+   "start": 660,
+   "end": 780,
+   "name": "Boogie Beat Suite"
+  },
+  {
+   "weekday": 4,
+   "start": 660,
+   "end": 780,
+   "name": "Eternal Rhythm"
+  },
+  {
+   "weekday": 6,
+   "start": 660,
+   "end": 780,
+   "name": "Fiesta Jazz"
+  },
+  {
+   "weekday": 5,
+   "start": 660,
+   "end": 780,
+   "name": "Riddim Yard"
+  },
+  {
+   "weekday": 3,
+   "start": 660,
+   "end": 780,
+   "name": "Southern Style"
+  },
+  {
+   "weekday": 1,
+   "start": 780,
+   "end": 900,
+   "name": "Come Together"
+  },
+  {
+   "weekday": 2,
+   "start": 780,
+   "end": 900,
+   "name": "Dounya"
+  },
+  {
+   "weekday": 3,
+   "start": 780,
+   "end": 900,
+   "name": "Jumpin' The Blues"
+  },
+  {
+   "weekday": 4,
+   "start": 780,
+   "end": 900,
+   "name": "Radio City"
+  },
+  {
+   "weekday": 6,
+   "start": 780,
+   "end": 900,
+   "name": "Switched On"
+  },
+  {
+   "weekday": 7,
+   "start": 780,
+   "end": 900,
+   "name": "The Juke Joint"
+  },
+  {
+   "weekday": 5,
+   "start": 780,
+   "end": 900,
+   "name": "Tomorrowland"
+  },
+  {
+   "weekday": 7,
+   "start": 900,
+   "end": 1020,
+   "name": "Flight 1067 To Africa"
+  },
+  {
+   "weekday": 1,
+   "start": 900,
+   "end": 1020,
+   "name": "Homebrew"
+  },
+  {
+   "weekday": 3,
+   "start": 900,
+   "end": 1020,
+   "name": "Soul Time"
+  },
+  {
+   "weekday": 4,
+   "start": 900,
+   "end": 1020,
+   "name": "Swinging Doors"
+  },
+  {
+   "weekday": 5,
+   "start": 900,
+   "end": 1020,
+   "name": "The Breakdown"
+  },
+  {
+   "weekday": 6,
+   "start": 900,
+   "end": 1020,
+   "name": "Tiger Beats Elephant Grooves"
+  },
+  {
+   "weekday": 2,
+   "start": 900,
+   "end": 1020,
+   "name": "Underground Love"
+  },
+  {
+   "weekday": 6,
+   "start": 1020,
+   "end": 1140,
+   "name": "Babylon Burning"
+  },
+  {
+   "weekday": 4,
+   "start": 1020,
+   "end": 1140,
+   "name": "Fang It!"
+  },
+  {
+   "weekday": 2,
+   "start": 1020,
+   "end": 1140,
+   "name": "Firewater"
+  },
+  {
+   "weekday": 7,
+   "start": 1020,
+   "end": 1140,
+   "name": "Global Village"
+  },
+  {
+   "weekday": 1,
+   "start": 1020,
+   "end": 1140,
+   "name": "Headhunters"
+  },
+  {
+   "weekday": 5,
+   "start": 1020,
+   "end": 1140,
+   "name": "Stone Love"
+  },
+  {
+   "weekday": 3,
+   "start": 1020,
+   "end": 1140,
+   "name": "The Afterglow Radio Show"
+  },
+  {
+   "weekday": 3,
+   "start": 1140,
+   "end": 1200,
+   "name": "Boss Action"
+  },
+  {
+   "weekday": 5,
+   "start": 1140,
+   "end": 1200,
+   "name": "Twistin' Fever"
+  },
+  {
+   "weekday": 4,
+   "start": 1140,
+   "end": 1200,
+   "name": "Junkyard"
+  },
+  {
+   "weekday": 7,
+   "start": 1140,
+   "end": 1200,
+   "name": "Soak"
+  },
+  {
+   "weekday": 1,
+   "start": 1140,
+   "end": 1200,
+   "name": "Stardust"
+  },
+  {
+   "weekday": 6,
+   "start": 1140,
+   "end": 1200,
+   "name": "Subway Sounds"
+  },
+  {
+   "weekday": 2,
+   "start": 1140,
+   "end": 1200,
+   "name": "Test Pressing"
+  },
+  {
+   "weekday": 3,
+   "start": 1200,
+   "end": 1320,
+   "name": "Bleeding Black Hearts Revue"
+  },
+  {
+   "weekday": 6,
+   "start": 1200,
+   "end": 1320,
+   "name": "Fresh Produce"
+  },
+  {
+   "weekday": 1,
+   "start": 1200,
+   "end": 1320,
+   "name": "Hippopotamus rex"
+  },
+  {
+   "weekday": 5,
+   "start": 1200,
+   "end": 1320,
+   "name": "Passing Notes"
+  },
+  {
+   "weekday": 2,
+   "start": 1200,
+   "end": 1320,
+   "name": "Pojama People"
+  },
+  {
+   "weekday": 7,
+   "start": 1200,
+   "end": 1320,
+   "name": "Stars In The Static"
+  },
+  {
+   "weekday": 4,
+   "start": 1200,
+   "end": 1320,
+   "name": "Sunglasses After Dark With Rodney Shah Again"
+  },
+  {
+   "weekday": 5,
+   "start": 1320,
+   "end": 1440,
+   "name": "Audio Vitamins"
+  },
+  {
+   "weekday": 4,
+   "start": 1320,
+   "end": 1440,
+   "name": "Burning Bitumen"
+  },
+  {
+   "weekday": 3,
+   "start": 1320,
+   "end": 1440,
+   "name": "Club It To Death"
+  },
+  {
+   "weekday": 6,
+   "start": 1320,
+   "end": 1440,
+   "name": "Electric Sunset"
+  },
+  {
+   "weekday": 1,
+   "start": 1320,
+   "end": 1440,
+   "name": "The Blend"
+  },
+  {
+   "weekday": 7,
+   "start": 1320,
+   "end": 1440,
+   "name": "The Sound Barrier"
+  },
+  {
+   "weekday": 2,
+   "start": 1320,
+   "end": 1440,
+   "name": "Tyrannocoreus"
+  }
+ ],
+ "answers": {
+  "20251005003000": "BPM ",
+  "20251005013000": "BPM ",
+  "20251005023000": "New Noise",
+  "20251005033000": "New Noise",
+  "20251005063000": "Storytellers",
+  "20251005093000": "The Gospel Show",
+  "20251005133000": "The Juke Joint",
+  "20251005183000": "Global Village",
+  "20251005233000": "The Sound Barrier",
+  "20260405003000": "BPM ",
+  "20260405013000": "BPM ",
+  "20260405023000": "New Noise",
+  "20260405033000": "New Noise",
+  "20260405063000": "Storytellers",
+  "20260405093000": "The Gospel Show",
+  "20260405133000": "The Juke Joint",
+  "20260405183000": "Global Village",
+  "20260405233000": "The Sound Barrier",
+  "20260928200000": "Hippopotamus rex",
+  "20260928210000": "Hippopotamus rex",
+  "20260928220000": "The Blend",
+  "20260930060000": "The Breakfast Spread",
+  "20260930073000": "The Breakfast Spread",
+  "20260930090000": "Roots Of Rhythm",
+  "20260930150000": "Soul Time",
+  "20260930160000": "Soul Time",
+  "20260930170000": "The Afterglow Radio Show",
+  "20261002090000": "Ports Of Paradise",
+  "20261002100000": "Ports Of Paradise",
+  "20261002110000": "Riddim Yard",
+  "20261003003000": "Android Discotheque",
+  "20261003013000": "Android Discotheque",
+  "20261003023000": "IrvineJUMP!",
+  "20261003033000": "IrvineJUMP!",
+  "20261003063000": "5ft High & Rising",
+  "20261003093000": "Jazz On Saturday",
+  "20261003133000": "Switched On",
+  "20261003183000": "Babylon Burning",
+  "20261003233000": "Electric Sunset",
+  "20261004003000": "BPM ",
+  "20261004013000": "BPM ",
+  "20261004023000": "New Noise",
+  "20261004033000": "New Noise",
+  "20261004063000": "Storytellers",
+  "20261004093000": "The Gospel Show",
+  "20261004110000": "Blue Juice",
+  "20261004120000": "Blue Juice",
+  "20261004130000": "The Juke Joint",
+  "20261004133000": "The Juke Joint",
+  "20261004183000": "Global Village",
+  "20261004190000": "Soak",
+  "20261004193000": "Soak",
+  "20261004200000": "Stars In The Static",
+  "20261004233000": "The Sound Barrier",
+  "20261102000000": "Dry Run",
+  "20261102010000": "Dry Run",
+  "20261102060000": "The Breakfast Spread",
+  "20261102110000": "Black Wax",
+  "20261102120000": "Black Wax",
+  "20261102130000": "Come Together",
+  "20261102190000": "Stardust",
+  "20261102193000": "Stardust",
+  "20261102200000": "Hippopotamus rex",
+  "20261103000000": "Ear Of The Behearer",
+  "20261103010000": "Ear Of The Behearer",
+  "20261105000000": "Synthesize Me",
+  "20261105010000": "Synthesize Me",
+  "20261105170000": "Fang It!",
+  "20261105180000": "Fang It!",
+  "20261105190000": "Junkyard",
+  "20261106220000": "Audio Vitamins",
+  "20261106230000": "Audio Vitamins",
+  "20261107000000": "Android Discotheque",
+  "20261107010000": "Android Discotheque",
+  "20261107020000": "IrvineJUMP!",
+  "20261107150000": "Tiger Beats Elephant Grooves",
+  "20261107160000": "Tiger Beats Elephant Grooves",
+  "20261107170000": "Babylon Burning",
+  "20261107200000": "Fresh Produce",
+  "20261107210000": "Fresh Produce",
+  "20261107220000": "Electric Sunset",
+  "20261108000000": "BPM ",
+  "20261108010000": "BPM ",
+  "20261108020000": "New Noise",
+  "20261110090000": "Mystic Brew",
+  "20261110100000": "Mystic Brew",
+  "20261110110000": "Boogie Beat Suite",
+  "20261110220000": "Tyrannocoreus",
+  "20261110230000": "Tyrannocoreus",
+  "20261111000000": "No Barriers",
+  "20261111010000": "No Barriers",
+  "20261111190000": "Boss Action",
+  "20261111193000": "Boss Action",
+  "20261111200000": "Bleeding Black Hearts Revue",
+  "20261113110000": "Riddim Yard",
+  "20261113120000": "Riddim Yard",
+  "20261113130000": "Tomorrowland",
+  "20261117170000": "Firewater",
+  "20261117180000": "Firewater",
+  "20261117190000": "Test Pressing",
+  "20261118110000": "Southern Style",
+  "20261118120000": "Southern Style",
+  "20261118130000": "Jumpin' The Blues",
+  "20261120190000": "Twistin' Fever",
+  "20261120193000": "Twistin' Fever",
+  "20261120200000": "Passing Notes",
+  "20261121090000": "Jazz On Saturday",
+  "20261121100000": "Jazz On Saturday",
+  "20261121110000": "Fiesta Jazz",
+  "20261121130000": "Switched On",
+  "20261121140000": "Switched On",
+  "20261121150000": "Tiger Beats Elephant Grooves",
+  "20261121220000": "Electric Sunset",
+  "20261121230000": "Electric Sunset",
+  "20261122000000": "BPM ",
+  "20261122130000": "The Juke Joint",
+  "20261122140000": "The Juke Joint",
+  "20261122150000": "Flight 1067 To Africa",
+  "20261123220000": "The Blend",
+  "20261123230000": "The Blend",
+  "20261124000000": "Ear Of The Behearer",
+  "20261124060000": "The Breakfast Spread",
+  "20261125170000": "The Afterglow Radio Show",
+  "20261125180000": "The Afterglow Radio Show",
+  "20261125190000": "Boss Action",
+  "20261125220000": "Club It To Death",
+  "20261125230000": "Club It To Death",
+  "20261126000000": "Synthesize Me",
+  "20261126130000": "Radio City",
+  "20261126140000": "Radio City",
+  "20261126150000": "Swinging Doors",
+  "20261126220000": "Burning Bitumen",
+  "20261126230000": "Burning Bitumen",
+  "20261127000000": "The Doom Saloon",
+  "20261127130000": "Tomorrowland",
+  "20261127140000": "Tomorrowland",
+  "20261127150000": "The Breakdown",
+  "20261127200000": "Passing Notes",
+  "20261127210000": "Passing Notes",
+  "20261127220000": "Audio Vitamins",
+  "20261129060000": "Storytellers",
+  "20261129073000": "Storytellers",
+  "20261129090000": "The Gospel Show",
+  "20261129170000": "Global Village",
+  "20261129180000": "Global Village",
+  "20261129190000": "Soak",
+  "20270403003000": "Android Discotheque",
+  "20270403013000": "Android Discotheque",
+  "20270403023000": "IrvineJUMP!",
+  "20270403033000": "IrvineJUMP!",
+  "20270403063000": "5ft High & Rising",
+  "20270403093000": "Jazz On Saturday",
+  "20270403133000": "Switched On",
+  "20270403183000": "Babylon Burning",
+  "20270403233000": "Electric Sunset",
+  "20270404003000": "BPM ",
+  "20270404013000": "BPM ",
+  "20270404023000": "New Noise",
+  "20270404033000": "New Noise",
+  "20270404063000": "Storytellers",
+  "20270404093000": "The Gospel Show",
+  "20270404133000": "The Juke Joint",
+  "20270404183000": "Global Village",
+  "20270404233000": "The Sound Barrier"
+ },
+ "lastSecondAnswers": {
+  "20260928195959": "Stardust",
+  "20260928215959": "Hippopotamus rex",
+  "20260930085959": "The Breakfast Spread",
+  "20260930145959": "Jumpin' The Blues",
+  "20260930165959": "Soul Time",
+  "20261002085959": "The Breakfast Spread",
+  "20261002105959": "Ports Of Paradise",
+  "20261004105959": "The Gospel Show",
+  "20261004125959": "Blue Juice",
+  "20261004185959": "Global Village",
+  "20261004195959": "Soak",
+  "20261101235959": "The Sound Barrier",
+  "20261102015959": "Dry Run",
+  "20261102105959": "Deeep Space",
+  "20261102125959": "Black Wax",
+  "20261102185959": "Headhunters",
+  "20261102195959": "Stardust",
+  "20261102235959": "The Blend",
+  "20261103015959": "Ear Of The Behearer",
+  "20261104235959": "Club It To Death",
+  "20261105015959": "Synthesize Me",
+  "20261105165959": "Swinging Doors",
+  "20261105185959": "Fang It!",
+  "20261106215959": "Passing Notes",
+  "20261106235959": "Audio Vitamins",
+  "20261107015959": "Android Discotheque",
+  "20261107145959": "Switched On",
+  "20261107165959": "Tiger Beats Elephant Grooves",
+  "20261107195959": "Subway Sounds",
+  "20261107215959": "Fresh Produce",
+  "20261107235959": "Electric Sunset",
+  "20261108015959": "BPM ",
+  "20261110085959": "The Breakfast Spread",
+  "20261110105959": "Mystic Brew",
+  "20261110215959": "Pojama People",
+  "20261110235959": "Tyrannocoreus",
+  "20261111015959": "No Barriers",
+  "20261111185959": "The Afterglow Radio Show",
+  "20261111195959": "Boss Action",
+  "20261113105959": "Ports Of Paradise",
+  "20261113125959": "Riddim Yard",
+  "20261117165959": "Underground Love",
+  "20261117185959": "Firewater",
+  "20261118105959": "Roots Of Rhythm",
+  "20261118125959": "Southern Style",
+  "20261120185959": "Stone Love",
+  "20261120195959": "Twistin' Fever",
+  "20261121085959": "5ft High & Rising",
+  "20261121105959": "Jazz On Saturday",
+  "20261121125959": "Fiesta Jazz",
+  "20261121145959": "Switched On",
+  "20261121215959": "Fresh Produce",
+  "20261121235959": "Electric Sunset",
+  "20261122125959": "Blue Juice",
+  "20261122145959": "The Juke Joint",
+  "20261123215959": "Hippopotamus rex",
+  "20261123235959": "The Blend",
+  "20261124015959": "Ear Of The Behearer",
+  "20261125165959": "Soul Time",
+  "20261125185959": "The Afterglow Radio Show",
+  "20261125215959": "Bleeding Black Hearts Revue",
+  "20261125235959": "Club It To Death",
+  "20261126125959": "Eternal Rhythm",
+  "20261126145959": "Radio City",
+  "20261126215959": "Sunglasses After Dark With Rodney Shah Again",
+  "20261126235959": "Burning Bitumen",
+  "20261127125959": "Riddim Yard",
+  "20261127145959": "Tomorrowland",
+  "20261127195959": "Twistin' Fever",
+  "20261127215959": "Passing Notes",
+  "20261129055959": "New Noise",
+  "20261129085959": "Storytellers",
+  "20261129165959": "Flight 1067 To Africa",
+  "20261129185959": "Global Village"
+ }
+}

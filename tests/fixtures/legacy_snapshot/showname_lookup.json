@@ -1,0 +1,1064 @@
+{
+ "_comment": "Snapshot of https://schedule.pbsfm.org.au captured 2026-10-30. episodes are every legacy /api/programs/{slug}/episodes entry (numBefore=100) overlapping 2026-10-13..2026-10-30, program = /api/programs name; start/end are Melbourne local. answers maps a YYYYMMDDHHMMSS query to the legacy /api/showname/{date} body ([] = no match).",
+ "episodes": [
+  {
+   "program": "5ft High & Rising",
+   "start": "2026-10-17 06:00:00",
+   "end": "2026-10-17 09:00:00"
+  },
+  {
+   "program": "5ft High & Rising",
+   "start": "2026-10-24 06:00:00",
+   "end": "2026-10-24 09:00:00"
+  },
+  {
+   "program": "Android Discotheque",
+   "start": "2026-10-17 00:00:00",
+   "end": "2026-10-17 02:00:00"
+  },
+  {
+   "program": "Android Discotheque",
+   "start": "2026-10-24 00:00:00",
+   "end": "2026-10-24 02:00:00"
+  },
+  {
+   "program": "Audio Vitamins",
+   "start": "2026-10-16 22:00:00",
+   "end": "2026-10-17 00:00:00"
+  },
+  {
+   "program": "Audio Vitamins",
+   "start": "2026-10-23 22:00:00",
+   "end": "2026-10-24 00:00:00"
+  },
+  {
+   "program": "Babylon Burning",
+   "start": "2026-10-17 17:00:00",
+   "end": "2026-10-17 19:00:00"
+  },
+  {
+   "program": "Babylon Burning",
+   "start": "2026-10-24 17:00:00",
+   "end": "2026-10-24 19:00:00"
+  },
+  {
+   "program": "Black Wax",
+   "start": "2026-10-19 11:00:00",
+   "end": "2026-10-19 13:00:00"
+  },
+  {
+   "program": "Black Wax",
+   "start": "2026-10-26 11:00:00",
+   "end": "2026-10-26 13:00:00"
+  },
+  {
+   "program": "Bleeding Black Hearts Revue",
+   "start": "2026-10-14 20:00:00",
+   "end": "2026-10-14 22:00:00"
+  },
+  {
+   "program": "Bleeding Black Hearts Revue",
+   "start": "2026-10-21 20:00:00",
+   "end": "2026-10-21 22:00:00"
+  },
+  {
+   "program": "Bleeding Black Hearts Revue",
+   "start": "2026-10-28 20:00:00",
+   "end": "2026-10-28 22:00:00"
+  },
+  {
+   "program": "Blue Juice",
+   "start": "2026-10-18 11:00:00",
+   "end": "2026-10-18 13:00:00"
+  },
+  {
+   "program": "Blue Juice",
+   "start": "2026-10-25 11:00:00",
+   "end": "2026-10-25 13:00:00"
+  },
+  {
+   "program": "Boogie Beat Suite",
+   "start": "2026-10-13 11:00:00",
+   "end": "2026-10-13 13:00:00"
+  },
+  {
+   "program": "Boogie Beat Suite",
+   "start": "2026-10-20 11:00:00",
+   "end": "2026-10-20 13:00:00"
+  },
+  {
+   "program": "Boogie Beat Suite",
+   "start": "2026-10-27 11:00:00",
+   "end": "2026-10-27 13:00:00"
+  },
+  {
+   "program": "Boss Action",
+   "start": "2026-10-14 19:00:00",
+   "end": "2026-10-14 21:00:00"
+  },
+  {
+   "program": "Boss Action",
+   "start": "2026-10-21 19:00:00",
+   "end": "2026-10-21 21:00:00"
+  },
+  {
+   "program": "Boss Action",
+   "start": "2026-10-28 19:00:00",
+   "end": "2026-10-28 21:00:00"
+  },
+  {
+   "program": "BPM ",
+   "start": "2026-10-18 00:00:00",
+   "end": "2026-10-18 02:00:00"
+  },
+  {
+   "program": "BPM ",
+   "start": "2026-10-25 00:00:00",
+   "end": "2026-10-25 02:00:00"
+  },
+  {
+   "program": "Burning Bitumen",
+   "start": "2026-10-15 22:00:00",
+   "end": "2026-10-16 00:00:00"
+  },
+  {
+   "program": "Burning Bitumen",
+   "start": "2026-10-22 22:00:00",
+   "end": "2026-10-23 00:00:00"
+  },
+  {
+   "program": "Club It To Death",
+   "start": "2026-10-14 22:00:00",
+   "end": "2026-10-15 00:00:00"
+  },
+  {
+   "program": "Club It To Death",
+   "start": "2026-10-21 22:00:00",
+   "end": "2026-10-22 00:00:00"
+  },
+  {
+   "program": "Club It To Death",
+   "start": "2026-10-28 22:00:00",
+   "end": "2026-10-29 00:00:00"
+  },
+  {
+   "program": "Come Together",
+   "start": "2026-10-19 13:00:00",
+   "end": "2026-10-19 15:00:00"
+  },
+  {
+   "program": "Deeep Space",
+   "start": "2026-10-19 09:00:00",
+   "end": "2026-10-19 11:00:00"
+  },
+  {
+   "program": "Deeep Space",
+   "start": "2026-10-26 09:00:00",
+   "end": "2026-10-26 11:00:00"
+  },
+  {
+   "program": "Dounya",
+   "start": "2026-10-13 13:00:00",
+   "end": "2026-10-13 15:00:00"
+  },
+  {
+   "program": "Dounya",
+   "start": "2026-10-20 13:00:00",
+   "end": "2026-10-20 15:00:00"
+  },
+  {
+   "program": "Dounya",
+   "start": "2026-10-27 13:00:00",
+   "end": "2026-10-27 15:00:00"
+  },
+  {
+   "program": "Down By The River",
+   "start": "2026-10-15 09:00:00",
+   "end": "2026-10-15 11:00:00"
+  },
+  {
+   "program": "Down By The River",
+   "start": "2026-10-22 09:00:00",
+   "end": "2026-10-22 11:00:00"
+  },
+  {
+   "program": "Down By The River",
+   "start": "2026-10-29 09:00:00",
+   "end": "2026-10-29 11:00:00"
+  },
+  {
+   "program": "Dry Run",
+   "start": "2026-10-19 00:00:00",
+   "end": "2026-10-19 02:00:00"
+  },
+  {
+   "program": "Ear Of The Behearer",
+   "start": "2026-10-13 00:00:00",
+   "end": "2026-10-13 02:00:00"
+  },
+  {
+   "program": "Ear Of The Behearer",
+   "start": "2026-10-20 00:00:00",
+   "end": "2026-10-20 02:00:00"
+  },
+  {
+   "program": "Electric Sunset",
+   "start": "2026-10-17 22:00:00",
+   "end": "2026-10-18 00:00:00"
+  },
+  {
+   "program": "Electric Sunset",
+   "start": "2026-10-24 22:00:00",
+   "end": "2026-10-25 00:00:00"
+  },
+  {
+   "program": "Elektrosophy",
+   "start": "2026-10-23 02:00:00",
+   "end": "2026-10-23 06:00:00"
+  },
+  {
+   "program": "Eternal Rhythm",
+   "start": "2026-10-15 11:00:00",
+   "end": "2026-10-15 13:00:00"
+  },
+  {
+   "program": "Eternal Rhythm",
+   "start": "2026-10-22 11:00:00",
+   "end": "2026-10-22 13:00:00"
+  },
+  {
+   "program": "Eternal Rhythm",
+   "start": "2026-10-29 11:00:00",
+   "end": "2026-10-29 13:00:00"
+  },
+  {
+   "program": "Fang It!",
+   "start": "2026-10-15 17:00:00",
+   "end": "2026-10-15 19:00:00"
+  },
+  {
+   "program": "Fang It!",
+   "start": "2026-10-22 17:00:00",
+   "end": "2026-10-22 19:00:00"
+  },
+  {
+   "program": "Fang It!",
+   "start": "2026-10-29 17:00:00",
+   "end": "2026-10-29 19:00:00"
+  },
+  {
+   "program": "Fiesta Jazz",
+   "start": "2026-10-17 11:00:00",
+   "end": "2026-10-17 13:00:00"
+  },
+  {
+   "program": "Fiesta Jazz",
+   "start": "2026-10-24 11:00:00",
+   "end": "2026-10-24 13:00:00"
+  },
+  {
+   "program": "Firewater",
+   "start": "2026-10-13 17:00:00",
+   "end": "2026-10-13 19:00:00"
+  },
+  {
+   "program": "Firewater",
+   "start": "2026-10-20 17:00:00",
+   "end": "2026-10-20 19:00:00"
+  },
+  {
+   "program": "Firewater",
+   "start": "2026-10-27 17:00:00",
+   "end": "2026-10-27 19:00:00"
+  },
+  {
+   "program": "Flight 1067 To Africa",
+   "start": "2026-10-18 15:00:00",
+   "end": "2026-10-18 17:00:00"
+  },
+  {
+   "program": "Flight 1067 To Africa",
+   "start": "2026-10-25 15:00:00",
+   "end": "2026-10-25 17:00:00"
+  },
+  {
+   "program": "Fresh Produce",
+   "start": "2026-10-17 20:00:00",
+   "end": "2026-10-17 22:00:00"
+  },
+  {
+   "program": "Fresh Produce",
+   "start": "2026-10-24 20:00:00",
+   "end": "2026-10-24 22:00:00"
+  },
+  {
+   "program": "Game Jams",
+   "start": "2026-10-15 02:00:00",
+   "end": "2026-10-15 06:00:00"
+  },
+  {
+   "program": "Game Jams",
+   "start": "2026-10-29 02:00:00",
+   "end": "2026-10-29 06:00:00"
+  },
+  {
+   "program": "Global Village",
+   "start": "2026-10-18 17:00:00",
+   "end": "2026-10-18 19:00:00"
+  },
+  {
+   "program": "Global Village",
+   "start": "2026-10-25 17:00:00",
+   "end": "2026-10-25 19:00:00"
+  },
+  {
+   "program": "Good Heavens!",
+   "start": "2026-10-22 02:00:00",
+   "end": "2026-10-22 06:00:00"
+  },
+  {
+   "program": "Got The Blues",
+   "start": "2026-10-13 02:00:00",
+   "end": "2026-10-13 06:00:00"
+  },
+  {
+   "program": "Got The Blues",
+   "start": "2026-10-27 02:00:00",
+   "end": "2026-10-27 06:00:00"
+  },
+  {
+   "program": "Headhunters",
+   "start": "2026-10-19 17:00:00",
+   "end": "2026-10-19 19:00:00"
+  },
+  {
+   "program": "Headhunters",
+   "start": "2026-10-26 17:00:00",
+   "end": "2026-10-26 19:00:00"
+  },
+  {
+   "program": "Hippopotamus rex",
+   "start": "2026-10-19 20:00:00",
+   "end": "2026-10-19 22:00:00"
+  },
+  {
+   "program": "Hippopotamus rex",
+   "start": "2026-10-26 20:00:00",
+   "end": "2026-10-26 22:00:00"
+  },
+  {
+   "program": "Homebrew",
+   "start": "2026-10-19 15:00:00",
+   "end": "2026-10-19 17:00:00"
+  },
+  {
+   "program": "Homebrew",
+   "start": "2026-10-26 15:00:00",
+   "end": "2026-10-26 17:00:00"
+  },
+  {
+   "program": "IrvineJUMP!",
+   "start": "2026-10-17 02:00:00",
+   "end": "2026-10-17 06:00:00"
+  },
+  {
+   "program": "IrvineJUMP!",
+   "start": "2026-10-24 02:00:00",
+   "end": "2026-10-24 06:00:00"
+  },
+  {
+   "program": "Jazz On Saturday",
+   "start": "2026-10-17 09:00:00",
+   "end": "2026-10-17 11:00:00"
+  },
+  {
+   "program": "Jazz On Saturday",
+   "start": "2026-10-24 09:00:00",
+   "end": "2026-10-24 11:00:00"
+  },
+  {
+   "program": "Jumpin' The Blues",
+   "start": "2026-10-14 13:00:00",
+   "end": "2026-10-14 15:00:00"
+  },
+  {
+   "program": "Jumpin' The Blues",
+   "start": "2026-10-21 13:00:00",
+   "end": "2026-10-21 15:00:00"
+  },
+  {
+   "program": "Jumpin' The Blues",
+   "start": "2026-10-28 13:00:00",
+   "end": "2026-10-28 15:00:00"
+  },
+  {
+   "program": "Junkyard",
+   "start": "2026-10-15 19:00:00",
+   "end": "2026-10-15 20:00:00"
+  },
+  {
+   "program": "Junkyard",
+   "start": "2026-10-22 19:00:00",
+   "end": "2026-10-22 20:00:00"
+  },
+  {
+   "program": "Junkyard",
+   "start": "2026-10-29 19:00:00",
+   "end": "2026-10-29 20:00:00"
+  },
+  {
+   "program": "Moondial",
+   "start": "2026-10-16 02:00:00",
+   "end": "2026-10-16 06:00:00"
+  },
+  {
+   "program": "Moondial",
+   "start": "2026-10-30 02:00:00",
+   "end": "2026-10-30 06:00:00"
+  },
+  {
+   "program": "Mystic Brew",
+   "start": "2026-10-13 09:00:00",
+   "end": "2026-10-13 11:00:00"
+  },
+  {
+   "program": "Mystic Brew",
+   "start": "2026-10-20 09:00:00",
+   "end": "2026-10-20 11:00:00"
+  },
+  {
+   "program": "Mystic Brew",
+   "start": "2026-10-27 09:00:00",
+   "end": "2026-10-27 11:00:00"
+  },
+  {
+   "program": "New Noise",
+   "start": "2026-10-18 02:00:00",
+   "end": "2026-10-18 06:00:00"
+  },
+  {
+   "program": "New Noise",
+   "start": "2026-10-25 02:00:00",
+   "end": "2026-10-25 06:00:00"
+  },
+  {
+   "program": "No Barriers",
+   "start": "2026-10-14 00:00:00",
+   "end": "2026-10-14 02:00:00"
+  },
+  {
+   "program": "No Barriers",
+   "start": "2026-10-21 00:00:00",
+   "end": "2026-10-21 02:00:00"
+  },
+  {
+   "program": "No Barriers",
+   "start": "2026-10-28 00:00:00",
+   "end": "2026-10-28 02:00:00"
+  },
+  {
+   "program": "Passing Notes",
+   "start": "2026-10-16 20:00:00",
+   "end": "2026-10-16 22:00:00"
+  },
+  {
+   "program": "Passing Notes",
+   "start": "2026-10-23 20:00:00",
+   "end": "2026-10-23 22:00:00"
+  },
+  {
+   "program": "Pojama People",
+   "start": "2026-10-13 20:00:00",
+   "end": "2026-10-13 22:00:00"
+  },
+  {
+   "program": "Pojama People",
+   "start": "2026-10-20 20:00:00",
+   "end": "2026-10-20 22:00:00"
+  },
+  {
+   "program": "Pojama People",
+   "start": "2026-10-27 20:00:00",
+   "end": "2026-10-27 22:00:00"
+  },
+  {
+   "program": "Ports Of Paradise",
+   "start": "2026-10-16 09:00:00",
+   "end": "2026-10-16 11:00:00"
+  },
+  {
+   "program": "Ports Of Paradise",
+   "start": "2026-10-23 09:00:00",
+   "end": "2026-10-23 11:00:00"
+  },
+  {
+   "program": "Radio City",
+   "start": "2026-10-15 13:00:00",
+   "end": "2026-10-15 15:00:00"
+  },
+  {
+   "program": "Radio City",
+   "start": "2026-10-22 13:00:00",
+   "end": "2026-10-22 15:00:00"
+  },
+  {
+   "program": "Radio City",
+   "start": "2026-10-29 13:00:00",
+   "end": "2026-10-29 15:00:00"
+  },
+  {
+   "program": "Riddim Yard",
+   "start": "2026-10-16 11:00:00",
+   "end": "2026-10-16 13:00:00"
+  },
+  {
+   "program": "Riddim Yard",
+   "start": "2026-10-23 11:00:00",
+   "end": "2026-10-23 13:00:00"
+  },
+  {
+   "program": "Roots Of Rhythm",
+   "start": "2026-10-14 09:00:00",
+   "end": "2026-10-14 11:00:00"
+  },
+  {
+   "program": "Roots Of Rhythm",
+   "start": "2026-10-21 09:00:00",
+   "end": "2026-10-21 11:00:00"
+  },
+  {
+   "program": "Roots Of Rhythm",
+   "start": "2026-10-28 09:00:00",
+   "end": "2026-10-28 11:00:00"
+  },
+  {
+   "program": "Soak",
+   "start": "2026-10-18 19:00:00",
+   "end": "2026-10-18 20:00:00"
+  },
+  {
+   "program": "Soak",
+   "start": "2026-10-25 19:00:00",
+   "end": "2026-10-25 20:00:00"
+  },
+  {
+   "program": "Soul Time",
+   "start": "2026-10-14 15:00:00",
+   "end": "2026-10-14 17:00:00"
+  },
+  {
+   "program": "Soul Time",
+   "start": "2026-10-21 15:00:00",
+   "end": "2026-10-21 17:00:00"
+  },
+  {
+   "program": "Soul Time",
+   "start": "2026-10-28 15:00:00",
+   "end": "2026-10-28 17:00:00"
+  },
+  {
+   "program": "Southern Style",
+   "start": "2026-10-14 11:00:00",
+   "end": "2026-10-14 13:00:00"
+  },
+  {
+   "program": "Southern Style",
+   "start": "2026-10-21 11:00:00",
+   "end": "2026-10-21 13:00:00"
+  },
+  {
+   "program": "Southern Style",
+   "start": "2026-10-28 11:00:00",
+   "end": "2026-10-28 13:00:00"
+  },
+  {
+   "program": "Stardust",
+   "start": "2026-10-19 19:00:00",
+   "end": "2026-10-19 20:00:00"
+  },
+  {
+   "program": "Stardust",
+   "start": "2026-10-26 19:00:00",
+   "end": "2026-10-26 20:00:00"
+  },
+  {
+   "program": "Stars In The Static",
+   "start": "2026-10-18 20:00:00",
+   "end": "2026-10-18 22:00:00"
+  },
+  {
+   "program": "Stars In The Static",
+   "start": "2026-10-25 20:00:00",
+   "end": "2026-10-25 22:00:00"
+  },
+  {
+   "program": "Stone Love",
+   "start": "2026-10-16 17:00:00",
+   "end": "2026-10-16 19:00:00"
+  },
+  {
+   "program": "Stone Love",
+   "start": "2026-10-23 17:00:00",
+   "end": "2026-10-23 19:00:00"
+  },
+  {
+   "program": "Storytellers",
+   "start": "2026-10-18 06:00:00",
+   "end": "2026-10-18 09:00:00"
+  },
+  {
+   "program": "Storytellers",
+   "start": "2026-10-25 06:00:00",
+   "end": "2026-10-25 09:00:00"
+  },
+  {
+   "program": "Subway Sounds",
+   "start": "2026-10-17 19:00:00",
+   "end": "2026-10-17 20:00:00"
+  },
+  {
+   "program": "Sunglasses After Dark With Rodney Shah Again",
+   "start": "2026-10-15 20:00:00",
+   "end": "2026-10-15 22:00:00"
+  },
+  {
+   "program": "Sunglasses After Dark With Rodney Shah Again",
+   "start": "2026-10-22 20:00:00",
+   "end": "2026-10-22 22:00:00"
+  },
+  {
+   "program": "Sunglasses After Dark With Rodney Shah Again",
+   "start": "2026-10-29 20:00:00",
+   "end": "2026-10-29 22:00:00"
+  },
+  {
+   "program": "Swinging Doors",
+   "start": "2026-10-15 15:00:00",
+   "end": "2026-10-15 17:00:00"
+  },
+  {
+   "program": "Swinging Doors",
+   "start": "2026-10-22 15:00:00",
+   "end": "2026-10-22 17:00:00"
+  },
+  {
+   "program": "Swinging Doors",
+   "start": "2026-10-29 15:00:00",
+   "end": "2026-10-29 17:00:00"
+  },
+  {
+   "program": "Switched On",
+   "start": "2026-10-17 13:00:00",
+   "end": "2026-10-17 15:00:00"
+  },
+  {
+   "program": "Switched On",
+   "start": "2026-10-24 13:00:00",
+   "end": "2026-10-24 15:00:00"
+  },
+  {
+   "program": "Synthesize Me",
+   "start": "2026-10-15 00:00:00",
+   "end": "2026-10-15 02:00:00"
+  },
+  {
+   "program": "Synthesize Me",
+   "start": "2026-10-22 00:00:00",
+   "end": "2026-10-22 02:00:00"
+  },
+  {
+   "program": "Synthesize Me",
+   "start": "2026-10-29 00:00:00",
+   "end": "2026-10-29 02:00:00"
+  },
+  {
+   "program": "Test Pressing",
+   "start": "2026-10-13 19:00:00",
+   "end": "2026-10-13 20:00:00"
+  },
+  {
+   "program": "Test Pressing",
+   "start": "2026-10-20 19:00:00",
+   "end": "2026-10-20 20:00:00"
+  },
+  {
+   "program": "Test Pressing",
+   "start": "2026-10-27 19:00:00",
+   "end": "2026-10-27 20:00:00"
+  },
+  {
+   "program": "The Afterglow Radio Show",
+   "start": "2026-10-14 17:00:00",
+   "end": "2026-10-14 19:00:00"
+  },
+  {
+   "program": "The Afterglow Radio Show",
+   "start": "2026-10-21 17:00:00",
+   "end": "2026-10-21 19:00:00"
+  },
+  {
+   "program": "The Afterglow Radio Show",
+   "start": "2026-10-28 17:00:00",
+   "end": "2026-10-28 19:00:00"
+  },
+  {
+   "program": "The Blend",
+   "start": "2026-10-19 22:00:00",
+   "end": "2026-10-20 00:00:00"
+  },
+  {
+   "program": "The Blend",
+   "start": "2026-10-26 22:00:00",
+   "end": "2026-10-27 00:00:00"
+  },
+  {
+   "program": "The Breakdown",
+   "start": "2026-10-16 15:00:00",
+   "end": "2026-10-16 17:00:00"
+  },
+  {
+   "program": "The Breakdown",
+   "start": "2026-10-23 15:00:00",
+   "end": "2026-10-23 17:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-13 06:00:00",
+   "end": "2026-10-13 09:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-14 06:00:00",
+   "end": "2026-10-14 09:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-15 06:00:00",
+   "end": "2026-10-15 09:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-16 06:00:00",
+   "end": "2026-10-16 09:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-19 06:00:00",
+   "end": "2026-10-19 09:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-20 06:00:00",
+   "end": "2026-10-20 09:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-21 06:00:00",
+   "end": "2026-10-21 09:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-22 06:00:00",
+   "end": "2026-10-22 09:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-23 06:00:00",
+   "end": "2026-10-23 09:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-26 06:00:00",
+   "end": "2026-10-26 09:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-27 06:00:00",
+   "end": "2026-10-27 09:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-28 06:00:00",
+   "end": "2026-10-28 09:00:00"
+  },
+  {
+   "program": "The Breakfast Spread",
+   "start": "2026-10-29 06:00:00",
+   "end": "2026-10-29 09:00:00"
+  },
+  {
+   "program": "The Doom Saloon",
+   "start": "2026-10-16 00:00:00",
+   "end": "2026-10-16 02:00:00"
+  },
+  {
+   "program": "The Doom Saloon",
+   "start": "2026-10-23 00:00:00",
+   "end": "2026-10-23 02:00:00"
+  },
+  {
+   "program": "The Doom Saloon",
+   "start": "2026-10-30 00:00:00",
+   "end": "2026-10-30 02:00:00"
+  },
+  {
+   "program": "The Gospel Show",
+   "start": "2026-10-18 09:00:00",
+   "end": "2026-10-18 11:00:00"
+  },
+  {
+   "program": "The Gospel Show",
+   "start": "2026-10-25 09:00:00",
+   "end": "2026-10-25 11:00:00"
+  },
+  {
+   "program": "The Juke Joint",
+   "start": "2026-10-18 13:00:00",
+   "end": "2026-10-18 15:00:00"
+  },
+  {
+   "program": "The Juke Joint",
+   "start": "2026-10-25 13:00:00",
+   "end": "2026-10-25 15:00:00"
+  },
+  {
+   "program": "The Modernist",
+   "start": "2026-10-14 02:00:00",
+   "end": "2026-10-14 06:00:00"
+  },
+  {
+   "program": "The Modernist",
+   "start": "2026-10-28 02:00:00",
+   "end": "2026-10-28 06:00:00"
+  },
+  {
+   "program": "The Sound Barrier",
+   "start": "2026-10-18 22:00:00",
+   "end": "2026-10-19 00:00:00"
+  },
+  {
+   "program": "The Sound Barrier",
+   "start": "2026-10-25 22:00:00",
+   "end": "2026-10-26 00:00:00"
+  },
+  {
+   "program": "Tiger Beats Elephant Grooves",
+   "start": "2026-10-17 15:00:00",
+   "end": "2026-10-17 17:00:00"
+  },
+  {
+   "program": "Tiger Beats Elephant Grooves",
+   "start": "2026-10-24 15:00:00",
+   "end": "2026-10-24 17:00:00"
+  },
+  {
+   "program": "Tomorrowland",
+   "start": "2026-10-16 13:00:00",
+   "end": "2026-10-16 15:00:00"
+  },
+  {
+   "program": "Tomorrowland",
+   "start": "2026-10-23 13:00:00",
+   "end": "2026-10-23 15:00:00"
+  },
+  {
+   "program": "Transfigurations",
+   "start": "2026-10-20 02:00:00",
+   "end": "2026-10-20 06:00:00"
+  },
+  {
+   "program": "Tyrannocoreus",
+   "start": "2026-10-13 22:00:00",
+   "end": "2026-10-14 00:00:00"
+  },
+  {
+   "program": "Tyrannocoreus",
+   "start": "2026-10-20 22:00:00",
+   "end": "2026-10-21 00:00:00"
+  },
+  {
+   "program": "Tyrannocoreus",
+   "start": "2026-10-27 22:00:00",
+   "end": "2026-10-28 00:00:00"
+  },
+  {
+   "program": "Underground Love",
+   "start": "2026-10-13 15:00:00",
+   "end": "2026-10-13 17:00:00"
+  },
+  {
+   "program": "Underground Love",
+   "start": "2026-10-20 15:00:00",
+   "end": "2026-10-20 17:00:00"
+  },
+  {
+   "program": "Underground Love",
+   "start": "2026-10-27 15:00:00",
+   "end": "2026-10-27 17:00:00"
+  },
+  {
+   "program": "VG+",
+   "start": "2026-10-21 02:00:00",
+   "end": "2026-10-21 06:00:00"
+  }
+ ],
+ "answers": {
+  "20261013235959": "Tyrannocoreus",
+  "20261014000000": "No Barriers",
+  "20261014010000": "No Barriers",
+  "20261014015959": "No Barriers",
+  "20261014020000": "The Modernist",
+  "20261014145959": "Jumpin' The Blues",
+  "20261014150000": "Soul Time",
+  "20261014160000": "Soul Time",
+  "20261014165959": "Soul Time",
+  "20261014170000": "The Afterglow Radio Show",
+  "20261014180000": "The Afterglow Radio Show",
+  "20261014185959": "The Afterglow Radio Show",
+  "20261014190000": "Boss Action",
+  "20261014200000": "Bleeding Black Hearts Revue",
+  "20261014205959": "Bleeding Black Hearts Revue",
+  "20261014210000": "Bleeding Black Hearts Revue",
+  "20261014215959": "Bleeding Black Hearts Revue",
+  "20261014220000": "Club It To Death",
+  "20261014230000": "Club It To Death",
+  "20261014235959": "Club It To Death",
+  "20261015000000": "Synthesize Me",
+  "20261015015959": "Synthesize Me",
+  "20261015020000": "Game Jams",
+  "20261015040000": "Game Jams",
+  "20261015055959": "Game Jams",
+  "20261015060000": "The Breakfast Spread",
+  "20261015073000": "The Breakfast Spread",
+  "20261015085959": "The Breakfast Spread",
+  "20261015090000": "Down By The River",
+  "20261015215959": "Sunglasses After Dark With Rodney Shah Again",
+  "20261015220000": "Burning Bitumen",
+  "20261015230000": "Burning Bitumen",
+  "20261015235959": "Burning Bitumen",
+  "20261016000000": "The Doom Saloon",
+  "20261016165959": "The Breakdown",
+  "20261016170000": "Stone Love",
+  "20261016180000": "Stone Love",
+  "20261016185959": "Stone Love",
+  "20261016190000": [],
+  "20261018125959": "Blue Juice",
+  "20261018130000": "The Juke Joint",
+  "20261018140000": "The Juke Joint",
+  "20261018145959": "The Juke Joint",
+  "20261018150000": "Flight 1067 To Africa",
+  "20261018165959": "Flight 1067 To Africa",
+  "20261018170000": "Global Village",
+  "20261018180000": "Global Village",
+  "20261018185959": "Global Village",
+  "20261018190000": "Soak",
+  "20261019185959": "Headhunters",
+  "20261019190000": "Stardust",
+  "20261019193000": "Stardust",
+  "20261019195959": "Stardust",
+  "20261019200000": "Hippopotamus rex",
+  "20261019235959": "The Blend",
+  "20261020000000": "Ear Of The Behearer",
+  "20261020010000": "Ear Of The Behearer",
+  "20261020015959": "Ear Of The Behearer",
+  "20261020020000": "Transfigurations",
+  "20261020105959": "Mystic Brew",
+  "20261020110000": "Boogie Beat Suite",
+  "20261020120000": "Boogie Beat Suite",
+  "20261020125959": "Boogie Beat Suite",
+  "20261020130000": "Dounya",
+  "20261020140000": "Dounya",
+  "20261020145959": "Dounya",
+  "20261020150000": "Underground Love",
+  "20261020160000": "Underground Love",
+  "20261020165959": "Underground Love",
+  "20261020170000": "Firewater",
+  "20261021055959": "VG+",
+  "20261021060000": "The Breakfast Spread",
+  "20261021073000": "The Breakfast Spread",
+  "20261021085959": "The Breakfast Spread",
+  "20261021090000": "Roots Of Rhythm",
+  "20261021185959": "The Afterglow Radio Show",
+  "20261021190000": "Boss Action",
+  "20261021195959": "Boss Action",
+  "20261021200000": "Bleeding Black Hearts Revue",
+  "20261021205959": "Bleeding Black Hearts Revue",
+  "20261021210000": "Bleeding Black Hearts Revue",
+  "20261021215959": "Bleeding Black Hearts Revue",
+  "20261021220000": "Club It To Death",
+  "20261022185959": "Fang It!",
+  "20261022190000": "Junkyard",
+  "20261022193000": "Junkyard",
+  "20261022195959": "Junkyard",
+  "20261022200000": "Sunglasses After Dark With Rodney Shah Again",
+  "20261022215959": "Sunglasses After Dark With Rodney Shah Again",
+  "20261022220000": "Burning Bitumen",
+  "20261022230000": "Burning Bitumen",
+  "20261022235959": "Burning Bitumen",
+  "20261023000000": "The Doom Saloon",
+  "20261023010000": "The Doom Saloon",
+  "20261023015959": "The Doom Saloon",
+  "20261023020000": "Elektrosophy",
+  "20261024215959": "Fresh Produce",
+  "20261024220000": "Electric Sunset",
+  "20261024230000": "Electric Sunset",
+  "20261024235959": "Electric Sunset",
+  "20261025000000": "BPM ",
+  "20261025105959": "The Gospel Show",
+  "20261025110000": "Blue Juice",
+  "20261025120000": "Blue Juice",
+  "20261025125959": "Blue Juice",
+  "20261025130000": "The Juke Joint",
+  "20261025165959": "Flight 1067 To Africa",
+  "20261025170000": "Global Village",
+  "20261025180000": "Global Village",
+  "20261025185959": "Global Village",
+  "20261025190000": "Soak",
+  "20261026055959": [],
+  "20261026060000": "The Breakfast Spread",
+  "20261026073000": "The Breakfast Spread",
+  "20261026085959": "The Breakfast Spread",
+  "20261026090000": "Deeep Space",
+  "20261026105959": "Deeep Space",
+  "20261026110000": "Black Wax",
+  "20261026120000": "Black Wax",
+  "20261026125959": "Black Wax",
+  "20261026130000": [],
+  "20261026165959": "Homebrew",
+  "20261026170000": "Headhunters",
+  "20261026180000": "Headhunters",
+  "20261026185959": "Headhunters",
+  "20261026190000": "Stardust",
+  "20261026193000": "Stardust",
+  "20261026195959": "Stardust",
+  "20261026200000": "Hippopotamus rex",
+  "20261027125959": "Boogie Beat Suite",
+  "20261027130000": "Dounya",
+  "20261027140000": "Dounya",
+  "20261027145959": "Dounya",
+  "20261027150000": "Underground Love",
+  "20261027215959": "Pojama People",
+  "20261027220000": "Tyrannocoreus",
+  "20261027230000": "Tyrannocoreus",
+  "20261027235959": "Tyrannocoreus",
+  "20261028000000": "No Barriers",
+  "20261028195959": "Boss Action",
+  "20261028200000": "Bleeding Black Hearts Revue",
+  "20261028210000": "Bleeding Black Hearts Revue",
+  "20261028215959": "Bleeding Black Hearts Revue",
+  "20261028220000": "Club It To Death",
+  "20261029055959": "Game Jams",
+  "20261029060000": "The Breakfast Spread",
+  "20261029073000": "The Breakfast Spread",
+  "20261029085959": "The Breakfast Spread",
+  "20261029090000": "Down By The River",
+  "20261029100000": "Down By The River",
+  "20261029105959": "Down By The River",
+  "20261029110000": "Eternal Rhythm",
+  "20261029125959": "Eternal Rhythm",
+  "20261029130000": "Radio City",
+  "20261029140000": "Radio City",
+  "20261029145959": "Radio City",
+  "20261029150000": "Swinging Doors"
+ }
+}

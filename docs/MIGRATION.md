@@ -52,6 +52,25 @@ Playback only uses the backend's audio fields once that template is switched
 Do that before Airnet's omnystudio redirect is retired, after confirming
 `field_api_aod_audio_url` is populated for the archive.
 
+#### 3. pbs_airnet_api module (merged)
+**Status:** MERGED, module to be sunset in pbss
+
+The separate `pbs_airnet_api` Drupal module (`/api/showname/{date}`, `/api/schedule/{date}`) is now part of this module (`LookupController`, `Service/ProgramLookup`). It no longer calls this site's own legacy endpoints over HTTP, so there is no per-program request loop; both lookups read JSON:API directly.
+
+**Behaviour changes:**
+- `/api/showname/{date}`: one episode query (start ≤ t < end) instead of fetching `numBefore=100` episodes for every program. Same answer: the on-air episode with the latest start.
+- `/api/schedule/{date}`: matches weekday + wall-clock time against the schedule templates. The old 14-day cycle anchored on 2010-01-04 (and its daylight-saving corrections) is gone; a fixed 14-day cycle can disagree with `/api/fortnight`'s ISO-week labelling after 53-week years.
+- No match (or unparseable date) is always `[]`. Previously `/api/showname/{date}` returned `[]` and `/api/schedule/{date}` had no defined no-match response.
+- Backend failures answer `500 {"error": ...}` without the exception message.
+- `/api/showname/clear` and `/api/schedule/clear` still answer `"Cache Cleared."`; they now invalidate one cache tag (`api_proxy_pbs:lookup`), which also drops cached responses, and the `clear` response itself is not cached. Both endpoints previously shared one cache key by mistake.
+- `Proxy-Version` is not sent on these two endpoints.
+- Fortnightly and monthly schedule slots are not yet honoured by `/api/fortnight`, `/api/schedule` and `/api/schedule/{date}` (they appear every week). Pending backend PBS-260 date filtering.
+
+**Action Required (pbss):**
+1. Pull this module into pbss (`git subtree pull`, see `api_proxy_pbs.subtree.md`).
+2. `drush cr`, then check `/api/showname/{YYYYMMDDHHMMSS}` and `/api/schedule/{YYYYMMDDHHMMSS}`.
+3. Uninstall `pbs_airnet_api` (`drush pmu pbs_airnet_api`, export config so `core.extension.yml` drops it) and delete `web/modules/custom/pbs_airnet_api`. Its routes use the same paths, so the module must not stay enabled alongside this one.
+
 ### Changed Behavior
 
 #### Slug Resolution

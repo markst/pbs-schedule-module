@@ -223,6 +223,39 @@ routes playback through the backend's audio fields; see MIGRATION.md.
 
 ---
 
+### GET /api/showname/{date}
+
+Returns the name of the program whose episode is on air at `date`. Replaces the
+`pbs_airnet_api` module's endpoint of the same path.
+
+**Parameters:**
+- `date`: Melbourne local time in any format accepted by the single-episode route; the existing clients send `YYYYMMDDHHMMSS`. An episode is on air from its start (inclusive) to its end (exclusive); if episodes overlap, the latest start wins. `clear` drops the cached lookup data and answers `"Cache Cleared."`
+
+**Response:** a JSON string, e.g. `"Black Wax"`; `[]` when nothing is on air or `date` cannot be parsed.
+
+**Cache:** 1 hour (`clear`: not cached)
+
+**Error Responses:**
+- `500`: Backend unavailable
+
+---
+
+### GET /api/schedule/{date}
+
+Returns the name of the program in the weekly schedule grid at `date`, whatever the date: the grid is the same every week, matched on weekday and wall-clock time in the slot's timezone (so daylight saving changes need no adjustment). Replaces the `pbs_airnet_api` module's endpoint of the same path; unlike `/api/schedule` (alias of `/api/fortnight`) it takes a date.
+
+**Parameters:**
+- `date`: as for `/api/showname/{date}`. A slot covers its start (inclusive) to its end (exclusive); if slots overlap, the earliest start wins. `clear` drops the cached lookup data and answers `"Cache Cleared."`
+
+**Response:** a JSON string, e.g. `"TEST | Radio City"`; `[]` when nothing is scheduled or `date` cannot be parsed.
+
+**Cache:** 1 hour (`clear`: not cached). Schedule slots are also cached server-side for 1 hour.
+
+**Error Responses:**
+- `500`: Backend unavailable
+
+---
+
 ### GET /api/channels/fm
 
 Returns station configuration.

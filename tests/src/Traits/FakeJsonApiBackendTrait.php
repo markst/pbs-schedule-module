@@ -21,6 +21,11 @@ trait FakeJsonApiBackendTrait {
   protected array $episodeQueries = [];
 
   /**
+   * Number of getSchedule() calls.
+   */
+  protected int $scheduleRequests = 0;
+
+  /**
    * Builds the mock client.
    *
    * @param array $overrides
@@ -57,6 +62,10 @@ trait FakeJsonApiBackendTrait {
         return ['data' => NULL];
       },
       'getEpisodeTracks' => fn () => $this->loadFixture('jsonapi/tracks_collection.json'),
+      'getSchedule' => function () {
+        $this->scheduleRequests++;
+        return $this->loadFixture('jsonapi/schedule_slots.json');
+      },
     ];
 
     $client = $this->createMock(JsonApiClient::class);
@@ -73,6 +82,7 @@ trait FakeJsonApiBackendTrait {
   protected function queryEpisodes(array $fixture, array $filters, array $page, ?string $sort): array {
     $matches = array_filter($fixture['data'], function (array $episode) use ($filters) {
       $start = strtotime($episode['attributes']['field_date_range']['value']);
+      $end = strtotime($episode['attributes']['field_date_range']['end_value']);
       foreach ($filters as $key => $value) {
         if ($key === 'field_program.id' && $episode['relationships']['field_program']['data']['id'] !== $value) {
           return FALSE;
@@ -82,11 +92,12 @@ trait FakeJsonApiBackendTrait {
         }
         if (is_array($value) && isset($value['condition'])) {
           $target = (int) $value['condition']['value'];
+          $subject = $value['condition']['path'] === 'field_date_range.end_value' ? $end : $start;
           $ok = match ($value['condition']['operator']) {
-            '<' => $start < $target,
-            '<=' => $start <= $target,
-            '>' => $start > $target,
-            '>=' => $start >= $target,
+            '<' => $subject < $target,
+            '<=' => $subject <= $target,
+            '>' => $subject > $target,
+            '>=' => $subject >= $target,
           };
           if (!$ok) {
             return FALSE;

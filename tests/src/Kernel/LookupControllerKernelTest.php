@@ -62,6 +62,25 @@ class LookupControllerKernelTest extends KernelTestBase {
   }
 
   /**
+   * Tests the on-air lookup answers the presenters with the program name.
+   */
+  public function testOnAirProgramIncludesBroadcasters(): void {
+    $lookup = new ProgramLookup(
+      $this->createFakeClient(),
+      $this->container->get('cache.default'),
+      $this->container->get('cache_tags.invalidator')
+    );
+
+    $this->assertSame(
+      ['name' => 'Black Wax', 'broadcasters' => 'Adam Rudegeair'],
+      $lookup->onAirProgram(new \DateTimeImmutable('2026-07-27 12:00:00', new \DateTimeZone('Australia/Melbourne')))
+    );
+    $this->assertNull(
+      $lookup->onAirProgram(new \DateTimeImmutable('2026-07-27 13:00:00', new \DateTimeZone('Australia/Melbourne')))
+    );
+  }
+
+  /**
    * Tests the weekly grid answers by weekday and wall-clock time.
    *
    * @dataProvider scheduleProvider
